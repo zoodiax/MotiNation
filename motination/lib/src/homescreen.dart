@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'workout.dart';
+
+
 
 class App extends StatelessWidget {
   
@@ -40,10 +43,16 @@ class HomeScreen extends StatelessWidget{
             
           )
         ),
+        /*bottomNavigationBar: BottomNavigationBar(items: 
+        [BottomNavigationBarItem(icon: Icon(Icons.home)
+        title: Text('home')),*/
+        
     );
   }
 
 }
+
+/*
 
 class workout extends StatelessWidget{
  final barColor = const Color(0xFF0A79DF);
@@ -72,3 +81,5 @@ class workout extends StatelessWidget{
 
 
 }
+
+*/
