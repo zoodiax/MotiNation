@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'workout.dart';
 import 'homescreen.dart';
+import 'shop.dart';
 
-class profile extends StatefulWidget {
+class Profile extends StatefulWidget {
   @override
   createState() {
-    return _profileState();
+    return _ProfileState();
   }
 }
 
-class _profileState extends State<profile> {
+class _ProfileState extends State<Profile> {
+
+
+
+
   int _currentIndex = 0;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
@@ -35,8 +40,8 @@ class _profileState extends State<profile> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            title: Text('Workout'),
+            icon: Icon(Icons.shopping_basket),
+            title: Text('Shop'),
           ),
         ],
         onTap: (index) {
@@ -45,7 +50,7 @@ class _profileState extends State<profile> {
             if (_currentIndex == 2)
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => workout()),
+                MaterialPageRoute(builder: (context) => Shoping()),
               );
             if (_currentIndex == 1)
               Navigator.push(

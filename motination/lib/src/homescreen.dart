@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'workout.dart';
 import 'profile.dart';
+import 'shop.dart';
 
-class App extends StatelessWidget {
+class MyApp extends StatelessWidget {
   Widget build(context) {
     return MaterialApp(home: new HomeScreen());
   }
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => workout()),
+                    MaterialPageRoute(builder: (context) => Workout()),
                   );
                 },
               ))),
@@ -62,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            title: Text('Workout'),
+            icon: Icon(Icons.shopping_basket),
+            title: Text('Shop'),
           ),
         ],
         onTap: (index) {
@@ -72,12 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
             if (_currentIndex == 2)
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => workout()),
+                MaterialPageRoute(builder: (context) => Shoping()),
               );
             if (_currentIndex == 0)
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => profile()),
+                MaterialPageRoute(builder: (context) => Profile()),
               );
           });
         },
