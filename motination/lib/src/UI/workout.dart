@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'homescreen.dart';
 import 'profile.dart';
 import 'shop.dart';
+import 'infospz.dart';
 import 'package:location/location.dart';
 import 'package:filter_list/filter_list.dart';
 
@@ -12,6 +13,7 @@ class Workout extends StatefulWidget {
   }
 }
 
+// Lister mit Filterfunktionen für ListView und _openFilterList
 class Category {
   Category({
     this.title,
@@ -37,6 +39,7 @@ class Category {
   String name;
 }
 
+// Liste Kategorien für ListView - Wichtig: info füllen für Zuweisung mit Infospz Class (siehe Ende Workout Class)
 List<Category> allCategories = [
   new Category(
       title: "dasStadtwerk.Hallenbad",
@@ -50,188 +53,21 @@ List<Category> allCategories = [
       unisport: true,
       icon: Icons.fitness_center,
       info: '/c'),
+  new Category(
+    title: 'dasStadwerk.Wöhrdbad',
+    pool: true,
+    icon: Icons.pool,
+    info: '/d',
+  ),
+  new Category(
+    title: 'dasStadwerk.Westbad',
+    pool: true,
+    icon: Icons.pool,
+    info: '/e',
+  ),
 ];
 
-class Infospz extends StatelessWidget {
-  Infospz({
-    this.infotitle,
-    this.infoopenhrs = 'Hier stehen die Öffnungszeiten',
-    this.infoaddress = 'Hier steht die Adresse',
-    this.infoname = 'Hier gibt es die Informationen über das Sportzentrum',
-    this.infospecial =
-        'Hier stehen Aktionen, falls das Sportzentrum Premium Partner ist',
-  });
-  final String infotitle;
-  final String infoopenhrs;
-  final String infoaddress;
-  final String infospecial;
-  final String infoname;
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: Text('Sportzentrum'),
-      ),
-      body: Center(
-        child: Card(
-            child: Column(children: [
-          Icon(Icons.fitness_center),
-          ListTile(
-            title: Text(infotitle),
-            subtitle: Text(infoname),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Öffnungszeiten:'),
-            subtitle: Text(infoopenhrs),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Adresse'),
-            subtitle: Text(infoaddress),
-          ),
-          Divider(),
-          ListTile(title: Text('Aktion'), subtitle: Text(infospecial)),
-        ])),
-      ),
-    );
-  }
-}
-
-class InfoHallenbad extends StatelessWidget {
-  InfoHallenbad({
-    this.infotitle = 'Name',
-    this.infoopenhrs = 'Hier stehen die Öffnungszeiten',
-    this.infoaddress = 'Hier steht die Adresse',
-    this.infoname = 'Hier gibt es die Informationen über das Sportzentrum',
-    this.infospecial =
-        'Hier stehen Aktionen, falls das Sportzentrum Premium Partner ist',
-  });
-  final String infotitle;
-  final String infoopenhrs;
-  final String infoaddress;
-  final String infospecial;
-  final String infoname;
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: Text('Sportzentrum'),
-      ),
-      body: Center(
-        child: Card(
-            child: Column(children: [
-          Icon(Icons.pool),
-          ListTile(
-            title: Text('das Stadtwerk.Hallenbad'),
-            subtitle: Text(infoname),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Öffnungszeiten:'),
-            subtitle: Text(infoopenhrs),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Adresse'),
-            subtitle: Text(infoaddress),
-          ),
-          Divider(),
-          ListTile(title: Text('Aktion'), subtitle: Text(infospecial)),
-        ])),
-      ),
-    );
-  }
-}
-
-class InfoFitnessFirst extends StatelessWidget {
-  InfoFitnessFirst({
-    this.infotitle = 'Name',
-    this.infoopenhrs = 'Hier stehen die Öffnungszeiten',
-    this.infoaddress = 'Hier steht die Adresse',
-    this.infoname = 'Hier gibt es die Informationen über das Sportzentrum',
-    this.infospecial =
-        'Hier stehen Aktionen, falls das Sportzentrum Premium Partner ist',
-  });
-  final String infotitle;
-  final String infoopenhrs;
-  final String infoaddress;
-  final String infospecial;
-  final String infoname;
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: Text('Sportzentrum'),
-      ),
-      body: Center(
-        child: Card(
-            child: Column(children: [
-          Icon(Icons.fitness_center),
-          ListTile(
-            title: Text('Fitness First'),
-            subtitle: Text(infoname),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Öffnungszeiten:'),
-            subtitle: Text(infoopenhrs),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Adresse'),
-            subtitle: Text(infoaddress),
-          ),
-          Divider(),
-          ListTile(title: Text('Aktion'), subtitle: Text(infospecial)),
-        ])),
-      ),
-    );
-  }
-}
-
-class InfoUnisport extends StatelessWidget {
-  InfoUnisport({
-    this.infotitle = 'Name',
-    this.infoopenhrs = 'Hier stehen die Öffnungszeiten',
-    this.infoaddress = 'Hier steht die Adresse',
-    this.infoname = 'Hier gibt es die Informationen über das Sportzentrum',
-    this.infospecial =
-        'Hier stehen Aktionen, falls das Sportzentrum Premium Partner ist',
-  });
-  final String infotitle;
-  final String infoopenhrs;
-  final String infoaddress;
-  final String infospecial;
-  final String infoname;
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: Text('Sportzentrum'),
-      ),
-      body: Center(
-        child: Card(
-            child: Column(children: [
-          Icon(Icons.fitness_center),
-          ListTile(
-            title: Text('Unisport'),
-            subtitle: Text(infoname),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Öffnungszeiten:'),
-            subtitle: Text(infoopenhrs),
-          ),
-          Divider(),
-          ListTile(
-            title: Text('Adresse'),
-            subtitle: Text(infoaddress),
-          ),
-          Divider(),
-          ListTile(title: Text('Aktion'), subtitle: Text(infospecial)),
-        ])),
-      ),
-    );
-  }
-}
-
+// Class Marker - Wichtig für Markeraufbau in MapView - Filterfunktion nach bool (z.b. gym, pool)
 class Markerz extends Marker {
   Markerz(
       {this.markerId,
@@ -250,122 +86,58 @@ class Markerz extends Marker {
   final VoidCallback onTap;
 }
 
-void openSite() {}
-List<Markerz> allMarkers = [
-  // new Markerz(
-  //   markerId: MarkerId('marker1'),
-  //   position: LatLng(49.015982, 12.107087),
-  //   infoWindow: InfoWindow(title: ('das Stadtwerk.Hallenbad')),
-  //   pool: true,
-  //   onTap: (){
-  //     Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHallenbad()));
-  //   },
-  // ),
-
-  // new Markerz(
-  //   markerId: MarkerId('marker2'),
-  //   position: LatLng(49.012260, 12.096680),
-  //   gym: true,
-  // )
-];
+// Liste mit allen Marker - wird in initState gefüllt
+List<Markerz> allMarkers = [];
 
 class WorkoutState extends State<Workout> {
   LatLng _initialPosition = LatLng(49.017214, 12.097498);
   // GoogleMapController _controller;
   Location _location = Location();
-  // List<Markerz> allMarkers = [];
   bool _alreadyWorkout = false;
   int _currentIndex = 2;
+
+  // countList Filteroptinen
   List<String> countList = [
     "Schwimmbad",
     "Fitness",
     "Hochschulsport",
   ];
 
+// selectedCountList für Filter nach Namen -> abgeleich ob Strings mit countList übereinstimmen, dann danach suchen
   List<String> selectedCountList = [];
+
+// slectedSpz Sportzentren gefiltert in Listenansicht
   List<Category> selectedSpz = [];
+
+// selectedMarkers Sportzentren gefilter in Kartenansicht
   List<Markerz> selectedMarkers = [];
 
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
   final black = const Color(0xFF000000);
 
-  // void _marker1tap() {
-  //   (showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //             title: Text('das Stadtwerk.Hallenbad'),
-  //             content: Text(
-  //                 'Kategorie:   Hallenschwimmbad  Addresse:   Gabelsbergerstr. 14 Telefon:       0941 6012977 '),
-  //             shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(22)),
-  //             backgroundColor: bgColor,
-  //             contentTextStyle: TextStyle(color: black, fontSize: 18),
-  //             titleTextStyle: TextStyle(color: barColor, fontSize: 25));
-  //       }));
-  // }
 
-  // void _marker2tap() {
-  //   (showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //             title: Text('Unisport Regensburg'),
-  //             content: Text(
-  //                 'Kategorie:   Universitätssport  Addresse:   Am Biopark 12      Telefon:       0941 9432507 '),
-  //             shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(22)),
-  //             backgroundColor: bgColor,
-  //             contentTextStyle: TextStyle(color: black, fontSize: 18),
-  //             titleTextStyle: TextStyle(color: barColor, fontSize: 25));
-  //       }));
-  // }
-
-  // void _marker3tap() {
-  //   (showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //             title: Text('Fitness First'),
-  //             content: Text(
-  //                 'Kategorie:   Fitnessstudio  Addresse:   Bahnhofstr. 12    Telefon:       0941 584070 '),
-  //             shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(22)),
-  //             backgroundColor: bgColor,
-  //             contentTextStyle: TextStyle(color: black, fontSize: 18),
-  //             titleTextStyle: TextStyle(color: barColor, fontSize: 25));
-  //       }));
-  // }
-
+// initState() -Markerz hinzufügen, WICHTIG: eine Filterfunktion auf true setzen (bsp gym, pool)
   @override
   void initState() {
     super.initState();
 
     allMarkers.add(Markerz(
       markerId: MarkerId('myMarker1'),
-      // draggable: false,
       position: LatLng(49.015982, 12.107087),
       infoWindow: InfoWindow(title: ('das Stadtwerk.Hallenbad')),
       onTap: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => InfoHallenbad()));
-
-        // Navigator.pushNamed(context, '/a' );
-
-        //_marker1tap();
       },
       pool: true,
     ));
 
     allMarkers.add(Markerz(
       markerId: MarkerId('myMarker2'),
-      // draggable: false,
       position: LatLng(48.992637, 12.098951),
       infoWindow: InfoWindow(title: ('Unisport Regensburg')),
       onTap: () {
-        // _marker2tap();
-        //Navigator.pushNamed(context, '/b');
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => InfoUnisport()));
       },
@@ -374,21 +146,45 @@ class WorkoutState extends State<Workout> {
 
     allMarkers.add(Markerz(
       markerId: MarkerId('myMarker3'),
-      // draggable: false,
       position: LatLng(49.012260, 12.096680),
       infoWindow: InfoWindow(
         title: ('Fitness First'),
       ),
       onTap: () {
-        // _marker3tap();
-        // Navigator.pushNamed(context, '/c' );
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => InfoFitnessFirst()));
       },
       gym: true,
     ));
+
+    allMarkers.add(Markerz(
+      markerId: MarkerId('myMarker4'),
+      position: LatLng(49.025150, 12.086251),
+      infoWindow: InfoWindow(
+        title: ('dasStadtwerk.Wöhrdbad'),
+      ),
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => InfoWoehrdbad()));
+      },
+      pool: true,
+    ));
+
+    allMarkers.add(Markerz(
+      markerId: MarkerId('myMarker5'),
+      position: LatLng(49.024390, 12.054341),
+      infoWindow: InfoWindow(
+        title: ('dasStadtwerk.Westbad'),
+      ),
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => InfoWestbad()));
+      },
+      pool: true,
+    ));
   }
 
+// _getPoints() - AlertDialog PopUp mit Info über gutgeschriebene Punkte
   void _getPoints() {
     if (_alreadyWorkout == true)
       return;
@@ -409,6 +205,7 @@ class WorkoutState extends State<Workout> {
     }
   }
 
+// checkLocationMarker - befindet sich User in gewünschtem Umkreis um SZ? Ja -> _getPoints() aufrufen
   void checkLocationMarker(LatLng l) {
     LatLng markersLocation;
     int i = 0;
@@ -432,6 +229,7 @@ class WorkoutState extends State<Workout> {
     });
   }
 
+// _openFilterList FilterFunktion, aufrufen der einzelnen Kategorien und hinzufügen zu selectedSpz und selectedMarkers
   void _openFilterList() async {
     selectedSpz.clear();
     selectedMarkers.clear();
@@ -463,7 +261,6 @@ class WorkoutState extends State<Workout> {
         if (selectedCountList[i] == "Hochschulsport") {
           searchCategory = allCategories.where((i) => i.unisport).toList();
           searchMarker = allMarkers.where((i) => i.unisport).toList();
-
         }
         for (int j = 0; j < searchCategory.length; j++) {
           selectedSpz.add(searchCategory[j]);
@@ -473,6 +270,8 @@ class WorkoutState extends State<Workout> {
     }
   }
 
+// MaterialApp build, TabBar, AppBar, floatingActionButton(Filter), locationButton, Karten- & Listenansicht
+// WICHTIG: Am Ende Inforouten angeben für aufruf der Infospz.dart files
   Widget build(context) {
     return MaterialApp(
       home: DefaultTabController(
@@ -480,7 +279,6 @@ class WorkoutState extends State<Workout> {
           child: Scaffold(
             appBar: AppBar(
               title: Text('Workout'),
-              //backgroundColor: barColor,
               bottom: TabBar(
                 tabs: [
                   Tab(icon: Icon(Icons.map)),
@@ -521,12 +319,6 @@ class WorkoutState extends State<Workout> {
                                 title: Text(allCategories[index].title),
                                 leading: Icon(allCategories[index].icon),
                                 onTap: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => infospz(
-                                  //             infotitle:
-                                  //                 allCategories[index].title)));
                                   Navigator.pushNamed(
                                       context, allCategories[index].info);
                                 },
@@ -540,12 +332,6 @@ class WorkoutState extends State<Workout> {
                                 title: Text(selectedSpz[index].title),
                                 leading: Icon(selectedSpz[index].icon),
                                 onTap: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => infospz(
-                                  //             infotitle:
-                                  //                 selectedSpz[index].title)));
                                   Navigator.pushNamed(
                                       context, selectedSpz[index].info);
                                 },
@@ -585,11 +371,11 @@ class WorkoutState extends State<Workout> {
                       context,
                       MaterialPageRoute(builder: (context) => Profile()),
                     );
-                  if(_currentIndex ==2)
-                    Navigator.push(context,
+                  if (_currentIndex == 2)
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(builder: (context) => Shoping()),
                     );
-                    
                 });
               },
             ),
@@ -598,6 +384,8 @@ class WorkoutState extends State<Workout> {
         '/a': (BuildContext context) => InfoHallenbad(),
         '/b': (BuildContext context) => InfoFitnessFirst(),
         '/c': (BuildContext context) => InfoUnisport(),
+        '/d': (BuildContext context) => InfoWoehrdbad(),
+        '/e': (BuildContext context) => InfoWestbad(),
       },
     );
   }

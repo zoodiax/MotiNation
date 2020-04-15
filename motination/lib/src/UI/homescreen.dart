@@ -3,6 +3,7 @@ import 'package:motination/services/auth.dart';
 import 'workout.dart';
 import 'profile.dart';
 import 'shop.dart';
+import 'running.dart';
 
 /*geschlöscht und in main.dart eingefügt
 class MyApp extends StatelessWidget {
@@ -23,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
   final AuthService _auth = AuthService(); 
+  final wrktColor = const Color (0xFF28CCD3);
+  final blackColor = const Color(0xBF000000);
 
   Widget build(context) {
     return new Scaffold(
@@ -47,18 +50,40 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Center(
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: barColor,
-              ),
-              width: 177,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Spacer(flex: 5,),
+              Container(
+              width: 178,
               height: 155,
-              child: FlatButton(
+              child: RaisedButton(
+                shape: new RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                color: blackColor, 
+                child: Icon(
+                  Icons.directions_run,
+                  size: 88,
+                  color: barColor,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Running()),
+                  );
+                },
+              ),),
+              Spacer(),
+              Container(
+              width: 178,
+              height: 155,
+              child: RaisedButton(
+                shape: new RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                color: blackColor, 
                 child: Icon(
                   Icons.fitness_center,
                   size: 88,
-                  color: bgColor,
+                  color: wrktColor,
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -66,7 +91,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => Workout()),
                   );
                 },
-              ))),
+              ),),
+              Spacer(flex:5),
+              ]
+            
+              ),),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -102,5 +131,38 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+}
+
+class TrianglePainter extends CustomPainter {
+  final Color strokeColor;
+  final PaintingStyle paintingStyle;
+  final double strokeWidth;
+
+  TrianglePainter({this.strokeColor = Colors.black, this.strokeWidth = 3, this.paintingStyle = PaintingStyle.stroke});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = strokeColor
+      ..strokeWidth = strokeWidth
+      ..style = paintingStyle;
+
+    canvas.drawPath(getTrianglePath(size.width, size.height), paint);
+  }
+
+  Path getTrianglePath(double x, double y) {
+    return Path()
+      ..moveTo(0, y)
+      ..lineTo(x / 2, 0)
+      ..lineTo(x, y)
+      ..lineTo(0, y);
+  }
+
+  @override
+  bool shouldRepaint(TrianglePainter oldDelegate) {
+    return oldDelegate.strokeColor != strokeColor ||
+        oldDelegate.paintingStyle != paintingStyle ||
+        oldDelegate.strokeWidth != strokeWidth;
   }
 }
