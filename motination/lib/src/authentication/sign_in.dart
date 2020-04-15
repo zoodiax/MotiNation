@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:motination/services/auth.dart';
 import 'package:motination/shared/constants.dart';
+import 'package:motination/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -15,6 +16,7 @@ class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   // text field State
   String email = '';
@@ -23,7 +25,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading(): Scaffold(
       backgroundColor: Colors.blue[100],
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
@@ -77,9 +79,13 @@ class _SignInState extends State<SignIn> {
                 ),
                 onPressed: () async {
                  if(_formKey.currentState.validate()){
+                   setState(() => loading = true);
                     dynamic result = await _auth.signInrWithEmailAndPassword(email, password);
                     if(result == null){
-                      setState(() => error = 'Bitte geben Sie eine gülitig E-Mail Adresse/Passwort ein');
+                      setState(() { 
+                        error = 'Bitte geben Sie eine gülitig E-Mail Adresse/Passwort ein';
+                        loading = false;
+                      });
                     } 
                   }
                 }
