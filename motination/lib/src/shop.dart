@@ -5,11 +5,11 @@ import 'profile.dart';
 class Shoping extends StatefulWidget {
   @override
   createState() {
-    return _ShopState();
+    return ShopState();
   }
 }
 
-class _ShopState extends State<Shoping> {
+class ShopState extends State<Shoping> {
 
 
 
