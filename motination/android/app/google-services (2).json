@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "871064382249",
+    "firebase_url": "https://motination-71086.firebaseio.com",
+    "project_id": "motination-71086",
+    "storage_bucket": "motination-71086.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871064382249:android:f5951e57e71426ea122538",
+        "android_client_info": {
+          "package_name": "com.app.motination"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871064382249-9jpqs911siqgttar91kn3mh30h59gvfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXsNq3Ji52V-hAUvOiN5NaSKoz6w75YN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871064382249-9jpqs911siqgttar91kn3mh30h59gvfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
