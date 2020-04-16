@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motination/src/UI/settings.dart';
 
 import 'homescreen.dart';
 import 'shop.dart';
@@ -25,7 +26,19 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         title: Text('Profile '),
         backgroundColor: barColor,
+        actions: <Widget>[
+          FlatButton.icon(
+            icon: Icon(
+              Icons.settings,
+              color: bgColor,
+              ),
+              label: Text(''),
+            onPressed: () => Navigator.push(context, 
+            MaterialPageRoute(builder: (context) => Settings())),
+            )
+        ],
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
