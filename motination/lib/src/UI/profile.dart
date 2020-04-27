@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/src/UI/settings.dart';
-
+import 'package:motination/src/authentication/sign_in.dart';
 import 'homescreen.dart';
 import 'shop.dart';
 
@@ -38,6 +39,251 @@ class _ProfileState extends State<Profile> {
             )
         ],
       ),
+      
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          
+          Expanded(
+            child:Container(
+            alignment: Alignment.center,
+              height: 150,
+              child: Icon(      //Profilbild
+               Icons.person,
+                color: Colors.grey[700],
+                size: 100,
+              ),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[200],
+              ),
+          ),
+          ),
+
+                          Expanded(
+                            child: Column(children: <Widget>[
+                              Expanded(
+                                child: Container(
+                                  color: bgColor,
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text('Felix Wechsler', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  color: bgColor,
+                                  alignment: Alignment.topCenter,
+                                  child: Text('Windchaser', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                ),
+                              ),
+                            ]),
+                          ),
+          /*Container(
+            child: Text(
+              'Felix Wechsler',//Name muss noch hinzugefügt werden
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey[500], fontSize: 20),
+            ),  
+          ),
+          Container(
+            child: Text(
+              'Windchaser', //Nickname hinzufügen
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey[400], fontSize: 15), 
+            ),
+          ),
+        */
+
+          Expanded(
+          child: Column(
+            children: <Widget>[
+            Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      '23', 
+                      style: TextStyle( color: Colors.grey[500], fontSize: 15),
+                      textAlign: TextAlign.center,
+                      ),
+                     ),
+                  Expanded(
+                    child: Text(
+                      '180 cm', 
+                      style: TextStyle(color: Colors.blueGrey[500], fontSize: 15),
+                      textAlign: TextAlign.center,
+                      ),
+                    ),
+                  Expanded(
+                    child: Text(
+                      '78 kg',
+                      style: TextStyle(color: Colors.grey[700], fontSize:15),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            
+            Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      'Alter', 
+                      style: TextStyle( color: Colors.grey[500], fontSize: 10),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Größe', 
+                      style: TextStyle(color: Colors.blueGrey[500], fontSize: 10),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Gewicht',
+                      style: TextStyle(color: Colors.grey[700], fontSize:10),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            
+            ],
+          ),
+          ),
+          
+    
+          Expanded(
+            child: Column(
+              children: <Widget> [
+                Container(
+                  height: 50,
+                  child: Icon(
+                    Icons.directions_run,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue
+                  ),
+                ), 
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        '23482', 
+                        style: TextStyle( color: Colors.grey[500], fontSize: 20),
+                        textAlign: TextAlign.center
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                      '70984', 
+                      style: TextStyle(color: Colors.blueGrey[500], fontSize: 20),
+                      textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '12,3 km/h',
+                        style: TextStyle(color: Colors.grey[700], fontSize: 20), 
+                        textAlign: TextAlign.center,       
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        'Meter', 
+                        style: TextStyle( color: Colors.grey[500], fontSize: 15),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Minuten', 
+                        style: TextStyle(color: Colors.blueGrey[500], fontSize: 15),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Geschwindigkeit', 
+                        style: TextStyle(color: Colors.blueGrey[500], fontSize: 15),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ]
+            ),
+          ),
+
+          Expanded(
+            child: Column(
+              children: <Widget>[
+              Container(
+                height: 60,
+                child: Icon(
+               Icons.fitness_center,
+                color: Colors.white,
+                size: 30,
+                ),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue
+                
+              ),
+            ), 
+            Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  '14', 
+                  style: TextStyle( color: Colors.grey[500], fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  '7054', 
+                  style: TextStyle(color: Colors.blueGrey[500], fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+            ),
+            Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  'Besuche', 
+                  style: TextStyle( color: Colors.grey[500], fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Minuten', 
+                  style: TextStyle(color: Colors.blueGrey[500], fontSize: 15, fontWeight: FontWeight.w700),                  
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+            ),
+          ],
+        ),
+          ),
+        ],
+      ),
+
+      
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

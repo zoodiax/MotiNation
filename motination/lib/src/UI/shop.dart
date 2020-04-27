@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'homescreen.dart';
 import 'profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Shoping extends StatefulWidget {
   @override
@@ -25,6 +26,14 @@ class ShopState extends State<Shoping> {
         title: Text('Shop'),
         backgroundColor: barColor,
       ),
+      body: StreamBuilder(stream: Firestore.instance.collection('workout').snapshots(),
+      builder: (context, snapshot){
+        return Column(children: <Widget>[
+          Text(snapshot.data.documents[0]['name']),
+
+          Text(snapshot.data.documents[0]['ort']),
+        ]);    
+      },),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
