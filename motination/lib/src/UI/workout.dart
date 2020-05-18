@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'homescreen.dart';
@@ -6,6 +7,11 @@ import 'shop.dart';
 import 'infospz.dart';
 import 'package:location/location.dart';
 import 'package:filter_list/filter_list.dart';
+import 'package:motination/services/database.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'spz.dart';
+import 'spzinfo.dart';
 
 class Workout extends StatefulWidget {
   createState() {
@@ -95,6 +101,8 @@ class WorkoutState extends State<Workout> {
   Location _location = Location();
   bool _alreadyWorkout = false;
   int _currentIndex = 2;
+  Markerz hlpmarker;
+
 
   // countList Filteroptinen
   List<String> countList = [
@@ -116,12 +124,9 @@ class WorkoutState extends State<Workout> {
   final bgColor = const Color(0xFFFEFDFD);
   final black = const Color(0xFF000000);
 
-
-// initState() -Markerz hinzufügen, WICHTIG: eine Filterfunktion auf true setzen (bsp gym, pool)
-  @override
-  void initState() {
-    super.initState();
-
+void fillMarker(){
+    setState(() {
+        
     allMarkers.add(Markerz(
       markerId: MarkerId('myMarker1'),
       position: LatLng(49.015982, 12.107087),
@@ -182,6 +187,14 @@ class WorkoutState extends State<Workout> {
       },
       pool: true,
     ));
+     });
+}
+// initState() -Markerz hinzufügen, WICHTIG: eine Filterfunktion auf true setzen (bsp gym, pool)
+  @override
+  void initState() {
+    super.initState();
+    fillMarker();
+
   }
 
 // _getPoints() - AlertDialog PopUp mit Info über gutgeschriebene Punkte
@@ -224,6 +237,9 @@ class WorkoutState extends State<Workout> {
   void _onMapCreated(GoogleMapController _cntrl) {
     // _controller = _cntrl;
     //var location = _location.getLocation();
+    setState(() {
+      
+    });
     _location.onLocationChanged().listen((l) {
       checkLocationMarker(LatLng(l.latitude, l.longitude));
     });
@@ -250,6 +266,7 @@ class WorkoutState extends State<Workout> {
       for (int i = 0; i < selectedCountList.length; i++) {
         List<Category> searchCategory = [];
         List<Markerz> searchMarker = [];
+
         if (selectedCountList[i] == "Schwimmbad") {
           searchCategory = allCategories.where((i) => i.pool).toList();
           searchMarker = allMarkers.where((i) => i.pool).toList();
@@ -262,13 +279,69 @@ class WorkoutState extends State<Workout> {
           searchCategory = allCategories.where((i) => i.unisport).toList();
           searchMarker = allMarkers.where((i) => i.unisport).toList();
         }
-        for (int j = 0; j < searchCategory.length; j++) {
+        for (int j = 0; j < searchMarker.length; j++) {
           selectedSpz.add(searchCategory[j]);
           selectedMarkers.add(searchMarker[j]);
         }
       }
     }
   }
+
+// makeListWidget für ListView Firestore
+  List<Widget> makeListWidget(AsyncSnapshot snapshot) {
+    
+    return snapshot.data.documents.map<Widget>((document) {
+      var icon;
+      double lat = double.parse(document['lat'] ?? '0');
+      double lng = double.parse(document['lng'] ?? '0'); 
+
+      allMarkers.add(Markerz(
+      markerId: MarkerId(document['name']),
+      position: LatLng(lat, lng),
+      infoWindow: InfoWindow(
+        title: (document['name']),
+      ),
+      pool: true,
+      onTap: () {
+        Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => SpzInfo(
+                      infocategory: document['category'] ?? 'Musterkategorie',
+                      infotitle: document['name'] ?? 'Muster Sportzentrum',
+                      infoaddress: document['address'] ?? 'Musterstraße 11, 1312 Musterstadt',
+                      infoopenhrs: document['opnhrs'] ?? ' Musteröffnungszeiten',
+                      infospecial: document['special'] ?? '',
+                      infotext: document['text'] ??'Bestes Muster Sportzentrum in der Stadt!',
+                      
+                    )),
+          );}));
+   
+
+      (document['pool'] == true) ? icon = Icons.pool : null;
+      (document['gym'] == true) ? icon = Icons.fitness_center : null;
+      return ListTile(
+        title: Text(document['name'] ?? ''),
+        subtitle: Text(document['category'] ?? 'Test'),
+        leading: Icon(icon ?? Icons.fitness_center),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => SpzInfo(
+                      infocategory: document['category'] ?? 'Musterkategorie',
+                      infotitle: document['name'] ?? 'Muster Sportzentrum',
+                      infoaddress: document['address'] ?? 'Musterstraße 11, 1312 Musterstadt',
+                      infoopenhrs: document['opnhrs'] ?? ' Musteröffnungszeiten',
+                      infospecial: document['special'] ?? '',
+                      infotext: document['text'] ?? 'Bestes Muster Sportzentrum in der Stadt!',
+                     
+                    )),
+          );
+        },
+      );
+    }).toList();
+  }
+
+
 
 // MaterialApp build, TabBar, AppBar, floatingActionButton(Filter), locationButton, Karten- & Listenansicht
 // WICHTIG: Am Ende Inforouten angeben für aufruf der Infospz.dart files
@@ -281,8 +354,8 @@ class WorkoutState extends State<Workout> {
               title: Text('Workout'),
               bottom: TabBar(
                 tabs: [
-                  Tab(icon: Icon(Icons.map)),
                   Tab(icon: Icon(Icons.list)),
+                  Tab(icon: Icon(Icons.map)),
                 ],
               ),
             ),
@@ -295,6 +368,23 @@ class WorkoutState extends State<Workout> {
                 FloatingActionButtonLocation.centerFloat,
             body:
                 TabBarView(physics: NeverScrollableScrollPhysics(), children: [
+              Container(
+                child:
+                    //new version with firebase
+                    StreamBuilder(
+                        stream:
+                            Firestore.instance.collection('spz').snapshots(),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Center(child: CircularProgressIndicator());
+                            default:
+                              return ListView(
+                                children: makeListWidget(snapshot),
+                              );
+                          }
+                        }),
+              ),
               GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
@@ -310,36 +400,38 @@ class WorkoutState extends State<Workout> {
                         ? Set.from(allMarkers)
                         : Set.from(selectedMarkers),
               ),
-              Container(
-                child:
-                    selectedCountList == null || selectedCountList.length == 0
-                        ? ListView.separated(
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(allCategories[index].title),
-                                leading: Icon(allCategories[index].icon),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, allCategories[index].info);
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: allCategories.length)
-                        : ListView.separated(
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(selectedSpz[index].title),
-                                leading: Icon(selectedSpz[index].icon),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, selectedSpz[index].info);
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: selectedSpz.length),
-              )
+              
+
+                // old version without firebase
+                // child:
+                //     selectedCountList == null || selectedCountList.length == 0
+                //         ? ListView.separated(
+                //             itemBuilder: (context, index) {
+                //               return ListTile(
+                //                 title: Text(allCategories[index].title),
+                //                 leading: Icon(allCategories[index].icon),
+                //                 onTap: () {
+                //                   Navigator.pushNamed(
+                //                       context, allCategories[index].info);
+                //                 },
+                //               );
+                //             },
+                //             separatorBuilder: (context, index) => Divider(),
+                //             itemCount: allCategories.length)
+                //         : ListView.separated(
+                //             itemBuilder: (context, index) {
+                //               return ListTile(
+                //                 title: Text(selectedSpz[index].title),
+                //                 leading: Icon(selectedSpz[index].icon),
+                //                 onTap: () {
+                //                   Navigator.pushNamed(
+                //                       context, selectedSpz[index].info);
+                //                 },
+                //               );
+                //             },
+                //             separatorBuilder: (context, index) => Divider(),
+                //             itemCount: selectedSpz.length),
+              
             ]),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: 1,
