@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:motination/models/user.dart';
+import 'package:motination/services/database.dart';
+import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/settings.dart';
 import 'package:motination/src/authentication/sign_in.dart';
+import 'package:provider/provider.dart';
 import 'homescreen.dart';
 import 'shop.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -15,6 +20,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
 
 
+    
 
 
   int _currentIndex = 0;
@@ -22,6 +28,9 @@ class _ProfileState extends State<Profile> {
   final bgColor = const Color(0xFFFEFDFD);
 
   Widget build(context) {
+
+    User user = Provider.of<User>(context);
+
     return new Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -40,7 +49,14 @@ class _ProfileState extends State<Profile> {
         ],
       ),
       
-      body: Column(
+      body: StreamBuilder(
+        stream: Firestore.instance.collection('user').document(user.uid).snapshots(),  /*DatabaseService(uid: user.uid).userData,*/
+        builder: (context, snapshot){
+          if(!snapshot.hasData){
+            return new Text('Loading');
+          }
+          
+        return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -67,7 +83,9 @@ class _ProfileState extends State<Profile> {
                                 child: Container(
                                   color: bgColor,
                                   alignment: Alignment.bottomCenter,
-                                  child: Text('Felix Wechsler', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                                  child: Text(snapshot.data['vorname']+' '+ snapshot.data['nachname'], 
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                                  ),
                                 ),
                               ),
                               Expanded(
@@ -75,7 +93,8 @@ class _ProfileState extends State<Profile> {
                                 child: Container(
                                   color: bgColor,
                                   alignment: Alignment.topCenter,
-                                  child: Text('Windchaser', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                  child: Text(snapshot.data['benutzername'], 
+                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
                                 ),
                               ),
                             ]),
@@ -103,21 +122,22 @@ class _ProfileState extends State<Profile> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      '23', 
+                      snapshot.data['alter'],
+            
                       style: TextStyle( color: Colors.grey[500], fontSize: 15),
                       textAlign: TextAlign.center,
                       ),
                      ),
                   Expanded(
                     child: Text(
-                      '180 cm', 
+                      snapshot.data['groese'], 
                       style: TextStyle(color: Colors.blueGrey[500], fontSize: 15),
                       textAlign: TextAlign.center,
                       ),
                     ),
                   Expanded(
                     child: Text(
-                      '78 kg',
+                      snapshot.data['gewicht'],
                       style: TextStyle(color: Colors.grey[700], fontSize:15),
                       textAlign: TextAlign.center,
                     ),
@@ -281,7 +301,10 @@ class _ProfileState extends State<Profile> {
         ),
           ),
         ],
+      );
+        },
       ),
+    
 
       
 
@@ -299,6 +322,10 @@ class _ProfileState extends State<Profile> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            title: Text('Challenge'),
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
             title: Text('Shop'),
           ),
@@ -306,7 +333,7 @@ class _ProfileState extends State<Profile> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            if (_currentIndex == 2)
+            if (_currentIndex == 3)
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Shoping()),
@@ -316,9 +343,15 @@ class _ProfileState extends State<Profile> {
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );
+            if (_currentIndex == 2)
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Challenge()),
+              );              
           });
         },
       ),
     );
+        
   }
 }
