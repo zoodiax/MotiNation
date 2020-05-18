@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motination/src/UI/challenge.dart';
 import 'homescreen.dart';
 import 'profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,7 +16,7 @@ class ShopState extends State<Shoping> {
 
 
 
-  int _currentIndex = 2;
+  int _currentIndex = 3;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
 
@@ -48,6 +49,10 @@ class ShopState extends State<Shoping> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            title: Text('Challenge'),
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
             title: Text('Shop'),
           ),
@@ -64,6 +69,11 @@ class ShopState extends State<Shoping> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            if (_currentIndex == 2)
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Challenge()),
               );
           });
         },

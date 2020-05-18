@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:motination/models/user.dart';
 import 'package:motination/services/database.dart';
+import 'package:motination/shared/loading.dart';
+import 'package:motination/src/UI/profile.dart';
 import 'package:provider/provider.dart';
-import 'user_list.dart';
-import 'package:motination/models/motination.dart';
+import 'package:motination/shared/constants.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -10,30 +12,271 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  final _formKey = GlobalKey<FormState>();
+
+  String _currentvorname;
+  String _currentnachname;
+  String _currentalter;
+  String _currentgroese;
+  String _currentbenutzername;
+  String _currentgewicht;
+  String _currentuid;
+
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<MotiNation>>.value(
-          value: DatabaseService().mNUser,
-          child: Scaffold(
-        appBar: AppBar(
-          title: Text('Einstellungen'),
-          backgroundColor: Colors.blue,
-        ),
+    User user = Provider.of<User>(context);
 
-        body:
-        Column(
-          children: <Widget>[
-         Container(
-          child: Text('Name')
-        ),
-        Container(
-          child: Text('Name aus der Datenbank'),
-        ),
-          ],
-        ),
-        ),
-    );
+    return StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            UserData userData = snapshot.data;
+            return Form(
+                key: _formKey,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text('Profil bearbeiten'),
+                    backgroundColor: Colors.blue,
+                  ),
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Nachname:',
+                                style: TextStyle(
+                                    fontSize: 20, fontStyle: FontStyle.normal),
+                              )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihren Nachnamen ein'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihren Nachnamen ein'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentnachname = val);
+                              })
+                        ],
+                      )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Vorname',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihren Vornamen ein'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihren Vornamen ein'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentvorname = val);
+                              })
+                        ],
+                      )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Benutzername',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie einen Benutzername ein'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie einen Benutzername ein'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentbenutzername = val);
+                              })
+                        ],
+                      )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Alter',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihr Alter ein'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihr Alter ein'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentalter = val);
+                              })
+                        ],
+                      )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Größe',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihre Größe ein'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihre Größe ein'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentgroese = val);
+                              })
+                        ],
+                      )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Gewicht',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihr Gewicht ein'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihr Gewicht ein'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentgewicht = val);
+                              })
+                        ],
+                      )),
+                      RaisedButton(
+                          color: Colors.blue[400],
+                          child: Text(
+                            'Update',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              await DatabaseService(uid: user.uid)
+                                  .updateUserData(
+                                _currentvorname ?? userData.vorname,
+                                _currentnachname ?? userData.nachname,
+                                _currentbenutzername ?? userData.benutzername,
+                                _currentgroese ?? userData.groese,
+                                _currentalter ?? userData.alter,
+                                _currentgewicht ?? userData.gewicht,
+                                _currentuid ?? userData.uid
+                              );
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Profile()));
+                            }
+                          }),
+                    ],
+                  ),
+                ));
+          } else {
+            return Loading();
+          }
+          // return Form(
+          // child: Scaffold(
+          //     appBar: AppBar(
+          //       title: Text('Profil bearbeiten'),
+          //       backgroundColor: Colors.blue,
+          //     ),
 
-    
+          //     body: Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       crossAxisAlignment: CrossAxisAlignment.center,
+          //            children: <Widget>[
+          //               Expanded(
+          //                child: Column(
+          //                 children: <Widget>[
+          //                   Container(
+          //                     alignment: Alignment.centerLeft,
+          //                     child: Text('Nachname:', style: TextStyle(fontSize: 20, fontStyle: FontStyle.normal),)
+
+          //                   ),
+          //                   TextFormField(
+          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihren Nachnamen ein'),
+          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihren Nachnamen ein' : null,
+          //                     onChanged: (val) {
+          //                       setState(() => currentnachname = val);
+          //                     }
+          //                   )
+          //            ],
+          //           )
+          //         ),
+          //               Expanded(
+          //                child: Column(
+          //                 children: <Widget>[
+          //                   Container(
+          //                     child: Text('Vorname', style: TextStyle(fontSize: 15, fontStyle: FontStyle.normal),)
+
+          //                   ),
+          //                   TextFormField(
+          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihren Vornamen ein'),
+          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihren Vornamen ein' : null,
+          //                     onChanged: (val) {
+          //                       setState(() => currentvorname = val);
+          //                     }
+          //                   )
+          //            ],
+          //           )
+          //         ),
+          //                           Expanded(
+          //                child: Column(
+          //                 children: <Widget>[
+          //                   Container(
+          //                     child: Text('Alter', style: TextStyle(fontSize: 15, fontStyle: FontStyle.normal),)
+
+          //                   ),
+          //                   TextFormField(
+          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihr Alter ein'),
+          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihr Alter ein' : null,
+          //                     onChanged: (val) {
+          //                       setState(() => currentalter = val);
+          //                     }
+          //                   )
+          //            ],
+          //           )
+          //         ),
+          //                           Expanded(
+          //                child: Column(
+          //                 children: <Widget>[
+          //                   Container(
+          //                     child: Text('Größe', style: TextStyle(fontSize: 15, fontStyle: FontStyle.normal),)
+
+          //                   ),
+          //                   TextFormField(
+          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihre Größe ein'),
+          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihre Größe ein' : null,
+          //                     onChanged: (val) {
+          //                       setState(() => currentgroese = val);
+          //                     }
+          //                   )
+          //            ],
+          //           )
+          //         )
+          //         ],
+          //       ),
+          // )
+          // );
+        });
   }
 }

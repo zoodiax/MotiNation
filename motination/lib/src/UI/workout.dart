@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:motination/src/UI/challenge.dart';
 import 'homescreen.dart';
 import 'profile.dart';
 import 'shop.dart';
@@ -354,6 +355,10 @@ class WorkoutState extends State<Workout> {
                   title: Text('Home'),
                 ),
                 BottomNavigationBarItem(
+                  icon: Icon(Icons.chat),
+                  title: Text('Challenge'),
+            ),
+                BottomNavigationBarItem(
                   icon: Icon(Icons.shopping_basket),
                   title: Text('Shop'),
                 ),
@@ -376,6 +381,11 @@ class WorkoutState extends State<Workout> {
                       context,
                       MaterialPageRoute(builder: (context) => Shoping()),
                     );
+                  if (_currentIndex == 2)
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => Challenge()),
+              );
                 });
               },
             ),

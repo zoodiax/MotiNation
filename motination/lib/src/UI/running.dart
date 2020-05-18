@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:latlong/latlong.dart' as lib2;
 import 'package:flutter/material.dart';
+import 'package:motination/src/UI/challenge.dart';
 import 'shop.dart';
 import 'homescreen.dart';
 import 'profile.dart';
@@ -233,6 +234,10 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            title: Text('Challenge'),
+          ),          
+          BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
             title: Text('Shop'),
           ),
@@ -250,10 +255,15 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );
-            if (_currentIndex == 2)
+            if (_currentIndex == 3)
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Shoping()),
+              );
+            if (_currentIndex == 2)
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => Challenge()),
               );
           });
         },

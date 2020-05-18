@@ -1,9 +1,10 @@
-class MotiNation {
+/*class MotiNation {
 
-  final String name;
-  final int alter;
-  final int punkte;
+  final String vorname;
+  final String nachname;
+  final String groese;
+  final String alter;
 
-  MotiNation({this.name, this.alter, this.punkte});
+  MotiNation({this.vorname, this.nachname, this.groese, this.alter});
 
-}
+}*/

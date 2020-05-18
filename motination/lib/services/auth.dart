@@ -21,7 +21,7 @@ Stream<User> get user {
 
 
 //sign in anon
-
+/*
 Future signInAnon() async {
   try{
     AuthResult result = await _auth.signInAnonymously();
@@ -32,7 +32,7 @@ Future signInAnon() async {
     return null;
 
   }
-}
+}*/
 
 // sign in with email & password
 Future signInrWithEmailAndPassword(String email, String password) async {
@@ -52,8 +52,8 @@ Future registerWithEmailAndPassword(String email, String password) async {
     AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     FirebaseUser user = result.user;
 
-    //create a new document (in firestore) for the user with the uid 
-    await DatabaseService(uid: user.uid).updateUserData( 'new member' , 0, 0);
+    //create a new document (in firestore) for the user with the uid  //Wird aber nur angelegt wenn man sich neu registriert, dh. wenn ein neues Update herausgebracht wird mit neuer Collection wird es nicht hinzugefügt.
+    await DatabaseService(uid: user.uid).updateUserData( 'Vorname', 'Nachname' ,'benutzername', '-', '-','-',user.uid);
 
     return _userFromFirebaseUser(user);
   } catch(e){

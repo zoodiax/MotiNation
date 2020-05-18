@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motination/services/auth.dart';
+import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/mn_tile.dart';
 import 'workout.dart';
 import 'profile.dart';
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget build(context) {
     return new Scaffold(
+      
       backgroundColor: bgColor,
       appBar: AppBar(
         title: Text('MotiNation '),
@@ -111,17 +113,27 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            title: Text('Challenge'),
+            ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
             title: Text('Shop'),
           ),
+          
         ],
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            if (_currentIndex == 2)
+            if (_currentIndex == 3)
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Shoping()),
+              );
+            if (_currentIndex == 2)
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => Challenge()),
               );
             if (_currentIndex == 0)
               Navigator.push(
