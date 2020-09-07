@@ -8,6 +8,13 @@ import 'profile.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+
+/* Running Class UI Design
+  Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
+  Function: startTimer, keeprunning, startstopwatch, stopstopwatch, distanceBetween, onMapCreated
+             MaterialPageRoute -> (Running, Workout, Profile, Challenge, Shop) 
+*/
+
 class Running extends StatefulWidget {
   @override
   createState() {
@@ -220,6 +227,8 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
             : Icon(Icons.play_arrow),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,

@@ -7,12 +7,10 @@ import 'profile.dart';
 import 'shop.dart';
 import 'running.dart';
 
-/*geschlöscht und in main.dart eingefügt
-class MyApp extends StatelessWidget {
-  Widget build(context) {
-    return MaterialApp(home: new HomeScreen());
-  }
-}*/
+/* Homescreen Class UI Design
+  Content: Logout Button, Workout Button, Running Botton, Bottom Navigation Bar
+  Function: _auth.signOut(), MaterialPageRoute -> (Running, Workout, Profile, Challenge, Shop) 
+*/
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -30,8 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final blackColor = const Color(0xBF000000);
 
   Widget build(context) {
-    return new Scaffold(
-      
+    return new Scaffold( 
       backgroundColor: bgColor,
       appBar: AppBar(
         title: Text('MotiNation '),
@@ -144,38 +141,5 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
-  }
-}
-
-class TrianglePainter extends CustomPainter {
-  final Color strokeColor;
-  final PaintingStyle paintingStyle;
-  final double strokeWidth;
-
-  TrianglePainter({this.strokeColor = Colors.black, this.strokeWidth = 3, this.paintingStyle = PaintingStyle.stroke});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = strokeColor
-      ..strokeWidth = strokeWidth
-      ..style = paintingStyle;
-
-    canvas.drawPath(getTrianglePath(size.width, size.height), paint);
-  }
-
-  Path getTrianglePath(double x, double y) {
-    return Path()
-      ..moveTo(0, y)
-      ..lineTo(x / 2, 0)
-      ..lineTo(x, y)
-      ..lineTo(0, y);
-  }
-
-  @override
-  bool shouldRepaint(TrianglePainter oldDelegate) {
-    return oldDelegate.strokeColor != strokeColor ||
-        oldDelegate.paintingStyle != paintingStyle ||
-        oldDelegate.strokeWidth != strokeWidth;
   }
 }

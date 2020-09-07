@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 
+/* Infospz Class UI Prototype
+  Used for Offline Marker Creation(Workout Function)
+  Goal: Get rid of this function, switch to Spzinfo with FireBase Connection
+ */
 class Infospz extends StatelessWidget {
   Infospz({
     this.infotitle,

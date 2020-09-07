@@ -6,6 +6,11 @@ import 'package:motination/src/UI/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/shared/constants.dart';
 
+/* Settings Class UI Design
+  Content: Update Button, TextField (LastName, FirstName, UserName, Age, Height, Weight)
+  Function: DatabaseService(), Loading(), MaterialPageRoute -> (Profile, Challenge, Shop) 
+*/
+
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();

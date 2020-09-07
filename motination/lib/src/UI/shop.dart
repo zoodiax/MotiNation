@@ -3,6 +3,13 @@ import 'package:motination/src/UI/challenge.dart';
 import 'homescreen.dart';
 import 'profile.dart';
 
+
+/* Shoping Class UI Design
+  Test Page for Backend Test
+  Content:  Bottom Navigation Bar
+  Function: MaterialPageRoute -> (Profile, Homescreen, Challenge) 
+*/
+
 class Shoping extends StatefulWidget {
   @override
   createState() {
@@ -11,9 +18,6 @@ class Shoping extends StatefulWidget {
 }
 
 class ShopState extends State<Shoping> {
-
-
-
 
   int _currentIndex = 3;
   final barColor = const Color(0xFF0A79DF);
