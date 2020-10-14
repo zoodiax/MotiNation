@@ -8,10 +8,6 @@ import 'shop.dart';
 import 'infospz.dart';
 import 'package:location/location.dart';
 import 'package:filter_list/filter_list.dart';
-import 'package:motination/services/database.dart';
-import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'spz.dart';
 import 'spzinfo.dart';
 
 class Workout extends StatefulWidget {
@@ -403,36 +399,6 @@ void fillMarker(){
               ),
               
 
-                // old version without firebase
-                // child:
-                //     selectedCountList == null || selectedCountList.length == 0
-                //         ? ListView.separated(
-                //             itemBuilder: (context, index) {
-                //               return ListTile(
-                //                 title: Text(allCategories[index].title),
-                //                 leading: Icon(allCategories[index].icon),
-                //                 onTap: () {
-                //                   Navigator.pushNamed(
-                //                       context, allCategories[index].info);
-                //                 },
-                //               );
-                //             },
-                //             separatorBuilder: (context, index) => Divider(),
-                //             itemCount: allCategories.length)
-                //         : ListView.separated(
-                //             itemBuilder: (context, index) {
-                //               return ListTile(
-                //                 title: Text(selectedSpz[index].title),
-                //                 leading: Icon(selectedSpz[index].icon),
-                //                 onTap: () {
-                //                   Navigator.pushNamed(
-                //                       context, selectedSpz[index].info);
-                //                 },
-                //               );
-                //             },
-                //             separatorBuilder: (context, index) => Divider(),
-                //             itemCount: selectedSpz.length),
-              
             ]),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: 1,

@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/models/user.dart';
-import 'package:motination/services/database.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/settings.dart';
-import 'package:motination/src/authentication/sign_in.dart';
 import 'package:provider/provider.dart';
 import 'homescreen.dart';
 import 'shop.dart';
@@ -99,21 +96,6 @@ class _ProfileState extends State<Profile> {
                               ),
                             ]),
                           ),
-          /*Container(
-            child: Text(
-              'Felix Wechsler',//Name muss noch hinzugefügt werden
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey[500], fontSize: 20),
-            ),  
-          ),
-          Container(
-            child: Text(
-              'Windchaser', //Nickname hinzufügen
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey[400], fontSize: 15), 
-            ),
-          ),
-        */
 
           Expanded(
           child: Column(

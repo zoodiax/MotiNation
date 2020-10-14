@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:motination/services/auth.dart';
 import 'package:motination/src/UI/challenge.dart';
-import 'package:motination/src/UI/mn_tile.dart';
 import 'workout.dart';
 import 'profile.dart';
 import 'shop.dart';
 import 'running.dart';
-
-/*geschlöscht und in main.dart eingefügt
-class MyApp extends StatelessWidget {
-  Widget build(context) {
-    return MaterialApp(home: new HomeScreen());
-  }
-}*/
 
 class HomeScreen extends StatefulWidget {
   @override

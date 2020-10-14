@@ -15,21 +15,4 @@ List<Spz> allSpz = [];
 
 }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return 
-//       StreamBuilder(stream: Firestore.instance.collection('spz').snapshots(),
-//       builder: (context, snapshot){
-//         if (!snapshot.hasData) return Text('Loading data .. please wait..');
-//         else{
-//         return Column(children: <Widget>[
-//           Text(snapshot.data.documents[1]['name']),
-//           Text(snapshot.data.documents[1]['lat'].toString()),
-//           Text(snapshot.data.documents[1]['address']['city']),
-//         ]); }   
-//       },
-//     );
-//   }
-// }
-
 
