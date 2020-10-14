@@ -7,9 +7,9 @@ class DatabaseService {
   DatabaseService({this.uid});
 // collection reference
 final CollectionReference userCollection = Firestore.instance.collection('user'); //new collection if you register
+final CollectionReference activityCollection = Firestore.instance.collection('user');
 
-
-Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid) async {
+Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, String geschlecht) async {
   return await userCollection.document(uid).setData({
     'vorname': vorname,
     'nachname': nachname,
@@ -17,9 +17,21 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
     'groese': groese,
     'alter': alter,
     'gewicht': gewicht,
-    'uid': uid, //neu hinzugefügt
+    'uid': uid,
+    'geschlecht': geschlecht, //neu hinzugefügt nochmals in Firestore überprüfen
   });
 }
+Future updateUserActivityData(String duration, distance, calories, date, time) async {
+  return await activityCollection.document(uid).collection('workout').document('workoutid').setData({
+    'duration': duration,
+    'distance': distance,
+    'calories': calories,
+    'date': date,
+    'time': time
+  });
+}
+   
+
 
 //list from snapshot
 

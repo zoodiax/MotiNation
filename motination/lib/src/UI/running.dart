@@ -63,6 +63,8 @@ class RunningState extends State<Running> {
       stopstopwatch();
   }
 
+ 
+
   void startstopwatch() {
     setState(() {
       timerisrunning = true;
@@ -89,7 +91,14 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
     // });
   }
 
+/*void resetactivity(){
 
+} 
+
+ void safeactivity(){
+    if  
+  }
+*/
 
   void _onMapCreated(GoogleMapController _cntrl) {
     _controller = _cntrl;
@@ -103,6 +112,7 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
           CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 14)));
     });
   }
+  
 
   Widget build(context) {
     return new Scaffold(
@@ -219,6 +229,9 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
             ? Icon(Icons.pause)
             : Icon(Icons.play_arrow),
       ),
+      /*floatingActionButton: FloatingActionButton(
+        onPressed: ,
+        ),*/
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

@@ -21,6 +21,7 @@ class _SettingsState extends State<Settings> {
   String _currentbenutzername;
   String _currentgewicht;
   String _currentuid;
+  String _currentgeschlecht;
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +55,9 @@ class _SettingsState extends State<Settings> {
                               )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihren Nachnamen ein'),
+                                  hintText: 'Geben Sie ihren Nachnamen ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihren Nachnamen ein'
+                                  ? 'Geben Sie ihren Nachnamen ein.'
                                   : null,
                               onChanged: (val) {
                                 setState(() => _currentnachname = val);
@@ -74,9 +75,9 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihren Vornamen ein'),
+                                  hintText: 'Geben Sie ihren Vornamen ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihren Vornamen ein'
+                                  ? 'Geben Sie ihren Vornamen ein.'
                                   : null,
                               onChanged: (val) {
                                 setState(() => _currentvorname = val);
@@ -94,9 +95,9 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie einen Benutzername ein'),
+                                  hintText: 'Geben Sie einen Benutzername ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie einen Benutzername ein'
+                                  ? 'Geben Sie einen Benutzername ein.'
                                   : null,
                               onChanged: (val) {
                                 setState(() => _currentbenutzername = val);
@@ -114,9 +115,9 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihr Alter ein'),
+                                  hintText: 'Geben Sie ihr Alter ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihr Alter ein'
+                                  ? 'Geben Sie ihr Alter ein.'
                                   : null,
                               onChanged: (val) {
                                 setState(() => _currentalter = val);
@@ -134,9 +135,9 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihre Größe ein'),
+                                  hintText: 'Geben Sie ihre Größe ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihre Größe ein'
+                                  ? 'Geben Sie ihre Größe ein.'
                                   : null,
                               onChanged: (val) {
                                 setState(() => _currentgroese = val);
@@ -154,15 +155,35 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihr Gewicht ein'),
+                                  hintText: 'Geben Sie ihr Gewicht ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihr Gewicht ein'
+                                  ? 'Geben Sie ihr Gewicht ein.'
                                   : null,
                               onChanged: (val) {
                                 setState(() => _currentgewicht = val);
                               })
                         ],
                       )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Geschlecht',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihr Geschlecht ein.'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihr Geschlecht ein.'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentgeschlecht = val);
+                              })
+                        ],
+                      )),                      
                       RaisedButton(
                           color: Colors.blue[400],
                           child: Text(
@@ -179,7 +200,8 @@ class _SettingsState extends State<Settings> {
                                 _currentgroese ?? userData.groese,
                                 _currentalter ?? userData.alter,
                                 _currentgewicht ?? userData.gewicht,
-                                _currentuid ?? userData.uid
+                                _currentuid ?? userData.uid,
+                                _currentgeschlecht ?? userData.geschlecht
                               );
                               Navigator.push(
                                   context,

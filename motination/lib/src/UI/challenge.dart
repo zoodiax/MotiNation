@@ -23,6 +23,20 @@ class _ChallengeState extends State<Challenge> {
   final blackColor = const Color(0xBF000000);
 
 
+// makeListWidget für ListView Firestore
+  List<Widget> makeListWidgetUser(AsyncSnapshot snapshot) {
+    
+    return snapshot.data.documents.map<Widget>((document) {
+    
+      return ListTile(
+        title: Text(document['vorname']+' '+document['nachname'] ?? ''),
+        subtitle: Text(document['benutzername'] ?? ''),
+        leading: Icon(Icons.person),
+       
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
   // User user = Provider.of<User>(context);
@@ -34,7 +48,7 @@ class _ChallengeState extends State<Challenge> {
         title: Text('Challenge'),
       ),
 
-      /*body: Container(
+      body: Container(
         child: StreamBuilder(
           stream: Firestore.instance.collection('user').snapshots(),
           builder: (context,snapshot) {
@@ -49,17 +63,16 @@ class _ChallengeState extends State<Challenge> {
                 ),
               );
             } else{
-                return ListView.builder(
+                return ListView(
                   padding: EdgeInsets.all(10.0),
-                  itemBuilder: (context,index) => buildItem(context, snapshot.data.documents[index]),
-                  itemCount: snapshot.data.documents.length,
+                  children: makeListWidgetUser(snapshot),
                   );
             }
           }
         ),
       ),
 
-*/
+
 
 
        bottomNavigationBar: BottomNavigationBar(
