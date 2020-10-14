@@ -32,6 +32,7 @@ dependencies:
   cloud_firestore: ^0.12.9+4
   provider: ^4.0.5
   flutter_spinkit: ^4.1.2+1
+  dcdg: ^2.0.1
 
   latlong: ^0.6.1
 

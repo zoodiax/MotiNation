@@ -1,12 +1,15 @@
 import 'dart:async';
-import 'package:latlong/latlong.dart' as lib2;
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong/latlong.dart' as lib2;
+import 'package:location/location.dart';
 import 'package:motination/src/UI/challenge.dart';
-import 'shop.dart';
+
 import 'homescreen.dart';
 import 'profile.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'shop.dart';
+
 
 
 /* Running Class UI Design
@@ -29,9 +32,13 @@ class RunningState extends State<Running> {
   bool timerisrunning = false;
   Stopwatch _stopwatch = Stopwatch();
   String timerdisplay = '00:00:00';
-  String distancedisplay = '0.00 km';
-  String speeddisplay = '0 km/h';
-  String minkmdisplay = '0 min / km';
+  String distancedisplay = '0.00 ';
+  String caldisplay = '0';
+  String tempodisplay = '0 ';
+  int min = 0;
+  int sec = 0;
+  int weigth = 70;
+  int met = 12;
   final Duration dur = const Duration(seconds: 1);
   final lib2.Distance distance = new lib2.Distance();
   double distancemeter =0;
@@ -39,9 +46,21 @@ class RunningState extends State<Running> {
   lib2.LatLng latlngend = lib2.LatLng(49.015982, 12.107087);
   lib2.LatLng latlnghlp = lib2.LatLng(0, 0);
 
+  LatLng linehlp = LatLng(0,0);
   int _currentIndex = 1;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
+
+  //polylines: 
+  final Set<Polyline> _polyline = {};
+  List<LatLng> latlnglines = List();
+  // LatLng _lineone = LatLng(49.016144,12.093372);
+  // LatLng _linetwo = LatLng(49.017270,12.100067);
+  // LatLng _linethree = LatLng(49.020366,12.090564);
+  // LatLng _linefour = LatLng(49.021041,12.084552);
+  
+
+
 
   void startTimer() {
     Timer(dur, keeprunning);
@@ -53,18 +72,32 @@ class RunningState extends State<Running> {
       latlngstart = latlnghlp;
       distanceBetween(latlngstart, latlngend);
       latlngend = latlngstart;
+      latlnglines.add(linehlp);
+      
+      // latlnglines.add(_lineone);
+      // latlnglines.add(_linetwo);
+      // latlnglines.add(_linethree);
+      // latlnglines.add(_linefour);
       setState(() {
         timerdisplay = (_stopwatch.elapsed.inHours.toString().padLeft(2, '0')) +
             ':' +
             ((_stopwatch.elapsed.inMinutes % 60).toString().padLeft(2, '0')) +
             ':' +
             ((_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0'));
-        speeddisplay = (distancemeter * 3.6 / _stopwatch.elapsed.inSeconds).toStringAsFixed(2) + ' km/h';
-        minkmdisplay = ((_stopwatch.elapsed.inSeconds * 1000) / (distancemeter * 60)).toStringAsFixed(2)  +
-                       // ((_stopwatch.elapsed.inSeconds *1000 /distancemeter)%60).toStringAsFixed(2) + 
-                        ' min/km';
         
-      distancedisplay = ((distancemeter/1000).toStringAsFixed(2) + ' km');
+        min = (_stopwatch.elapsed.inSeconds / (60 * distancemeter/1000)).toInt() ;              
+        sec = ((((_stopwatch.elapsed.inSeconds / (60 * distancemeter/1000))*100).toInt() - min*100) * 0.6).toInt();
+        caldisplay = (_stopwatch.elapsed.inSeconds / 60 * 3.5 * weigth * met/200).toInt().toString();
+        tempodisplay = min.toString() + ':' + sec.toString().padLeft(2, '0');
+        distancedisplay = ((distancemeter/1000).toStringAsFixed(2));
+      
+      _polyline.add(Polyline(
+        polylineId: PolylineId('route1'),
+        visible: true,
+        points: latlnglines,
+        color: Colors.blue,
+        width: 4,
+      ));
       });
     } else
       stopstopwatch();
@@ -85,6 +118,7 @@ class RunningState extends State<Running> {
       timerisrunning = false;
     });
     _stopwatch.stop();
+    latlnglines = [];
   }
 
 void distanceBetween(lib2.LatLng start, lib2.LatLng end){
@@ -105,7 +139,9 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
       double hlplat = l.latitude;
       double hlplng = l.longitude;
       latlnghlp = lib2.LatLng(hlplat, hlplng);
-     
+      linehlp = LatLng(hlplat, hlplng);
+
+      
       _controller.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 14)));
     });
@@ -155,7 +191,7 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
                                 child: Container(
                                   color: bgColor,
                                   alignment: Alignment.topCenter,
-                                  child: Text('Distanz', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                  child: Text('Distanz km', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
                                 ),
                               ),
                             ]),
@@ -166,7 +202,7 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
                                 child: Container(
                                   color: bgColor,
                                   alignment: Alignment.center,
-                                  child: Text(speeddisplay, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                                  child: Text(caldisplay, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
                                 ),
                               ),
                               Expanded(
@@ -174,7 +210,7 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
                                 child: Container(
                                   color: bgColor,
                                   alignment: Alignment.topCenter,
-                                  child: Text('Geschwindigkeit', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                  child: Text('Kalorien kcal', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
                                 ),
                               ),
                             ]),
@@ -185,7 +221,7 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
                                 child: Container(
                                   color: bgColor,
                                   alignment: Alignment.center,
-                                  child: Text(minkmdisplay, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                                  child: Text(tempodisplay, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
                                 ),
                               ),
                               Expanded(
@@ -193,7 +229,7 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
                                 child: Container(
                                   color: bgColor,
                                   alignment: Alignment.topCenter,
-                                  child: Text('Zeit', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                  child: Text('ø Tempo /km', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
                                 ),
                               ),
                             ]),
@@ -210,12 +246,13 @@ void distanceBetween(lib2.LatLng start, lib2.LatLng end){
               mapType: MapType.terrain,
               initialCameraPosition: CameraPosition(
                 target: _initialPosition,
-                zoom: 13,
+                zoom: 11,
               ),
               myLocationButtonEnabled: true,
               myLocationEnabled: true,
               scrollGesturesEnabled: true,
               onMapCreated: _onMapCreated,
+              polylines: _polyline,
             ),
           ),
         ],
