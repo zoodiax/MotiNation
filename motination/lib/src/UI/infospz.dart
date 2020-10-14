@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// manuelle eingabe für die Marker -> wird derzeit noch benötigt, aber in zukunft gelöscht, weil switch auf online marker setzten
+
 
 /* Infospz Class UI Prototype
   Used for Offline Marker Creation(Workout Function)

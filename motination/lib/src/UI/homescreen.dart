@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:motination/services/auth.dart';
 import 'package:motination/src/UI/challenge.dart';
-import 'package:motination/src/UI/mn_tile.dart';
+
 import 'workout.dart';
 import 'profile.dart';
 import 'shop.dart';
 import 'running.dart';
 
-/* Homescreen Class UI Design
-  Content: Logout Button, Workout Button, Running Botton, Bottom Navigation Bar
-  Function: _auth.signOut(), MaterialPageRoute -> (Running, Workout, Profile, Challenge, Shop) 
-*/
+
 
 class HomeScreen extends StatefulWidget {
   @override

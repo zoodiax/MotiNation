@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:motination/models/user.dart';
-import 'package:motination/services/database.dart';
+
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/settings.dart';
-import 'package:motination/src/authentication/sign_in.dart';
+
 import 'package:provider/provider.dart';
 import 'homescreen.dart';
 import 'shop.dart';

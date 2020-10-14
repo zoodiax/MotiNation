@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'homescreen.dart';
 import 'shop.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
-import 'package:motination/models/user.dart';
 
 
 /* Challenge Class UI Design

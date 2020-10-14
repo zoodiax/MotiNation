@@ -60,8 +60,6 @@ class RunningState extends State<Running> {
   // LatLng _linefour = LatLng(49.021041,12.084552);
   
 
-
-
   void startTimer() {
     Timer(dur, keeprunning);
   }

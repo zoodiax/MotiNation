@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:motination/models/motination.dart';
+
 import 'package:motination/models/user.dart';
 
 class DatabaseService {
@@ -21,20 +21,7 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
   });
 }
 
-//list from snapshot
 
-/*List<MotiNation> _motinationListFromSnapshot(QuerySnapshot snapshot){
-return snapshot.documents.map((doc){
-  return MotiNation(
-    vorname: doc.data['vorname'] ?? '-',
-    nachname: doc.data['nachname'] ?? '-',
-    groese: doc.data['groese'] ?? '-',
-    alter: doc.data['alter'] ?? '-',
-
-  );
-
-}).toList();
-}*/
 
 //userData from snapshot
 
@@ -50,11 +37,7 @@ return UserData(
 );
 }
 
-//get User streams
-/*Stream<List<MotiNation>> get user{
-return userCollection.snapshots()
-.map(_motinationListFromSnapshot);
-}*/
+
 
 //get user doch stream
 Stream<UserData> get userData {
