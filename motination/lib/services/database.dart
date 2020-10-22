@@ -4,12 +4,13 @@ import 'package:motination/models/user.dart';
 
 class DatabaseService {
   final String uid;
+  
   DatabaseService({this.uid});
 // collection reference
 final CollectionReference userCollection = Firestore.instance.collection('user'); //new collection if you register
 
 
-Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid) async {
+Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, int trackrun) async {
   return await userCollection.document(uid).setData({
     'vorname': vorname,
     'nachname': nachname,
@@ -18,9 +19,18 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
     'alter': alter,
     'gewicht': gewicht,
     'uid': uid, //neu hinzugefügt
+    'trackrun' : trackrun,
   });
 }
 
+Future updateRunData(String distanz, kcal, time) async {
+  return await userCollection.document(uid).collection('Run').add({
+    'distanz': distanz,
+    'kcal': kcal,
+    'time': time,
+    
+  });
+}
 
 
 //userData from snapshot

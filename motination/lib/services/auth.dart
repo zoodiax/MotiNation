@@ -5,15 +5,14 @@ import 'package:motination/services/database.dart';
 class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  //create user obj based on FirebaseUser
+ 
+  //compare if User exists with given Mail and Passwort
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
   }
 
 
 //auth change user stream
-
 Stream<User> get user {
   return _auth.onAuthStateChanged
     .map(_userFromFirebaseUser);
@@ -52,8 +51,10 @@ Future registerWithEmailAndPassword(String email, String password) async {
     AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     FirebaseUser user = result.user;
 
+
     //create a new document (in firestore) for the user with the uid  //Wird aber nur angelegt wenn man sich neu registriert, dh. wenn ein neues Update herausgebracht wird mit neuer Collection wird es nicht hinzugefügt.
-    await DatabaseService(uid: user.uid).updateUserData( 'Vorname', 'Nachname' ,'benutzername', '-', '-','-',user.uid);
+    await DatabaseService(uid: user.uid).updateUserData( 'Vorname', 'Nachname' ,'benutzername', '-', '-','-',user.uid,0 );
+   
 
     return _userFromFirebaseUser(user);
   } catch(e){

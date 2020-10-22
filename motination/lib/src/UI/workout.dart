@@ -9,7 +9,6 @@ import 'infospz.dart';
 import 'package:location/location.dart';
 import 'package:filter_list/filter_list.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'spzinfo.dart';
 

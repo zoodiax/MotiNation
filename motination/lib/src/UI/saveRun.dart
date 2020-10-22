@@ -1,52 +1,76 @@
+
+
 import 'package:flutter/material.dart';
+
 import 'package:motination/src/UI/challenge.dart';
+
 import 'homescreen.dart';
 import 'profile.dart';
+import 'shop.dart';
+
 import 'package:motination/services/database.dart';
+
 import 'package:motination/models/user.dart';
 
 import 'package:motination/src/UI/profile.dart';
 import 'package:provider/provider.dart';
 
 
-/* Shoping Class UI Design
-  Test Page for Backend Test
-  Content:  Bottom Navigation Bar
-  Function: MaterialPageRoute -> (Profile, Homescreen, Challenge) 
-*/
 
-class Shoping extends StatefulWidget {
+class SaveRun extends StatefulWidget {
+  final int dis;
+  final int kcal;
+  final int time;
+ 
+  SaveRun({Key key, this.dis, this.kcal, this.time}) : super (key:key);
   @override
-  createState() {
-    return ShopState();
-  }
+  _SaveRunState createState() => new _SaveRunState();
 }
 
-class ShopState extends State<Shoping> {
-
-
-
-   String kcal = '10';
-   String tmp = '200';
-   String dis = '0.1';
-   String time = '0';
-  int _currentIndex = 3;
+class _SaveRunState extends State<SaveRun> {
+ 
+int _currentIndex = 1;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
+
+
   Widget build(context) {
     User user = Provider.of<User>(context);
-    return Scaffold(
+
+    return new Scaffold(
+      
       backgroundColor: bgColor,
       appBar: AppBar(
-        title: Text('Shop'),
+        title: Text('SaveRun'),
         backgroundColor: barColor,
       ),
       body: Container(
-        
+        alignment: Alignment.center,
+        child: Column (children: <Widget> [ 
+          Spacer(),
+          Text('Gratulation!', style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w500)),
+          Text(''),
+          Text('Deine Laufergebnisse:'),
+          Text(''),
+          Text('Distanz in m: ' +widget.dis.toString() + '    Verbrannte Kcal: ' +  widget.kcal.toString()+ '   Gelaufene Zeit in sec: ' + widget.time.toString()),
+          Spacer(),
+
+
+        ]),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
+      floatingActionButton: FloatingActionButton(onPressed: ()async {
       
-        await DatabaseService(uid: user.uid).updateRunData(dis, kcal, tmp);}),
+        await DatabaseService(uid: user.uid).updateRunData(widget.dis.toString(), widget.kcal.toString(), widget.time.toString());
+        Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+        },
+
+         child: Icon(Icons.save),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
 
       bottomNavigationBar: BottomNavigationBar(
@@ -65,7 +89,7 @@ class ShopState extends State<Shoping> {
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             title: Text('Challenge'),
-          ),
+          ),          
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
             title: Text('Shop'),
@@ -84,9 +108,14 @@ class ShopState extends State<Shoping> {
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );
-            if (_currentIndex == 2)
+            if (_currentIndex == 3)
               Navigator.push(
                 context,
+                MaterialPageRoute(builder: (context) => Shoping()),
+              );
+            if (_currentIndex == 2)
+              Navigator.push(
+                context, 
                 MaterialPageRoute(builder: (context) => Challenge()),
               );
           });

@@ -184,7 +184,8 @@ class _SettingsState extends State<Settings> {
                                 _currentgroese ?? userData.groese,
                                 _currentalter ?? userData.alter,
                                 _currentgewicht ?? userData.gewicht,
-                                _currentuid ?? userData.uid
+                                _currentuid ?? userData.uid,
+                                userData.trackrun,
                               );
                               Navigator.push(
                                   context,
