@@ -20,6 +20,7 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
     'geschlecht': geschlecht, //neu hinzugefügt nochmals in Firestore überprüfen
   });
 }
+
 Future updateUserActivityData(String duration, distance, calories, date, time) async {
   return await activityCollection.document(uid).collection('workout').document('workoutid').setData({
     'duration': duration,

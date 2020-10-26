@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:motination/models/user.dart';
 import 'package:motination/src/UI/challenge.dart';
+import 'package:motination/src/UI/runstats.dart';
 import 'package:motination/src/UI/settings.dart';
 import 'package:provider/provider.dart';
 import 'homescreen.dart';
@@ -163,16 +164,43 @@ class _ProfileState extends State<Profile> {
               children: <Widget> [
                 Container(
                   height: 50,
-                  child: Icon(
-                    Icons.directions_run,
-                    color: Colors.white,
-                    size: 30,
+                  child: FloatingActionButton(
+                    backgroundColor: barColor,
+                    child: Icon(
+                      Icons.directions_run,
+                      size: 30,
+                      color: Colors.white
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Runstats()),
+                      );
+                    },
                   ),
-                  decoration: BoxDecoration(
+                  /*decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.blue
-                  ),
+                  ),*/
                 ), 
+               /* Container(
+              width: 178,
+              height: 155,
+              child: RaisedButton(
+                shape: new RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                color: Colors.black, 
+                child: Icon(
+                  Icons.fitness_center,
+                  size: 88,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Runstats()),
+                  );
+                },
+              ),),*/
                 Row(
                   children: <Widget>[
                     Expanded(
