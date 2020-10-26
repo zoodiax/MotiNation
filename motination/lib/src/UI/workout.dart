@@ -8,10 +8,8 @@ import 'shop.dart';
 import 'infospz.dart';
 import 'package:location/location.dart';
 import 'package:filter_list/filter_list.dart';
-import 'package:motination/services/database.dart';
-import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'spz.dart';
+
+
 import 'spzinfo.dart';
 
 

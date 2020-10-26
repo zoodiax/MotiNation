@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:motination/models/motination.dart';
+
 import 'package:motination/models/user.dart';
 
 class DatabaseService {
   final String uid;
+  
   DatabaseService({this.uid});
 // collection reference
 final CollectionReference userCollection = Firestore.instance.collection('user'); //new collection if you register
 
 
-Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid) async {
+Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, int trackrun) async {
   return await userCollection.document(uid).setData({
     'vorname': vorname,
     'nachname': nachname,
@@ -18,23 +19,19 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
     'alter': alter,
     'gewicht': gewicht,
     'uid': uid, //neu hinzugefügt
+    'trackrun' : trackrun,
   });
 }
 
-//list from snapshot
+Future updateRunData(String distanz, kcal, time) async {
+  return await userCollection.document(uid).collection('Run').add({
+    'distanz': distanz,
+    'kcal': kcal,
+    'time': time,
+    
+  });
+}
 
-/*List<MotiNation> _motinationListFromSnapshot(QuerySnapshot snapshot){
-return snapshot.documents.map((doc){
-  return MotiNation(
-    vorname: doc.data['vorname'] ?? '-',
-    nachname: doc.data['nachname'] ?? '-',
-    groese: doc.data['groese'] ?? '-',
-    alter: doc.data['alter'] ?? '-',
-
-  );
-
-}).toList();
-}*/
 
 //userData from snapshot
 
@@ -50,11 +47,7 @@ return UserData(
 );
 }
 
-//get User streams
-/*Stream<List<MotiNation>> get user{
-return userCollection.snapshots()
-.map(_motinationListFromSnapshot);
-}*/
+
 
 //get user doch stream
 Stream<UserData> get userData {

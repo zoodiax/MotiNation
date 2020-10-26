@@ -184,7 +184,8 @@ class _SettingsState extends State<Settings> {
                                 _currentgroese ?? userData.groese,
                                 _currentalter ?? userData.alter,
                                 _currentgewicht ?? userData.gewicht,
-                                _currentuid ?? userData.uid
+                                _currentuid ?? userData.uid,
+                                userData.trackrun,
                               );
                               Navigator.push(
                                   context,
@@ -198,90 +199,7 @@ class _SettingsState extends State<Settings> {
           } else {
             return Loading();
           }
-          // return Form(
-          // child: Scaffold(
-          //     appBar: AppBar(
-          //       title: Text('Profil bearbeiten'),
-          //       backgroundColor: Colors.blue,
-          //     ),
-
-          //     body: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //            children: <Widget>[
-          //               Expanded(
-          //                child: Column(
-          //                 children: <Widget>[
-          //                   Container(
-          //                     alignment: Alignment.centerLeft,
-          //                     child: Text('Nachname:', style: TextStyle(fontSize: 20, fontStyle: FontStyle.normal),)
-
-          //                   ),
-          //                   TextFormField(
-          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihren Nachnamen ein'),
-          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihren Nachnamen ein' : null,
-          //                     onChanged: (val) {
-          //                       setState(() => currentnachname = val);
-          //                     }
-          //                   )
-          //            ],
-          //           )
-          //         ),
-          //               Expanded(
-          //                child: Column(
-          //                 children: <Widget>[
-          //                   Container(
-          //                     child: Text('Vorname', style: TextStyle(fontSize: 15, fontStyle: FontStyle.normal),)
-
-          //                   ),
-          //                   TextFormField(
-          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihren Vornamen ein'),
-          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihren Vornamen ein' : null,
-          //                     onChanged: (val) {
-          //                       setState(() => currentvorname = val);
-          //                     }
-          //                   )
-          //            ],
-          //           )
-          //         ),
-          //                           Expanded(
-          //                child: Column(
-          //                 children: <Widget>[
-          //                   Container(
-          //                     child: Text('Alter', style: TextStyle(fontSize: 15, fontStyle: FontStyle.normal),)
-
-          //                   ),
-          //                   TextFormField(
-          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihr Alter ein'),
-          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihr Alter ein' : null,
-          //                     onChanged: (val) {
-          //                       setState(() => currentalter = val);
-          //                     }
-          //                   )
-          //            ],
-          //           )
-          //         ),
-          //                           Expanded(
-          //                child: Column(
-          //                 children: <Widget>[
-          //                   Container(
-          //                     child: Text('Größe', style: TextStyle(fontSize: 15, fontStyle: FontStyle.normal),)
-
-          //                   ),
-          //                   TextFormField(
-          //                     decoration: textInputDecoration.copyWith(hintText: 'Geben Sie ihre Größe ein'),
-          //                     validator: (val) => val.isEmpty ? 'Geben Sie ihre Größe ein' : null,
-          //                     onChanged: (val) {
-          //                       setState(() => currentgroese = val);
-          //                     }
-          //                   )
-          //            ],
-          //           )
-          //         )
-          //         ],
-          //       ),
-          // )
-          // );
+         
         });
   }
 }

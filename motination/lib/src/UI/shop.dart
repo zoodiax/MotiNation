@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'homescreen.dart';
 import 'profile.dart';
+import 'package:motination/services/database.dart';
+import 'package:motination/models/user.dart';
+
+import 'package:motination/src/UI/profile.dart';
+import 'package:provider/provider.dart';
 
 
 /* Shoping Class UI Design
@@ -19,17 +24,31 @@ class Shoping extends StatefulWidget {
 
 class ShopState extends State<Shoping> {
 
+
+
+   String kcal = '10';
+   String tmp = '200';
+   String dis = '0.1';
+   String time = '0';
   int _currentIndex = 3;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
   Widget build(context) {
+    User user = Provider.of<User>(context);
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
         title: Text('Shop'),
         backgroundColor: barColor,
       ),
-      body: Container(),
+      body: Container(
+        
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+      
+        await DatabaseService(uid: user.uid).updateRunData(dis, kcal, tmp);}),
+
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,

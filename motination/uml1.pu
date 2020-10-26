@@ -1,0 +1,472 @@
+@startuml motination
+scale 2
+set namespaceSeparator ::
+
+class "motination::shared::loading.dart::Loading" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::shared::loading.dart::Loading"
+
+class "motination::models::user.dart::User" {
+  +String uid
+}
+
+class "motination::models::user.dart::UserData" {
+  +String uid
+  +String vorname
+  +String nachname
+  +String groese
+  +String alter
+  +String benutzername
+  +String gewicht
+}
+
+class "motination::models::spz.dart::Spz" {
+  +String id
+  +String name
+  +int lat
+  +String address
+}
+
+class "motination::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::main.dart::MyApp"
+
+class "motination::test.dart::TimerService" {
+  -Stopwatch _watch
+  -Timer _timer
+  -Duration _currentDuration
+  +Duration currentDuration
+  +bool isRunning
+  -void _onTick()
+  +void start()
+  +void stop()
+  +void reset()
+  {static} +TimerService of()
+}
+
+"motination::test.dart::TimerService" o-- "dart::async::Timer"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "motination::test.dart::TimerService"
+
+class "motination::test.dart::TimerServiceProvider" {
+  +TimerService service
+  +bool updateShouldNotify()
+}
+
+"motination::test.dart::TimerServiceProvider" o-- "motination::test.dart::TimerService"
+"flutter::src::widgets::framework.dart::InheritedWidget" <|-- "motination::test.dart::TimerServiceProvider"
+
+class "motination::test.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::test.dart::MyApp"
+
+class "motination::test.dart::MyHomePage" {
+  +_MyHomePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::test.dart::MyHomePage"
+
+class "motination::test.dart::_MyHomePageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::test.dart::_MyHomePageState"
+
+class "motination::test.dart::SecondPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::test.dart::SecondPage"
+
+class "motination::services::auth.dart::AuthService" {
+  -FirebaseAuth _auth
+  +Stream<User> user
+  -User _userFromFirebaseUser()
+  +Future signInrWithEmailAndPassword()
+  +Future registerWithEmailAndPassword()
+  +Future signOut()
+}
+
+"motination::services::auth.dart::AuthService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"motination::services::auth.dart::AuthService" o-- "dart::async::Stream<User>"
+
+class "motination::services::database.dart::DatabaseService" {
+  +String uid
+  +CollectionReference userCollection
+  +Stream<UserData> userData
+  +Future updateUserData()
+  -UserData _userDataFromSnapshot()
+}
+
+"motination::services::database.dart::DatabaseService" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference"
+"motination::services::database.dart::DatabaseService" o-- "dart::async::Stream<UserData>"
+
+class "motination::services::notifier.dart::SpzNotifier" {
+  -List<Spz> _spzList
+  -Spz _currentSpz
+  +UnmodifiableListView<Spz> spzlist
+  +Spz currentSpz
+  +List<Spz> spzList
+}
+
+"motination::services::notifier.dart::SpzNotifier" o-- "motination::models::spz.dart::Spz"
+"motination::services::notifier.dart::SpzNotifier" o-- "dart::collection::UnmodifiableListView<Spz>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "motination::services::notifier.dart::SpzNotifier"
+
+class "motination::src::UI::homescreen.dart::HomeScreen" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::UI::homescreen.dart::HomeScreen"
+
+class "motination::src::UI::homescreen.dart::_HomeScreenState" {
+  -int _currentIndex
+  +Color barColor
+  +Color bgColor
+  -AuthService _auth
+  +Color wrktColor
+  +Color blackColor
+  +Widget build()
+}
+
+"motination::src::UI::homescreen.dart::_HomeScreenState" o-- "dart::ui::Color"
+"motination::src::UI::homescreen.dart::_HomeScreenState" o-- "motination::services::auth.dart::AuthService"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::UI::homescreen.dart::_HomeScreenState"
+
+class "motination::src::UI::profile.dart::Profile" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::UI::profile.dart::Profile"
+
+class "motination::src::UI::profile.dart::_ProfileState" {
+  -int _currentIndex
+  +Color barColor
+  +Color bgColor
+  +Widget build()
+}
+
+"motination::src::UI::profile.dart::_ProfileState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::UI::profile.dart::_ProfileState"
+
+class "motination::src::UI::workout.dart::Workout" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::UI::workout.dart::Workout"
+
+class "motination::src::UI::workout.dart::Category" {
+  +dynamic info
+  +dynamic title
+  +bool pool
+  +bool gym
+  +bool unisport
+  +IconData icon
+  +dynamic openhrs
+  +dynamic address
+  +dynamic special
+  +dynamic name
+}
+
+"motination::src::UI::workout.dart::Category" o-- "flutter::src::widgets::icon_data.dart::IconData"
+
+class "motination::src::UI::workout.dart::Markerz" {
+  +MarkerId markerId
+  +LatLng position
+  +bool pool
+  +bool gym
+  +bool unisport
+  +InfoWindow infoWindow
+  +void Function() onTap
+}
+
+"motination::src::UI::workout.dart::Markerz" o-- "google_maps_flutter::google_maps_flutter.dart::MarkerId"
+"motination::src::UI::workout.dart::Markerz" o-- "google_maps_flutter::google_maps_flutter.dart::LatLng"
+"motination::src::UI::workout.dart::Markerz" o-- "google_maps_flutter::google_maps_flutter.dart::InfoWindow"
+"motination::src::UI::workout.dart::Markerz" o-- "dart::ui::void Function()"
+"google_maps_flutter::google_maps_flutter.dart::Marker" <|-- "motination::src::UI::workout.dart::Markerz"
+
+class "motination::src::UI::workout.dart::WorkoutState" {
+  -LatLng _initialPosition
+  -Location _location
+  -bool _alreadyWorkout
+  -int _currentIndex
+  +Markerz hlpmarker
+  +List countList
+  +List selectedCountList
+  +List<Category> selectedSpz
+  +List<Markerz> selectedMarkers
+  +Color barColor
+  +Color bgColor
+  +Color black
+  +void fillMarker()
+  +void initState()
+  -void _getPoints()
+  +void checkLocationMarker()
+  -void _onMapCreated()
+  -void _openFilterList()
+  +List makeListWidget()
+  +Widget build()
+}
+
+"motination::src::UI::workout.dart::WorkoutState" o-- "google_maps_flutter::google_maps_flutter.dart::LatLng"
+"motination::src::UI::workout.dart::WorkoutState" o-- "location::location.dart::Location"
+"motination::src::UI::workout.dart::WorkoutState" o-- "motination::src::UI::workout.dart::Markerz"
+"motination::src::UI::workout.dart::WorkoutState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::UI::workout.dart::WorkoutState"
+
+class "motination::src::UI::shop.dart::Shoping" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::UI::shop.dart::Shoping"
+
+class "motination::src::UI::shop.dart::ShopState" {
+  -int _currentIndex
+  +Color barColor
+  +Color bgColor
+  +Widget build()
+}
+
+"motination::src::UI::shop.dart::ShopState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::UI::shop.dart::ShopState"
+
+class "motination::src::UI::infospz.dart::Infospz" {
+  +dynamic infotitle
+  +dynamic infoopenhrs
+  +dynamic infoaddress
+  +dynamic infospecial
+  +dynamic infoname
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::UI::infospz.dart::Infospz"
+
+class "motination::src::UI::infospz.dart::InfoHallenbad" {
+  +dynamic infotitle
+  +dynamic infoopenhrs
+  +dynamic infoaddress
+  +dynamic infospecial
+  +dynamic infoname
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::UI::infospz.dart::InfoHallenbad"
+
+class "motination::src::UI::infospz.dart::InfoFitnessFirst" {
+  +dynamic infotitle
+  +dynamic infoopenhrs
+  +dynamic infoaddress
+  +dynamic infospecial
+  +dynamic infoname
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::UI::infospz.dart::InfoFitnessFirst"
+
+class "motination::src::UI::infospz.dart::InfoUnisport" {
+  +dynamic infotitle
+  +dynamic infoopenhrs
+  +dynamic infoaddress
+  +dynamic infospecial
+  +dynamic infoname
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::UI::infospz.dart::InfoUnisport"
+
+class "motination::src::UI::infospz.dart::InfoWoehrdbad" {
+  +dynamic infotitle
+  +dynamic infoopenhrs
+  +dynamic infoaddress
+  +dynamic infospecial
+  +dynamic infoname
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::UI::infospz.dart::InfoWoehrdbad"
+
+class "motination::src::UI::infospz.dart::InfoWestbad" {
+  +dynamic infotitle
+  +dynamic infoopenhrs
+  +dynamic infoaddress
+  +dynamic infospecial
+  +dynamic infoname
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::UI::infospz.dart::InfoWestbad"
+
+class "motination::src::UI::spzinfo.dart::SpzInfo" {
+  +dynamic infotitle
+  +dynamic infoopenhrs
+  +dynamic infoaddress
+  +dynamic infospecial
+  +dynamic infotext
+  +dynamic infocategory
+  +dynamic infolat
+  +dynamic infolng
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::UI::spzinfo.dart::SpzInfo"
+
+class "motination::src::UI::challenge.dart::Challenge" {
+  +_ChallengeState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::UI::challenge.dart::Challenge"
+
+class "motination::src::UI::challenge.dart::_ChallengeState" {
+  -int _currentIndex
+  +Color barColor
+  +Color bgColor
+  +Color wrktColor
+  +Color blackColor
+  +Widget build()
+}
+
+"motination::src::UI::challenge.dart::_ChallengeState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::UI::challenge.dart::_ChallengeState"
+
+class "motination::src::UI::running.dart::Running" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::UI::running.dart::Running"
+
+class "motination::src::UI::running.dart::RunningState" {
+  -LatLng _initialPosition
+  -GoogleMapController _controller
+  -Location _location
+  +bool timerisrunning
+  -Stopwatch _stopwatch
+  +dynamic timerdisplay
+  +dynamic distancedisplay
+  +dynamic speeddisplay
+  +dynamic minkmdisplay
+  +Duration dur
+  +Distance distance
+  +double distancemeter
+  +LatLng latlngstart
+  +LatLng latlngend
+  +LatLng latlnghlp
+  -int _currentIndex
+  +Color barColor
+  +Color bgColor
+  +void startTimer()
+  +void keeprunning()
+  +void startstopwatch()
+  +void stopstopwatch()
+  +void distanceBetween()
+  -void _onMapCreated()
+  +Widget build()
+}
+
+"motination::src::UI::running.dart::RunningState" o-- "google_maps_flutter::google_maps_flutter.dart::LatLng"
+"motination::src::UI::running.dart::RunningState" o-- "google_maps_flutter::google_maps_flutter.dart::GoogleMapController"
+"motination::src::UI::running.dart::RunningState" o-- "location::location.dart::Location"
+"motination::src::UI::running.dart::RunningState" o-- "latlong::latlong.dart::Distance"
+"motination::src::UI::running.dart::RunningState" o-- "latlong::latlong.dart::LatLng"
+"motination::src::UI::running.dart::RunningState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::UI::running.dart::RunningState"
+
+class "motination::src::UI::spz.dart::Spz" {
+  +List<Spz> allSpz
+  +dynamic name
+  +int lat
+  +int lng
+  +bool gym
+  +bool pool
+}
+
+class "motination::src::UI::settings.dart::Settings" {
+  +_SettingsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::UI::settings.dart::Settings"
+
+class "motination::src::UI::settings.dart::_SettingsState" {
+  -GlobalKey<FormState> _formKey
+  -dynamic _currentvorname
+  -dynamic _currentnachname
+  -dynamic _currentalter
+  -dynamic _currentgroese
+  -dynamic _currentbenutzername
+  -dynamic _currentgewicht
+  -dynamic _currentuid
+  +Widget build()
+}
+
+"motination::src::UI::settings.dart::_SettingsState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::UI::settings.dart::_SettingsState"
+
+class "motination::src::wrapper.dart::Wrapper" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "motination::src::wrapper.dart::Wrapper"
+
+class "motination::src::authentication::register.dart::Register" {
+  +Function toggleView
+  +_RegisterState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::authentication::register.dart::Register"
+
+class "motination::src::authentication::register.dart::_RegisterState" {
+  -AuthService _auth
+  -GlobalKey<FormState> _formKey
+  +bool loading
+  +dynamic email
+  +dynamic password
+  +dynamic error
+  +Widget build()
+}
+
+"motination::src::authentication::register.dart::_RegisterState" o-- "motination::services::auth.dart::AuthService"
+"motination::src::authentication::register.dart::_RegisterState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::authentication::register.dart::_RegisterState"
+
+class "motination::src::authentication::sign_in.dart::SignIn" {
+  +Function toggleView
+  +_SignInState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::authentication::sign_in.dart::SignIn"
+
+class "motination::src::authentication::sign_in.dart::_SignInState" {
+  -AuthService _auth
+  -GlobalKey<FormState> _formKey
+  +bool loading
+  +dynamic email
+  +dynamic password
+  +dynamic error
+  +Widget build()
+}
+
+"motination::src::authentication::sign_in.dart::_SignInState" o-- "motination::services::auth.dart::AuthService"
+"motination::src::authentication::sign_in.dart::_SignInState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::authentication::sign_in.dart::_SignInState"
+
+class "motination::src::authentication::authenticate.dart::Authenticate" {
+  +_AuthenticateState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "motination::src::authentication::authenticate.dart::Authenticate"
+
+class "motination::src::authentication::authenticate.dart::_AuthenticateState" {
+  +bool showSignIn
+  +void toggleView()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "motination::src::authentication::authenticate.dart::_AuthenticateState"
+
+
+@enduml
