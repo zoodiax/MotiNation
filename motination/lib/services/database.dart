@@ -8,6 +8,7 @@ class DatabaseService {
   DatabaseService({this.uid});
 // collection reference
 final CollectionReference userCollection = Firestore.instance.collection('user'); //new collection if you register
+final CollectionReference spzCollection = Firestore.instance.collection('spz');
 
 
 Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, int trackrun) async {
@@ -48,8 +49,7 @@ return UserData(
 }
 
 
-
-//get user doch stream
+//get user data stream
 Stream<UserData> get userData {
   return userCollection.document(uid).snapshots()
   .map(_userDataFromSnapshot);

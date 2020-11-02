@@ -1,12 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/src/UI/challenge.dart';
+import 'package:motination/src/UI/profile.dart';
+
 import 'homescreen.dart';
 import 'profile.dart';
-import 'package:motination/services/database.dart';
-import 'package:motination/models/user.dart';
-
-import 'package:motination/src/UI/profile.dart';
-import 'package:provider/provider.dart';
 
 
 /* Shoping Class UI Design
@@ -25,16 +23,40 @@ class Shoping extends StatefulWidget {
 class ShopState extends State<Shoping> {
 
 
+// makeListWidget für ListView Firestore
+  List<Widget> makeListWidget(AsyncSnapshot snapshot) {
+    
+    return snapshot.data.documents.map<Widget>((document) {
+      
+      return ListTile(
+        title: Text(document['name'] ?? ''),
+        subtitle: Text(document['category'] ?? 'Test'),
+        leading: Icon(Icons.fitness_center),
+      //   onTap: () {
+      //     Navigator.of(context).push(
+      //       MaterialPageRoute(
+      //           builder: (context) => SpzInfo(
+      //                 infocategory: document['category'] ?? 'Musterkategorie',
+      //                 infotitle: document['name'] ?? 'Muster Sportzentrum',
+      //                 infoaddress: document['address'] ?? 'Musterstraße 11, 1312 Musterstadt',
+      //                 infoopenhrs: document['opnhrs'] ?? ' Musteröffnungszeiten',
+      //                 infospecial: document['special'] ?? '',
+      //                 infotext: document['text'] ?? 'Bestes Muster Sportzentrum in der Stadt!',
+                     
+      //               )),
+      //     );
+      //   },
+       );
+    }).toList();
+  }
 
-   String kcal = '10';
-   String tmp = '200';
-   String dis = '0.1';
-   String time = '0';
+
   int _currentIndex = 3;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
   Widget build(context) {
-    User user = Provider.of<User>(context);
+   
+    
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -42,12 +64,22 @@ class ShopState extends State<Shoping> {
         backgroundColor: barColor,
       ),
       body: Container(
+        child: StreamBuilder(
+                        stream:
+                            Firestore.instance.collection('spz').snapshots(),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Center(child: CircularProgressIndicator());
+                            default:
+                              return ListView(
+                                children: makeListWidget(snapshot),
+                              );
+                          }
+                        }),
         
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-      
-        await DatabaseService(uid: user.uid).updateRunData(dis, kcal, tmp);}),
-
+     
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
