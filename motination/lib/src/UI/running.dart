@@ -57,6 +57,12 @@ class RunningState extends State<Running> {
   //polylines:
   final Set<Polyline> _polyline = {};
   List<LatLng> latlnglines = List();
+  List<LatLng> latlnglines2 = List();
+  List<double> altitude = List();
+  List<double> altitude2 = List();
+  List <double> altitude3 = [1];
+  double _loc =1;
+  
 
   void startTimer() {
     Timer(dur, keeprunning);
@@ -69,6 +75,8 @@ class RunningState extends State<Running> {
       distanceBetween(latlngstart, latlngend);
       latlngend = latlngstart;
       latlnglines.add(linehlp);
+      altitude.add(_loc);
+      
 
       setState(() {
         timerdisplay = (_stopwatch.elapsed.inHours.toString().padLeft(2, '0')) +
@@ -90,7 +98,7 @@ class RunningState extends State<Running> {
         caldisplay = kcal.toString();
         tempodisplay = min.toString() + ':' + sec.toString().padLeft(2, '0');
         distancedisplay = ((distancemeter / 1000).toStringAsFixed(2));
-
+        
         _polyline.add(Polyline(
           polylineId: PolylineId('route1'),
           visible: true,
@@ -98,6 +106,8 @@ class RunningState extends State<Running> {
           color: Colors.blue,
           width: 4,
         ));
+        latlnglines2.add(linehlp);
+        altitude2.add(_loc);
       });
     } else
       stopstopwatch();
@@ -127,7 +137,7 @@ class RunningState extends State<Running> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SaveRun(dis: dis, time: time, kcal: kcal)),
+          builder: (context) => SaveRun(dis: dis, time: time, kcal: kcal, latlng: latlnglines2 , altitude: altitude)),
     );
   }
 
@@ -141,6 +151,8 @@ class RunningState extends State<Running> {
     _controller = _cntrl;
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
+      
+      _loc = l.altitude;
       double hlplat = l.latitude;
       double hlplng = l.longitude;
       latlnghlp = lib2.LatLng(hlplat, hlplng);

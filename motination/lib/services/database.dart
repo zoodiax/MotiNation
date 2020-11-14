@@ -24,14 +24,21 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
   });
 }
 
-Future updateRunData(String distanz, kcal, time) async {
+Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> lng, double latinit, double lnginit) async {
   return await userCollection.document(uid).collection('Run').add({
     'distanz': distanz,
     'kcal': kcal,
     'time': time,
+    'lat':lat,
+    'lng':lng,
+    'latinit':latinit,
+    'lnginit':lnginit,
+
     
   });
 }
+
+
 
 
 //userData from snapshot

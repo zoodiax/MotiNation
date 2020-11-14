@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Spacer(flex: 2),
                               Icon(
-                            Icons.directions_run,
+                            Icons.timer,
                             size: 80,
                               ),
                             Spacer(),
