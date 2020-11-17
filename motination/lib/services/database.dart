@@ -24,8 +24,8 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
   });
 }
 
-Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> lng, double latinit, double lnginit) async {
-  return await userCollection.document(uid).collection('Run').add({
+Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> lng, double latinit, double lnginit, String date) async {
+  return await userCollection.document(uid).collection('Run').document(date).setData({
     'distanz': distanz,
     'kcal': kcal,
     'time': time,
@@ -33,6 +33,7 @@ Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> 
     'lng':lng,
     'latinit':latinit,
     'lnginit':lnginit,
+    'date' : date,
 
     
   });

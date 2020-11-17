@@ -23,8 +23,13 @@ class _ChallengeState extends State<Challenge> {
   
   final wrktColor = const Color (0xFF28CCD3);
   final blackColor = const Color(0xBF000000);
+  var now = new DateTime.now();
 
-
+  getDate(){
+    setState(() {
+      now = DateTime.now();
+    });
+  }
   @override
   Widget build(BuildContext context) {
   // User user = Provider.of<User>(context);
@@ -36,6 +41,11 @@ class _ChallengeState extends State<Challenge> {
         title: Text('Challenge'),
       ),
 
+      body: Container(
+
+        child: Text(now.toString()),
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: getDate),
       /*body: Container(
         child: StreamBuilder(
           stream: Firestore.instance.collection('user').snapshots(),

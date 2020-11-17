@@ -40,7 +40,7 @@ int _currentIndex = 1;
   final List <double> lat = [];
   final List <double> lng = [];
   final List <double> alt = [];
-  
+  String date;
   double latmin,latmax,lngmin,lngmax, latinit, lnginit;
   void buildPolyline(List<LatLng> list){
   
@@ -90,14 +90,19 @@ void initposition(){
   });
 }
 
+void getDate(){
+  setState(() {
+    date = DateTime.now().toString();
+  });
+}
 
 
   Widget build(context) {
     User user = Provider.of<User>(context);
     buildPolyline(widget.latlng);
     data2collection(widget.latlng, widget.altitude);
-   
-    
+    initposition();
+    getDate();
 
     return new Scaffold(
       
@@ -152,7 +157,8 @@ void initposition(){
         ]),
       ),
       floatingActionButton: FloatingActionButton(onPressed: ()async {
-        await DatabaseService(uid: user.uid).updateRunData(widget.dis.toString(), widget.kcal.toString(), widget.time.toString(), lat, lng,latinit,lnginit);
+        
+        await DatabaseService(uid: user.uid).updateRunData(widget.dis.toString(), widget.kcal.toString(), widget.time.toString(), lat, lng,latinit,lnginit, date);
         Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
