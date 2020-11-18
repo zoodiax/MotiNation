@@ -17,6 +17,9 @@ final String benutzername;
 final String gewicht;
 final String geschlecht; 
 
-UserData({this.uid, this.vorname, this.nachname, this.groese, this.alter, this.benutzername, this.gewicht, this.geschlecht});
+UserData({this.uid, this.trackrun, this.vorname, this.nachname, this.groese, this.alter, this.benutzername, this.gewicht, this.geschlecht});
+final int trackrun;
+
+
 
 }

@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:motination/models/user.dart';
+
+import 'package:flutter/material.dart';
+import 'package:motination/models/user.dart';
+
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/runstats.dart';
 import 'package:motination/src/UI/settings.dart';
+
 import 'package:provider/provider.dart';
 import 'homescreen.dart';
 import 'shop.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+
+/* Profile Class UI Design
+  Content: User Information, Profile Settings Button, Bottom Navigation Bar
+  Function:  MaterialPageRoute -> (Settings, Home, Challenge, Shop) 
+  Stream Builder for Firebase Backend Information 
+*/
+
 
 class Profile extends StatefulWidget {
   @override
@@ -16,10 +30,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-
-
-    
-
 
   int _currentIndex = 0;
   final barColor = const Color(0xFF0A79DF);

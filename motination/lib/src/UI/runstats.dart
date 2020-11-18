@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:motination/models/user.dart';
+import 'package:motination/src/UI/runstatsdetails.dart';
+import 'package:provider/provider.dart';
 
 
 class Runstats extends StatefulWidget {
@@ -15,8 +18,8 @@ class _RunstatsState extends State<Runstats> {
   
   final wrktColor = const Color (0xFF28CCD3);
   final blackColor = const Color(0xBF000000);
-  final CollectionReference userCollection = Firestore.instance.collection('user');
-
+  //final CollectionReference userCollection = Firestore.instance.collection('user');
+  
 
 // makeListWidget für ListView Firestore
   List<Widget> makeListWidgetUser(AsyncSnapshot snapshot) {
@@ -24,15 +27,27 @@ class _RunstatsState extends State<Runstats> {
     return snapshot.data.documents.map<Widget>((document) {
     
       return ListTile(
-        title: Text(document['distanz']+' '+document['time'] ?? ''),
-        subtitle: Text(document['kcal'] ?? ''),
-        leading: Icon(Icons.person),
-       
+        title: Text('Distanz: '+document['distanz']+'km'+' '+'Zeit: '+document['time'] ?? ''),
+        subtitle: Text('Kalorien: '+document['kcal'] ?? ''),
+        leading: Icon(
+          Icons.directions_run_rounded,
+          color: Colors.white,
+          ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RunStatsDetails(
+              currentdistanz: document['distanz'] ?? 'fauler Hund',
+              currentdate: document['date'] ?? '0',
+            )),
+          );
+        },
       );
     }).toList();
   }
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
       return new Scaffold(
       backgroundColor: Colors.blue,
       appBar: AppBar(
@@ -41,7 +56,7 @@ class _RunstatsState extends State<Runstats> {
 
       body: Container(
         child: StreamBuilder(
-          stream: userCollection.document('uid').collection('Run').snapshots(),
+          stream: Firestore.instance.collection('user').document(user.uid).collection('Run').snapshots(),
           builder: (context,snapshot) {
             if (!snapshot.hasData) {
               return Container(

@@ -3,12 +3,13 @@ import 'package:motination/models/user.dart';
 
 class DatabaseService {
   final String uid;
+  
   DatabaseService({this.uid});
 // collection reference
 final CollectionReference userCollection = Firestore.instance.collection('user'); //new collection if you register
 final CollectionReference activityCollection = Firestore.instance.collection('user');
 
-Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, String geschlecht) async {
+Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, String geschlecht, int trackrun) async {
   return await userCollection.document(uid).setData({
     'vorname': vorname,
     'nachname': nachname,
@@ -17,22 +18,19 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
     'alter': alter,
     'gewicht': gewicht,
     'uid': uid,
-    'geschlecht': geschlecht, //neu hinzugefügt nochmals in Firestore überprüfen
+    'geschlecht': geschlecht, //neu hinzugefügt
+    'trackrun' : trackrun,
   });
 }
 
-Future updateUserActivityData(String duration, distance, calories, date, time) async {
-  return await activityCollection.document(uid).collection('workout').document('workoutid').setData({
-    'duration': duration,
-    'distance': distance,
-    'calories': calories,
-    'date': date,
-    'time': time
+Future updateRunData(String distanz, kcal, time) async {
+  return await userCollection.document(uid).collection('Run').add({
+    'distanz': distanz,
+    'kcal': kcal,
+    'time': time,
+    
   });
 }
-   
-
-
 
 
 //userData from snapshot

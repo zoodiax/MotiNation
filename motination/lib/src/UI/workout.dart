@@ -8,7 +8,18 @@ import 'shop.dart';
 import 'infospz.dart';
 import 'package:location/location.dart';
 import 'package:filter_list/filter_list.dart';
+
+
 import 'spzinfo.dart';
+
+
+
+/* Workout Class UI Design & Logic
+  Content: List View Column, MapView Column, Floarting Action Button (Filter Function), Center Location, Categroy class(Filter),
+          List Categories, class Markerz, List Markerz
+  Function:  onMapCreated
+             MaterialPageRoute -> (Home, Profile, Challenge, Shop) 
+*/
 
 class Workout extends StatefulWidget {
   createState() {
@@ -121,6 +132,7 @@ class WorkoutState extends State<Workout> {
   final bgColor = const Color(0xFFFEFDFD);
   final black = const Color(0xFF000000);
 
+
 void fillMarker(){
     setState(() {
         
@@ -186,6 +198,7 @@ void fillMarker(){
     ));
      });
 }
+
 // initState() -Markerz hinzufügen, WICHTIG: eine Filterfunktion auf true setzen (bsp gym, pool)
   @override
   void initState() {

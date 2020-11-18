@@ -6,6 +6,11 @@ import 'package:motination/src/UI/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/shared/constants.dart';
 
+/* Settings Class UI Design
+  Content: Update Button, TextField (LastName, FirstName, UserName, Age, Height, Weight)
+  Function: DatabaseService(), Loading(), MaterialPageRoute -> (Profile, Challenge, Shop) 
+*/
+
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
@@ -201,7 +206,8 @@ class _SettingsState extends State<Settings> {
                                 _currentalter ?? userData.alter,
                                 _currentgewicht ?? userData.gewicht,
                                 _currentuid ?? userData.uid,
-                                _currentgeschlecht ?? userData.geschlecht
+                                _currentgeschlecht ?? userData.geschlecht,
+                                userData.trackrun
                               );
                               Navigator.push(
                                   context,
@@ -216,6 +222,7 @@ class _SettingsState extends State<Settings> {
             return Loading();
           }
           
+         
         });
   }
 }

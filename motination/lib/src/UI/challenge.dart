@@ -7,6 +7,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 
+/* Challenge Class UI Design
+  Test Page for Backend Test
+  Content:  Bottom Navigation Bar
+  Function: MaterialPageRoute -> (Profile, Homescreen, Shop) 
+*/
+
 class Challenge extends StatefulWidget {
   @override
   _ChallengeState createState() => _ChallengeState();

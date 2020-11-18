@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 
+/*
+
+  Sports Center Prototype UI Class - used for Firebase on ListView (Workout Function)
+  Goal: get also the information for the marker from MapView(Workout FUnction) connected with Class SpzInfo via Firebase
+*/
+ 
 class SpzInfo extends StatelessWidget {
   SpzInfo({
     this.infotitle = 'Name',
