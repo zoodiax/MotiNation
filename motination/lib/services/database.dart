@@ -11,8 +11,9 @@ final CollectionReference userCollection = Firestore.instance.collection('user')
 final CollectionReference spzCollection = Firestore.instance.collection('spz');
 
 
-Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, int trackrun) async {
-  return await userCollection.document(uid).setData({
+// Send Data
+Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, int trackrun, int points) async {
+ return await userCollection.document(uid).setData({
     'vorname': vorname,
     'nachname': nachname,
     'benutzername': benutzername,
@@ -21,10 +22,12 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
     'gewicht': gewicht,
     'uid': uid, //neu hinzugefügt
     'trackrun' : trackrun,
+    'points' : points,
+
   });
 }
 
-Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> lng, double latinit, double lnginit, String date) async {
+Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> lng, double latinit, double lnginit, String date, String sportType) async {
   return await userCollection.document(uid).collection('Run').document(date).setData({
     'distanz': distanz,
     'kcal': kcal,
@@ -34,16 +37,51 @@ Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> 
     'latinit':latinit,
     'lnginit':lnginit,
     'date' : date,
+    'sportType' : sportType
 
     
   });
 }
 
+Future updatePoints(int points) async {
+  return await userCollection.document(uid).updateData({
+    'points': points,
+  });
+}
 
 
 
+// Get Data
+
+//get UserData 
+Future getUserData() async {
+  return await userCollection.document(uid).get();
+}
+
+// Retruns DocumentSnapshot from User from Database
+ Future <DocumentSnapshot> getData(User user) async{
+    try{
+    DocumentSnapshot snapshot = await DatabaseService(uid: user.uid).getUserData();
+    print(snapshot.data.toString());
+    return snapshot; 
+    }
+    catch(err){
+    print(err.toString());
+    return null;
+    
+    }
+  }
+
+
+// Prototype gets Data from DocumentSnapshot to Variable
+void getStufffromSnapshot(DocumentSnapshot snapshot){
+  Map<String, dynamic> data = snapshot.data;
+  
+  // var = data["nameOfFieldDocumentSnapshot"]
+  
+}
+  
 //userData from snapshot
-
 UserData _userDataFromSnapshot(DocumentSnapshot snapshot){
 return UserData(
   uid: uid,
@@ -56,13 +94,10 @@ return UserData(
 );
 }
 
-
 //get user data stream
 Stream<UserData> get userData {
   return userCollection.document(uid).snapshots()
   .map(_userDataFromSnapshot);
 }
-
-
 
 }

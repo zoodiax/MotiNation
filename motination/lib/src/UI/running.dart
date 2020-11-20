@@ -140,7 +140,7 @@ class RunningState extends State<Running> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SaveRun(dis: dis, time: time, kcal: kcal, latlng: latlnglines2 , altitude: altitude)),
+          builder: (context) => SaveRun(dis: dis, time: time, kcal: kcal, latlng: latlnglines2 , altitude: altitude, sport:sport)),
     );
   }
 
@@ -197,7 +197,7 @@ class RunningState extends State<Running> {
   }
 
 
-
+// Filter Button, different sport disciplines
 Widget _sportType() {
   return  Container(
     
@@ -211,8 +211,11 @@ Widget _sportType() {
           onSelected: (val) { 
             setState(() {
               if (val ==1) {
+                sport = 1;
                 _iconSport = Icon(Icons.directions_run); 
-              } else if (val ==2 ){_iconSport = Icon(Icons.directions_bike);}
+              } else if (val ==2 ){
+                sport = 2;
+                _iconSport = Icon(Icons.directions_bike);}
               else {_iconSport = Icon(Icons.cached);}
             });
           },

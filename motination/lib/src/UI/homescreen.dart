@@ -7,6 +7,7 @@ import 'profile.dart';
 import 'shop.dart';
 import 'running.dart';
 import 'triangle.dart';
+import 'points.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

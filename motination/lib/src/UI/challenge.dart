@@ -1,7 +1,16 @@
+
 import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'homescreen.dart';
 import 'shop.dart';
+
+
+import 'package:motination/services/database.dart';
+import 'package:motination/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:motination/src/UI/profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 
 /* Challenge Class UI Design
@@ -11,69 +20,127 @@ import 'shop.dart';
 */
 
 class Challenge extends StatefulWidget {
+  final int points;
+
+  Challenge({Key key, this.points}) : super (key:key);
   @override
   _ChallengeState createState() => _ChallengeState();
 }
 
 class _ChallengeState extends State<Challenge> {
 
+
+  int p = 0;
+  int points = 0;
   int _currentIndex = 2;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
   
   final wrktColor = const Color (0xFF28CCD3);
   final blackColor = const Color(0xBF000000);
-  var now = new DateTime.now();
-
-  getDate(){
+  
+  final String uId= 'gosuBxL9kuT2sGkvIziJQfkQwrt2';
+  DocumentSnapshot doc;
+ 
+  void getPoints(){
     setState(() {
-      now = DateTime.now();
+      p += 10;
     });
   }
+
+void loosePoints(){
+    setState(() {
+      p -= 10;
+    });
+  }
+
+// gets Points-Data from DocumentSnapshot to Variable
+void getPointsfromSnapshot(DocumentSnapshot snapshot){
+  Map<String, dynamic> data = snapshot.data;
+  setState(() {
+    points = data["points"];
+  }); 
+}
+  
+// Prototype gets Data from DocumentSnapshot to Variable
+void getStufffromSnapshot(DocumentSnapshot snapshot){
+  Map<String, dynamic> data = snapshot.data;
+  setState(() {
+    // Variable = data["nameOfFieldDocumentSnapshot"]
+  }); 
+}
+  
+
+
+
   @override
   Widget build(BuildContext context) {
-  // User user = Provider.of<User>(context);
-  // final QuerySnapshot result = await Firestore.instance.collection('user').where('uid', isEqualTo: user.uid).getDocuments();
-  // final List<DocumentSnapshot>documents = result.documents;
+
+   User user = Provider.of<User>(context);
+  
+
+   
     return new Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: bgColor,
       appBar: AppBar(
         title: Text('Challenge'),
       ),
 
       body: Container(
 
-        child: Text(now.toString()),
-      ),
-      floatingActionButton: FloatingActionButton(onPressed: getDate),
-      /*body: Container(
-        child: StreamBuilder(
-          stream: Firestore.instance.collection('user').snapshots(),
-          builder: (context,snapshot) {
-            if (!snapshot.hasData) {
-              return Container(
-                color: Colors.blue,
-                child: Center(
-                  child: SpinKitRotatingCircle(
-                    color: Colors.white,
-                    size: 50.0,
-                  ),
-                ),
-              );
-            } else{
-                return ListView.builder(
-                  padding: EdgeInsets.all(10.0),
-                  itemBuilder: (context,index) => buildItem(context, snapshot.data.documents[index]),
-                  itemCount: snapshot.data.documents.length,
-                  );
-            }
-          }
+        child: Column(
+          children:  [
+              Spacer(),
+              Text('Points added: ' + p.toString(),style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500,fontSize: 25),),
+              Text('Points from Database: ' + points.toString(), style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500, fontSize: 25),),
+              ButtonBar(alignment: MainAxisAlignment.center, children: [
+        RaisedButton(
+          onPressed: getPoints,
+          color: Colors.blue,
+          child: Icon(Icons.add),
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
         ),
+        RaisedButton(
+          onPressed: loosePoints,
+          color: Colors.blue,
+          child: Icon(Icons.remove),
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
+        ),
+        RaisedButton(
+          onPressed: () async {
+                doc = await DatabaseService(uid: user.uid).getData(user);
+                getPointsfromSnapshot(doc);
+                
+          },
+          color: Colors.blue,
+          child: Icon(Icons.archive),
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
+        ),
+        RaisedButton(
+          onPressed: () async {await DatabaseService(uid: user.uid).updatePoints(points+p);
+          setState(() {
+            p=0;
+          });
+          
+          },
+          color: Colors.blue,
+          child: Icon(Icons.publish),
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
+        ),
+      ]),     
+      Spacer(),
+          ],
+        ), 
+       
       ),
-
-*/
-
-
+     
+     
        bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,

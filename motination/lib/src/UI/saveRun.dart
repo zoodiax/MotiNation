@@ -24,8 +24,9 @@ class SaveRun extends StatefulWidget {
   List<LatLng> latlng;
   final Set<Polyline> polyline;
   List <double> altitude;
+  final int sport;
  
-  SaveRun({Key key, this.dis, this.kcal, this.time, this.latlng, this.polyline, this.altitude}) : super (key:key);
+  SaveRun({Key key, this.dis, this.kcal, this.time, this.latlng, this.polyline, this.altitude, this.sport}) : super (key:key);
   @override
   _SaveRunState createState() => new _SaveRunState();
 }
@@ -41,6 +42,7 @@ int _currentIndex = 1;
   final List <double> lng = [];
   final List <double> alt = [];
   String date;
+  String sportType;
   double latmin,latmax,lngmin,lngmax, latinit, lnginit;
   void buildPolyline(List<LatLng> list){
   
@@ -96,6 +98,11 @@ void getDate(){
   });
 }
 
+void getSport(){
+  if (widget.sport == 1) {sportType = 'running';}
+  else if (widget.sport == 2) {sportType = 'bike';}
+  else sportType = null;
+}
 
   Widget build(context) {
     User user = Provider.of<User>(context);
@@ -103,6 +110,7 @@ void getDate(){
     data2collection(widget.latlng, widget.altitude);
     initposition();
     getDate();
+    getSport();
 
     return new Scaffold(
       
@@ -158,7 +166,7 @@ void getDate(){
       ),
       floatingActionButton: FloatingActionButton(onPressed: ()async {
         
-        await DatabaseService(uid: user.uid).updateRunData(widget.dis.toString(), widget.kcal.toString(), widget.time.toString(), lat, lng,latinit,lnginit, date);
+        await DatabaseService(uid: user.uid).updateRunData(widget.dis.toString(), widget.kcal.toString(), widget.time.toString(), lat, lng,latinit,lnginit, date, sportType);
         Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),

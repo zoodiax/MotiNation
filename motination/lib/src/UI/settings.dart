@@ -5,6 +5,8 @@ import 'package:motination/shared/loading.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/shared/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 /* Settings Class UI Design
   Content: Update Button, TextField (LastName, FirstName, UserName, Age, Height, Weight)
@@ -26,16 +28,33 @@ class _SettingsState extends State<Settings> {
   String _currentbenutzername;
   String _currentgewicht;
   String _currentuid;
+  int trackrun;
+  int points;
 
+Future <void> getData(User user) async{
+    try{DocumentSnapshot snapshot = await DatabaseService(uid: user.uid).getUserData();
+    Map<String, dynamic> data = snapshot.data;
+    setState(() {
+    
+    points = data["points"];
+    trackrun = data["trackrun"];
+    }); 
+    }
+    catch(err){
+    print(err.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
-
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
+            getData(user);
+
+            
             return Form(
                 key: _formKey,
                 child: Scaffold(
@@ -64,6 +83,7 @@ class _SettingsState extends State<Settings> {
                                   ? 'Geben Sie ihren Nachnamen ein'
                                   : null,
                               onChanged: (val) {
+                               
                                 setState(() => _currentnachname = val);
                               })
                         ],
@@ -84,6 +104,7 @@ class _SettingsState extends State<Settings> {
                                   ? 'Geben Sie ihren Vornamen ein'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentvorname = val);
                               })
                         ],
@@ -104,6 +125,7 @@ class _SettingsState extends State<Settings> {
                                   ? 'Geben Sie einen Benutzername ein'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentbenutzername = val);
                               })
                         ],
@@ -124,6 +146,7 @@ class _SettingsState extends State<Settings> {
                                   ? 'Geben Sie ihr Alter ein'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentalter = val);
                               })
                         ],
@@ -144,6 +167,7 @@ class _SettingsState extends State<Settings> {
                                   ? 'Geben Sie ihre Größe ein'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentgroese = val);
                               })
                         ],
@@ -164,6 +188,7 @@ class _SettingsState extends State<Settings> {
                                   ? 'Geben Sie ihr Gewicht ein'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentgewicht = val);
                               })
                         ],
@@ -176,7 +201,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              await DatabaseService(uid: user.uid)
+                             await DatabaseService(uid: user.uid)
                                   .updateUserData(
                                 _currentvorname ?? userData.vorname,
                                 _currentnachname ?? userData.nachname,
@@ -185,7 +210,8 @@ class _SettingsState extends State<Settings> {
                                 _currentalter ?? userData.alter,
                                 _currentgewicht ?? userData.gewicht,
                                 _currentuid ?? userData.uid,
-                                userData.trackrun,
+                                trackrun ?? userData.trackrun,
+                                points ?? userData.points,
                               );
                               Navigator.push(
                                   context,

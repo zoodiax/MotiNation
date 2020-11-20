@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/profile.dart';
-
 import 'homescreen.dart';
 import 'profile.dart';
 
