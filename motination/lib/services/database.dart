@@ -23,7 +23,7 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
     'uid': uid, //neu hinzugefügt
     'trackrun' : trackrun,
     'points' : points,
-
+    
   });
 }
 
@@ -67,8 +67,7 @@ Future getUserData() async {
     }
     catch(err){
     print(err.toString());
-    return null;
-    
+    return null;   
     }
   }
 
@@ -78,7 +77,6 @@ void getStufffromSnapshot(DocumentSnapshot snapshot){
   Map<String, dynamic> data = snapshot.data;
   
   // var = data["nameOfFieldDocumentSnapshot"]
-  
 }
   
 //userData from snapshot

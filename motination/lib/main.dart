@@ -3,6 +3,7 @@ import 'package:motination/models/user.dart';
 import 'package:motination/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'src/wrapper.dart';
+import 'package:motination/shared/theme.dart';
 
 
 
@@ -17,9 +18,9 @@ class MyApp extends StatelessWidget {
       
       value: AuthService().user,
       child: MaterialApp(
+        theme: getTheme(),
         debugShowCheckedModeBanner: false,
         home: Wrapper(),
-        
       ),
     );
   }

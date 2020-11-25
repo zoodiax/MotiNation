@@ -4,6 +4,7 @@ import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'homescreen.dart';
 import 'profile.dart';
+import 'package:motination/shared/theme.dart';
 
 
 /* Shoping Class UI Design

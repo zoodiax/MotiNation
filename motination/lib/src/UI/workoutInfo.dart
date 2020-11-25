@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/services/auth.dart';
 import 'package:motination/src/UI/challenge.dart';
-import 'package:motination/shared/theme.dart';
 
 import 'workout.dart';
 import 'profile.dart';
@@ -13,15 +12,14 @@ import 'shop.dart';
 import 'running.dart';
 import 'triangle.dart';
 
-
-class HomeScreen extends StatefulWidget {
+class WorkoutInfo extends StatefulWidget {
   @override
   createState() {
-    return _HomeScreenState();
+    return _WorkoutInfoState();
   }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _WorkoutInfoState extends State<WorkoutInfo> {
   
   final barColor = const Color(0xFF0A79DF);
  
@@ -36,11 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Running()),
+            MaterialPageRoute(builder: (context) => Workout()),
           );
         },
-        child: Text("     Auf geht's!     ",
-            style: Theme.of(context).textTheme.headline2));
+        child: Text("     Weiter     ",
+            style: Theme.of(context).textTheme.headline2,));
   }
 
   Widget build(context) {
@@ -48,8 +46,17 @@ class _HomeScreenState extends State<HomeScreen> {
         onWillPop: () async => false,
         child: new Scaffold(
          backgroundColor: bgColor,
-          
-          
+          // appBar: AppBar(
+          //   automaticallyImplyLeading: false,
+          //   title: Text('Motination ',
+          //       style: GoogleFonts.spartan(
+          //           textStyle: TextStyle(
+          //               color: Colors.black,
+          //               fontSize: 25,
+          //               fontWeight: FontWeight.w600))),
+          //   backgroundColor: bgColor,
+           
+          // ),
           body: Column(children: [
             Expanded(
               flex: 10,
@@ -58,11 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Spacer(flex: 4),
                 Container(
                 child: Center(
-                  
                   child: Text(
-                    'Willkommen bei Motination!',
-                    style: Theme.of(context).textTheme.headline1,
-                    textAlign: TextAlign.center,
+                    'Motination Workout!',
+                    style:  Theme.of(context).textTheme.headline1,
                   ),
                 
                 ),
@@ -73,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                   child: Text(
                   
-                    'Lieblingssport machen, Punkte in Running oder Workout sammeln und coole Prämien absahnen',
+                    'Besuche oder entdecke ein Sportzentrum in deiner Nähe und erhalte pro Besuch 10 Punkte',
                     style: Theme.of(context).textTheme.bodyText1,
                     textAlign: TextAlign.center,
                   ),
@@ -87,7 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Spacer(flex: 2),
             Expanded(flex: 1, child: _info()),
             Spacer(flex: 2),
+            
           ]),
+          
+          
         ));
   }
 }

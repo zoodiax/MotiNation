@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:motination/shared/constants.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/models/markerz.dart';
 import 'homescreen.dart';
@@ -132,8 +133,8 @@ void setBackWorkout(){
   List<Widget> makeListWidget(AsyncSnapshot snapshot) {
     return snapshot.data.documents.map<Widget>((document) {
       return ListTile(
-        title: Text(document['name'] ?? ''),
-        subtitle: Text(document['category'] ?? 'Test'),
+        title: Text(document['name'] ?? '', style: Theme.of(context).textTheme.headline5,),
+        subtitle: Text(document['category'] ?? 'Test',style: Theme.of(context).textTheme.bodyText2,),
         leading: Icon(Icons.fitness_center),
         onTap: () {
           Navigator.of(context).push(
@@ -162,30 +163,22 @@ void setBackWorkout(){
           length: 2,
           child: Scaffold(
             appBar: AppBar(
-              title: Text('Workout'),
+            automaticallyImplyLeading: false,
+            title: Text('Workout' , style:  Theme.of(context).textTheme.headline1,),
+            backgroundColor: bgColor,
+          
               bottom: TabBar(
                 tabs: [
-                  Tab(icon: Icon(Icons.list)),
-                  Tab(icon: Icon(Icons.map)),
+                  Tab(icon: Icon(Icons.map,color: Colors.black,)),
+                  Tab(icon: Icon(Icons.list, color: Colors.black,)),
                 ],
+                indicatorColor: blue,
+                indicatorWeight: 3,
               ),
             ),
             body:
                 TabBarView(physics: NeverScrollableScrollPhysics(), children: [
-              Container(
-                child: StreamBuilder(
-                    stream: Firestore.instance.collection('spz').snapshots(),
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return Center(child: CircularProgressIndicator());
-                        default:
-                          return ListView(
-                            children: makeListWidget(snapshot),
-                          );
-                      }
-                    }),
-              ),
+             
               Container(
                 child: GoogleMap(
                   mapType: MapType.normal,
@@ -200,11 +193,26 @@ void setBackWorkout(){
                   markers: Set.from(allMarkers),
                 ),
               ),
+               Container(
+                child: StreamBuilder(
+                    stream: Firestore.instance.collection('spz').snapshots(),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                        default:
+                          return ListView(
+                            children: makeListWidget(snapshot),
+                          );
+                      }
+                    }),
+              ),
             ]),
-            floatingActionButton: FloatingActionButton(onPressed: setBackWorkout),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            // floatingActionButton: FloatingActionButton(onPressed: setBackWorkout),
+            // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
             bottomNavigationBar: BottomNavigationBar(
-              currentIndex: 1,
+              currentIndex: 2,
+              selectedItemColor: blue,
               type: BottomNavigationBarType.fixed,
               items: [
                 BottomNavigationBarItem(
@@ -212,12 +220,13 @@ void setBackWorkout(){
                   title: Text('Profile'),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  title: Text('Home'),
+                  icon: Icon(Icons.timer),
+                  title: Text('Running'),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat),
-                  title: Text('Challenge'),
+                  
+                  icon: Icon(Icons.fitness_center),
+                  title: Text('Workout'),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.shopping_basket),
