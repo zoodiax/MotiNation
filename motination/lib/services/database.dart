@@ -8,8 +8,9 @@ class DatabaseService {
 // collection reference
 final CollectionReference userCollection = Firestore.instance.collection('user'); //new collection if you register
 final CollectionReference activityCollection = Firestore.instance.collection('user');
+final CollectionReference spzCollection = Firestore.instance.collection('spz');
 
-Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, String geschlecht, int trackrun) async {
+Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, String geschlecht, int trackrun, String sumdistanz, String sumtime, String sumspeed,) async {
   return await userCollection.document(uid).setData({
     'vorname': vorname,
     'nachname': nachname,
@@ -23,14 +24,22 @@ Future updateUserData(String vorname, String nachname, String benutzername, Stri
   });
 }
 
-Future updateRunData(String distanz, kcal, time) async {
-  return await userCollection.document(uid).collection('Run').add({
+Future updateRunData(String distanz, kcal, time, List<double> lat, List<double> lng, double latinit, double lnginit, String date) async {
+  return await userCollection.document(uid).collection('Run').document(date).setData({
     'distanz': distanz,
     'kcal': kcal,
     'time': time,
+    'lat':lat,
+    'lng':lng,
+    'latinit':latinit,
+    'lnginit':lnginit,
+    'date' : date,
+
     
   });
 }
+
+
 
 
 //userData from snapshot
@@ -48,6 +57,7 @@ return UserData(
 
 
 //get user doch stream
+//get user data stream
 Stream<UserData> get userData {
   return userCollection.document(uid).snapshots()
   .map(_userDataFromSnapshot);

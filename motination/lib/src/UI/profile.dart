@@ -3,24 +3,23 @@ import 'package:motination/models/user.dart';
 
 import 'package:flutter/material.dart';
 import 'package:motination/models/user.dart';
+import 'package:motination/shared/constants.dart';
 
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/runstats.dart';
 import 'package:motination/src/UI/settings.dart';
+import 'package:motination/src/UI/workoutstats.dart';
 
 import 'package:provider/provider.dart';
 import 'homescreen.dart';
 import 'shop.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-
 /* Profile Class UI Design
   Content: User Information, Profile Settings Button, Bottom Navigation Bar
   Function:  MaterialPageRoute -> (Settings, Home, Challenge, Shop) 
   Stream Builder for Firebase Backend Information 
 */
-
 
 class Profile extends StatefulWidget {
   @override
@@ -30,304 +29,332 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-
   int _currentIndex = 0;
-  final barColor = const Color(0xFF0A79DF);
-  final bgColor = const Color(0xFFFEFDFD);
 
   Widget build(context) {
-
     User user = Provider.of<User>(context);
 
     return new Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        title: Text('Profile '),
-        backgroundColor: barColor,
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          'Profil',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: bgColor,
         actions: <Widget>[
           FlatButton.icon(
-            icon: Icon(
-              Icons.settings,
-              color: bgColor,
-              ),
-              label: Text(''),
-            onPressed: () => Navigator.push(context, 
-            MaterialPageRoute(builder: (context) => Settings())),
-            )
+            icon: Icon(Icons.settings, color: Colors.black),
+            label: Text(''),
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Settings())),
+          )
         ],
       ),
-      
       body: StreamBuilder(
-        stream: Firestore.instance.collection('user').document(user.uid).snapshots(),  /*DatabaseService(uid: user.uid).userData,*/
-        builder: (context, snapshot){
-          if(!snapshot.hasData){
+        stream: Firestore.instance
+            .collection('user')
+            .document(user.uid)
+            .snapshots(),
+        /*DatabaseService(uid: user.uid).userData,*/
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
             return new Text('Loading');
           }
-          
-        return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          
-          Expanded(
-            child:Container(
-            alignment: Alignment.center,
-              height: 150,
-              child: Icon(      //Profilbild
-               Icons.person,
-                color: Colors.grey[700],
-                size: 100,
-              ),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey[200],
-              ),
-          ),
-          ),
 
-                          Expanded(
-                            child: Column(children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  color: bgColor,
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(snapshot.data['vorname']+' '+ snapshot.data['nachname'], 
-                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          return Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.center,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            'https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_200_200/0/1573047022324?e=1611792000&v=beta&t=RF6cdGacErRqLLs90TuK1KW_H9jtKYplI_Z_9KJgc88'),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            snapshot.data['vorname'] +
+                                ' ' +
+                                snapshot.data['nachname'],
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            snapshot.data['benutzername'],
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    'Alter: ',
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(snapshot.data['alter'],
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      ))
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    'Größe: ',
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(snapshot.data['groese'] + 'cm',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      )),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    'Gewicht: ',
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(snapshot.data['gewicht']+'kg',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Gesamtstatistik',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: boxColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(1),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 2),
+                          )
+                        ]),
+                    child: Column(
+                      children: <Widget>[
+                        FloatingActionButton(
+                          heroTag: null,
+                          backgroundColor: Colors.teal[900],
+                          child: Icon(Icons.directions_run,
+                              size: 30, color: Colors.white),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Runstats()),
+                            );
+                          },
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  snapshot.data['sumdistanz'],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  color: bgColor,
-                                  alignment: Alignment.topCenter,
-                                  child: Text(snapshot.data['benutzername'], 
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                Text(
+                                  'Kilomter',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                  ),
                                 ),
-                              ),
-                            ]),
-                          ),
-
-          Expanded(
-          child: Column(
-            children: <Widget>[
-            Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      snapshot.data['alter'],
-            
-                      style: TextStyle( color: Colors.grey[500], fontSize: 15),
-                      textAlign: TextAlign.center,
-                      ),
-                     ),
-                  Expanded(
-                    child: Text(
-                      snapshot.data['groese'], 
-                      style: TextStyle(color: Colors.blueGrey[500], fontSize: 15),
-                      textAlign: TextAlign.center,
-                      ),
-                    ),
-                  Expanded(
-                    child: Text(
-                      snapshot.data['gewicht'],
-                      style: TextStyle(color: Colors.grey[700], fontSize:15),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            
-            Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      'Alter', 
-                      style: TextStyle( color: Colors.grey[500], fontSize: 10),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Größe', 
-                      style: TextStyle(color: Colors.blueGrey[500], fontSize: 10),
-                      textAlign: TextAlign.center,
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  snapshot.data['sumtime'],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                Text(
+                                  'Stunden',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  snapshot.data['sumspeed'],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                Text(
+                                  'Speed',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    child: Text(
-                      'Gewicht',
-                      style: TextStyle(color: Colors.grey[700], fontSize:10),
-                      textAlign: TextAlign.center,
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: boxColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(1),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 2),
+                          )
+                        ]),
+                    child: Column(
+                      children: <Widget>[
+                        FloatingActionButton(
+                          heroTag: null,
+                          backgroundColor: buttonColor,
+                          child: Icon(Icons.fitness_center_rounded,
+                              size: 30, color: Colors.white),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WorkoutStats()),
+                            );
+                          },
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  '15',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                Text(
+                                  'Besuche',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  '35',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                Text(
+                                  'Stunden',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            
-            ],
-          ),
-          ),
-          
-    
-          Expanded(
-            child: Column(
-              children: <Widget> [
-                Container(
-                  height: 50,
-                  child: FloatingActionButton(
-                    backgroundColor: barColor,
-                    child: Icon(
-                      Icons.directions_run,
-                      size: 30,
-                      color: Colors.white
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Runstats()),
-                      );
-                    },
-                  ),
-                  /*decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue
-                  ),*/
-                ), 
-               /* Container(
-              width: 178,
-              height: 155,
-              child: RaisedButton(
-                shape: new RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
-                color: Colors.black, 
-                child: Icon(
-                  Icons.fitness_center,
-                  size: 88,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Runstats()),
-                  );
-                },
-              ),),*/
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        '23482', 
-                        style: TextStyle( color: Colors.grey[500], fontSize: 20),
-                        textAlign: TextAlign.center
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                      '70984', 
-                      style: TextStyle(color: Colors.blueGrey[500], fontSize: 20),
-                      textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        '12,3 km/h',
-                        style: TextStyle(color: Colors.grey[700], fontSize: 20), 
-                        textAlign: TextAlign.center,       
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        'Meter', 
-                        style: TextStyle( color: Colors.grey[500], fontSize: 15),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Minuten', 
-                        style: TextStyle(color: Colors.blueGrey[500], fontSize: 15),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Geschwindigkeit', 
-                        style: TextStyle(color: Colors.blueGrey[500], fontSize: 15),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ]
-            ),
-          ),
-
-          Expanded(
-            child: Column(
-              children: <Widget>[
-              Container(
-                height: 60,
-                child: Icon(
-               Icons.fitness_center,
-                color: Colors.white,
-                size: 30,
-                ),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue
-                
-              ),
-            ), 
-            Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  '14', 
-                  style: TextStyle( color: Colors.grey[500], fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '7054', 
-                  style: TextStyle(color: Colors.blueGrey[500], fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-            ),
-            Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  'Besuche', 
-                  style: TextStyle( color: Colors.grey[500], fontSize: 15),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'Minuten', 
-                  style: TextStyle(color: Colors.blueGrey[500], fontSize: 15, fontWeight: FontWeight.w700),                  
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-            ),
-          ],
-        ),
-          ),
-        ],
-      );
+                ]),
+          );
         },
       ),
-    
-
       
-
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -367,11 +394,10 @@ class _ProfileState extends State<Profile> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Challenge()),
-              );              
+              );
           });
         },
       ),
     );
-        
   }
 }

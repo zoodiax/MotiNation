@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:motination/models/user.dart';
+import 'package:motination/shared/constants.dart';
 import 'package:motination/src/UI/runstatsdetails.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_icons/flutter_icons.dart';
 
 class Runstats extends StatefulWidget {
   @override
@@ -12,76 +13,130 @@ class Runstats extends StatefulWidget {
 }
 
 class _RunstatsState extends State<Runstats> {
-  
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
-  
-  final wrktColor = const Color (0xFF28CCD3);
+
+  final wrktColor = const Color(0xFF28CCD3);
   final blackColor = const Color(0xBF000000);
   //final CollectionReference userCollection = Firestore.instance.collection('user');
-  
+
+  final int sumdistanz = 0;
+
+  String randerdatum(String datum){
+    return datum.substring(0,9);
+  }
+    
+
+  Icon sporttype(String type) {
+    if (type == 'running')
+      return Icon(
+        Icons.directions_run_rounded,
+        color: mainColor,
+      );
+    else
+      return Icon(
+        Icons.directions_bike,
+        color: buttonColor,
+      );
+  }
 
 // makeListWidget für ListView Firestore
   List<Widget> makeListWidgetUser(AsyncSnapshot snapshot) {
-    
     return snapshot.data.documents.map<Widget>((document) {
-    
-      return ListTile(
-        title: Text('Distanz: '+document['distanz']+'km'+' '+'Zeit: '+document['time'] ?? ''),
-        subtitle: Text('Kalorien: '+document['kcal'] ?? ''),
-        leading: Icon(
-          Icons.directions_run_rounded,
-          color: Colors.white,
+      return Card(
+        color: boxColor,
+        child: ListTile(
+          title: Text('Datum: ' +
+                  randerdatum(document['date']??'') +
+                  
+                  '  ' +
+                  'Distanz: ' + 
+                  document['distanz']  + ' km',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,)
+                  ) ,
+                  
+          subtitle: Text('Dauer: ' + document['time']  + ' min'),
+          leading: sporttype(document['sportType']),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+          Icon(
+            MaterialIcons.monetization_on,
+            color: Colors.yellow,
+          ), 
+          Text(
+            document['points'],
+            style: TextStyle(
+              color: Colors.black
+            ),
+          )
+              
+            ],
           ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RunStatsDetails(
-              currentdistanz: document['distanz'] ?? 'fauler Hund',
-              currentdate: document['date'] ?? '0',
-            )),
-          );
-        },
+
+          /* Icons.directions_run_rounded,
+          color: mainColor,
+          ),*/
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => RunStatsDetails(
+                        currentdistanz: document['distanz'] ?? 'fauler Hund',
+                        currentdate: document['date'] ?? '0',
+                        currenttime: document['time'] ?? '0',
+                        currentkcal: document['kcal'] ?? '0',
+                      )),
+            );
+          },
+        ),
       );
     }).toList();
   }
+
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
-      return new Scaffold(
-      backgroundColor: Colors.blue,
+    return new Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
-        title: Text('Run Statistik'),
-      ),
-
-      body: Container(
-        child: StreamBuilder(
-          stream: Firestore.instance.collection('user').document(user.uid).collection('Run').snapshots(),
-          builder: (context,snapshot) {
-            if (!snapshot.hasData) {
-              return Container(
-                color: Colors.blue,
-                child: Center(
-                  child: SpinKitRotatingCircle(
-                    color: Colors.white,
-                    size: 50.0,
-                  ),
-                ),
-              );
-            } else{
-                return ListView(
-                  padding: EdgeInsets.all(10.0),
-                  children: makeListWidgetUser(snapshot),
-                  );
-            }
-          }
+        backgroundColor: bgColor,
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          'Run Statistik',
+          style: TextStyle(
+            color: Colors.black,
+          ),
         ),
       ),
+      body: Container(
+        child: StreamBuilder(
+            stream: Firestore.instance
+                .collection('user')
+                .document(user.uid)
+                .collection('Run')
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container(
+                  color: boxColor,
+                  child: Center(
+                    child: SpinKitRotatingCircle(
+                      color: Colors.white,
+                      size: 50.0,
+                    ),
+                  ),
+                );
+              } else {
+                return ListView(
+                  padding: EdgeInsets.all(20.0),
+                  children: makeListWidgetUser(snapshot),
+                );
+              }
+            }),
+      ),
 
-
-
-
-       /*bottomNavigationBar: BottomNavigationBar(
+      /*bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: bgColor,
@@ -126,6 +181,5 @@ class _RunstatsState extends State<Runstats> {
         },
       ),*/
     );
-
   }
 }

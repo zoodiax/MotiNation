@@ -1,22 +1,17 @@
-
 import 'package:flutter/material.dart';
+
 import 'package:motination/models/user.dart';
 import 'package:motination/src/UI/challenge.dart';
+import 'package:motination/src/UI/profile.dart';
+
 import 'homescreen.dart';
 import 'profile.dart';
-import 'package:provider/provider.dart';
-import 'package:motination/services/database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:motination/models/user.dart';
-
-import 'package:motination/services/database.dart';
-import 'package:motination/models/user.dart';
-
-import 'package:motination/src/UI/profile.dart';
-import 'package:provider/provider.dart';
 
 
-/* Shoping Class UI Design
+
+/*Shoping Class UI Design
   Test Page for Backend Test
   Content:  Bottom Navigation Bar
   Function: MaterialPageRoute -> (Profile, Homescreen, Challenge) 
@@ -35,42 +30,40 @@ class Shoping extends StatefulWidget {
 }
 
 class ShopState extends State<Shoping> {
-  final _formKey = GlobalKey<FormState>();
- 
-  int _currentIndex = 3;
+  
+int _currentIndex = 3;
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);  
-  final CollectionReference activityCollection = Firestore.instance.collection('user');
+  DateTime _dateTime = DateTime.now();
 
-  String duration = '0';
-  String distance = '0';
-  String calories;
-  String date;
-  String time; 
-
-
-   String kcal = '10';
-   String tmp = '200';
-   String dis = '0.1';
-  
-  
+ 
   Widget build(context) {
-    User user = Provider.of<User>(context);
+   
+    
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
         title: Text('Shop'),
         backgroundColor: barColor,
       ),
-      body: Container(
-        
+      body: CupertinoDatePicker(
+        initialDateTime: _dateTime,
+        mode: CupertinoDatePickerMode.date,
+        onDateTimeChanged: (datetime){
+          setState(() {
+            _dateTime = datetime;     
+          }
+          );
+        }
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
       
-        await DatabaseService(uid: user.uid).updateRunData(dis, kcal, tmp);}),
+        
+      
+    
+  
 
 
-      bottomNavigationBar: BottomNavigationBar(
+     bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: bgColor,

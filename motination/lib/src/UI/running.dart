@@ -48,6 +48,7 @@ class RunningState extends State<Running> {
   lib2.LatLng latlnghlp = lib2.LatLng(0, 0);
 
   bool showRun = true;
+  bool showSportType = false;
 
   LatLng linehlp = LatLng(0, 0);
   int _currentIndex = 1;
@@ -57,6 +58,14 @@ class RunningState extends State<Running> {
   //polylines:
   final Set<Polyline> _polyline = {};
   List<LatLng> latlnglines = List();
+  List<LatLng> latlnglines2 = List();
+  List<double> altitude = List();
+  List<double> altitude2 = List();
+  List <double> altitude3 = [1];
+  double _loc =1;
+  int sport = 1;
+  Icon _iconSport = Icon(Icons.directions_run);
+  
 
   void startTimer() {
     Timer(dur, keeprunning);
@@ -69,6 +78,8 @@ class RunningState extends State<Running> {
       distanceBetween(latlngstart, latlngend);
       latlngend = latlngstart;
       latlnglines.add(linehlp);
+      altitude.add(_loc);
+      
 
       setState(() {
         timerdisplay = (_stopwatch.elapsed.inHours.toString().padLeft(2, '0')) +
@@ -90,7 +101,7 @@ class RunningState extends State<Running> {
         caldisplay = kcal.toString();
         tempodisplay = min.toString() + ':' + sec.toString().padLeft(2, '0');
         distancedisplay = ((distancemeter / 1000).toStringAsFixed(2));
-
+        
         _polyline.add(Polyline(
           polylineId: PolylineId('route1'),
           visible: true,
@@ -98,6 +109,8 @@ class RunningState extends State<Running> {
           color: Colors.blue,
           width: 4,
         ));
+        latlnglines2.add(linehlp);
+        altitude2.add(_loc);
       });
     } else
       stopstopwatch();
@@ -129,7 +142,7 @@ class RunningState extends State<Running> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SaveRun(dis: dis, time: time, kcal: kcal)),
+          builder: (context) => SaveRun(dis: dis, time: time, kcal: kcal, latlng: latlnglines2 , altitude: altitude)),
     );
   }
 
@@ -143,6 +156,8 @@ class RunningState extends State<Running> {
     _controller = _cntrl;
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
+      
+      _loc = l.altitude;
       double hlplat = l.latitude;
       double hlplng = l.longitude;
       latlnghlp = lib2.LatLng(hlplat, hlplng);
@@ -155,6 +170,7 @@ class RunningState extends State<Running> {
   
 
   Widget _getFAB() {
+
     if (showRun == false) {
       return ButtonBar(alignment: MainAxisAlignment.center, children: [
         RaisedButton(
@@ -177,9 +193,58 @@ class RunningState extends State<Running> {
           onPressed: (timerisrunning == true) ? stopstopwatch : startstopwatch,
           child: (timerisrunning == true)
               ? Icon(Icons.pause)
-              : Icon(Icons.play_arrow));
+              : Icon(Icons.play_arrow),
+              heroTag: null
+              ,);
     }
   }
+
+
+
+Widget _sportType() {
+  return  Container(
+    
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 2),
+              shape: BoxShape.circle,
+              color: bgColor,
+            ),
+    
+    child:PopupMenuButton<int>(
+          onSelected: (val) { 
+            setState(() {
+              if (val ==1) {
+                _iconSport = Icon(Icons.directions_run); 
+              } else if (val ==2 ){_iconSport = Icon(Icons.directions_bike);}
+              else {_iconSport = Icon(Icons.cached);}
+            });
+          },
+          
+          itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  child: Text(
+                    "Running",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                  ),
+                  
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  child: Text(
+                    "Cycling",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                  ),
+                  
+                ),
+                
+              ],
+          
+          icon: _iconSport,
+          offset: Offset(0, -120),
+        ));}
 
   Widget build(context) {
     return new WillPopScope(
@@ -324,9 +389,17 @@ class RunningState extends State<Running> {
               ),
             ],
           ),
-          floatingActionButton: _getFAB(),
+          floatingActionButton: //_getFAB(),
+          Stack(children: <Widget>[
+            Align(alignment: Alignment.bottomCenter, child: _getFAB(),
+            ),
+            Align(alignment: Alignment(-0.95,1), child: _sportType(),
+            ),
+           
+          ]),
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+             FloatingActionButtonLocation.centerFloat,
+           
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             type: BottomNavigationBarType.fixed,

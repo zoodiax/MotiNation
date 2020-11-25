@@ -26,6 +26,7 @@ class _ChallengeState extends State<Challenge> {
   
   final wrktColor = const Color (0xFF28CCD3);
   final blackColor = const Color(0xBF000000);
+  var now = new DateTime.now();
 
 
 // makeListWidget für ListView Firestore
