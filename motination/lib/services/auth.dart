@@ -53,9 +53,8 @@ Future registerWithEmailAndPassword(String email, String password) async {
 
 
     //create a new document (in firestore) for the user with the uid  //Wird aber nur angelegt wenn man sich neu registriert, dh. wenn ein neues Update herausgebracht wird mit neuer Collection wird es nicht hinzugefügt.
-    await DatabaseService(uid: user.uid).updateUserData( 'Vorname', 'Nachname' ,'benutzername', '-', '-','-',user.uid,0 ,0);
-   
-
+    await DatabaseService(uid: user.uid).updateUserData( 'Vorname', 'Nachname' ,'benutzername', '-', '-','-',user.uid,'-','0','0','0',0 ,0);
+    //await DatabaseService(uid: user.uid).updateUserActivityData('duration', 'distance', 'calories', 'date', 'time'); //nur Test aber normalerweise bei start running implementieren
     return _userFromFirebaseUser(user);
   } catch(e){
     print(e.toString());

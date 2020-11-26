@@ -1,59 +1,40 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:motination/services/auth.dart';
+import 'package:motination/models/user.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'homescreen.dart';
 import 'profile.dart';
 import 'package:motination/shared/theme.dart';
+final AuthService _auth = AuthService();
 
 
-/* Shoping Class UI Design
+/*Shoping Class UI Design
   Test Page for Backend Test
   Content:  Bottom Navigation Bar
   Function: MaterialPageRoute -> (Profile, Homescreen, Challenge) 
 */
 
-class Shoping extends StatefulWidget {
+class Shoping extends StatefulWidget { 
+  final String uid;
+  
+
+  const Shoping({Key key, this.uid}) : super(key: key);
   @override
   createState() {
     return ShopState();
+
   }
 }
 
 class ShopState extends State<Shoping> {
-
-
-// makeListWidget für ListView Firestore
-  List<Widget> makeListWidget(AsyncSnapshot snapshot) {
-    
-    return snapshot.data.documents.map<Widget>((document) {
-      
-      return ListTile(
-        title: Text(document['name'] ?? ''),
-        subtitle: Text(document['category'] ?? 'Test'),
-        leading: Icon(Icons.fitness_center),
-      //   onTap: () {
-      //     Navigator.of(context).push(
-      //       MaterialPageRoute(
-      //           builder: (context) => SpzInfo(
-      //                 infocategory: document['category'] ?? 'Musterkategorie',
-      //                 infotitle: document['name'] ?? 'Muster Sportzentrum',
-      //                 infoaddress: document['address'] ?? 'Musterstraße 11, 1312 Musterstadt',
-      //                 infoopenhrs: document['opnhrs'] ?? ' Musteröffnungszeiten',
-      //                 infospecial: document['special'] ?? '',
-      //                 infotext: document['text'] ?? 'Bestes Muster Sportzentrum in der Stadt!',
-                     
-      //               )),
-      //     );
-      //   },
-       );
-    }).toList();
-  }
-
-
-  int _currentIndex = 3;
+  
+int _currentIndex = 3;
   final barColor = const Color(0xFF0A79DF);
-  final bgColor = const Color(0xFFFEFDFD);
+  final bgColor = const Color(0xFFFEFDFD);  
+  DateTime _dateTime = DateTime.now();
+
+ 
   Widget build(context) {
    
     
@@ -63,25 +44,27 @@ class ShopState extends State<Shoping> {
         title: Text('Shop'),
         backgroundColor: barColor,
       ),
-      body: Container(
-        child: StreamBuilder(
-                        stream:
-                            Firestore.instance.collection('spz').snapshots(),
-                        builder: (context, snapshot) {
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting:
-                              return Center(child: CircularProgressIndicator());
-                            default:
-                              return ListView(
-                                children: makeListWidget(snapshot),
-                              );
-                          }
-                        }),
+      // body: CupertinoDatePicker(
+      //   initialDateTime: _dateTime,
+      //   mode: CupertinoDatePickerMode.date,
+      //   onDateTimeChanged: (datetime){
+      //     setState(() {
+      //       _dateTime = datetime;     
+      //     }
+      //     );
+      //   }
+      // ),
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+                  await _auth.signOut();
+                }
+                ),
         
-      ),
-     
+      
+    
+  
 
-      bottomNavigationBar: BottomNavigationBar(
+
+     bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: bgColor,

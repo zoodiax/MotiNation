@@ -30,6 +30,11 @@ class _SettingsState extends State<Settings> {
   String _currentuid;
   int trackrun;
   int points;
+  String _currentgeschlecht;
+  String _sumdistanz;
+  String _sumtime;
+  String _sumspeed;
+
 
 Future <void> getData(User user) async{
     try{DocumentSnapshot snapshot = await DatabaseService(uid: user.uid).getUserData();
@@ -38,6 +43,9 @@ Future <void> getData(User user) async{
     
     points = data["points"];
     trackrun = data["trackrun"];
+    _sumdistanz = data["sumdistanz"];
+    _sumspeed = data["sumspeed"];
+    _sumtime = data["sumtime"];
     }); 
     }
     catch(err){
@@ -78,9 +86,9 @@ Future <void> getData(User user) async{
                               )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihren Nachnamen ein'),
+                                  hintText: 'Geben Sie ihren Nachnamen ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihren Nachnamen ein'
+                                  ? 'Geben Sie ihren Nachnamen ein.'
                                   : null,
                               onChanged: (val) {
                                
@@ -99,9 +107,9 @@ Future <void> getData(User user) async{
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihren Vornamen ein'),
+                                  hintText: 'Geben Sie ihren Vornamen ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihren Vornamen ein'
+                                  ? 'Geben Sie ihren Vornamen ein.'
                                   : null,
                               onChanged: (val) {
                                 
@@ -120,9 +128,9 @@ Future <void> getData(User user) async{
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie einen Benutzername ein'),
+                                  hintText: 'Geben Sie einen Benutzername ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie einen Benutzername ein'
+                                  ? 'Geben Sie einen Benutzername ein.'
                                   : null,
                               onChanged: (val) {
                                 
@@ -141,9 +149,9 @@ Future <void> getData(User user) async{
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihr Alter ein'),
+                                  hintText: 'Geben Sie ihr Alter ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihr Alter ein'
+                                  ? 'Geben Sie ihr Alter ein.'
                                   : null,
                               onChanged: (val) {
                                 
@@ -162,9 +170,9 @@ Future <void> getData(User user) async{
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihre Größe ein'),
+                                  hintText: 'Geben Sie ihre Größe ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihre Größe ein'
+                                  ? 'Geben Sie ihre Größe ein.'
                                   : null,
                               onChanged: (val) {
                                 
@@ -183,9 +191,9 @@ Future <void> getData(User user) async{
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihr Gewicht ein'),
+                                  hintText: 'Geben Sie ihr Gewicht ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihr Gewicht ein'
+                                  ? 'Geben Sie ihr Gewicht ein.'
                                   : null,
                               onChanged: (val) {
                                 
@@ -193,6 +201,26 @@ Future <void> getData(User user) async{
                               })
                         ],
                       )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Geschlecht',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihr Geschlecht ein.'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihr Geschlecht ein.'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentgeschlecht = val);
+                              })
+                        ],
+                      )),                      
                       RaisedButton(
                           color: Colors.blue[400],
                           child: Text(
@@ -210,8 +238,12 @@ Future <void> getData(User user) async{
                                 _currentalter ?? userData.alter,
                                 _currentgewicht ?? userData.gewicht,
                                 _currentuid ?? userData.uid,
-                                trackrun ?? userData.trackrun,
-                                points ?? userData.points,
+                                _currentgeschlecht ?? userData.geschlecht,
+                                _sumspeed,
+                                _sumtime,
+                                _sumdistanz,
+                                trackrun,
+                                points
                               );
                               Navigator.push(
                                   context,
@@ -225,7 +257,8 @@ Future <void> getData(User user) async{
           } else {
             return Loading();
           }
-         
+          
+         //du schwanz
         });
   }
 }

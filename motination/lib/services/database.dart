@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:motination/models/user.dart';
 
 class DatabaseService {
@@ -8,19 +7,25 @@ class DatabaseService {
   DatabaseService({this.uid});
 // collection reference
 final CollectionReference userCollection = Firestore.instance.collection('user'); //new collection if you register
+final CollectionReference activityCollection = Firestore.instance.collection('user');
 final CollectionReference spzCollection = Firestore.instance.collection('spz');
 
 
 // Send Data
-Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, int trackrun, int points) async {
- return await userCollection.document(uid).setData({
+
+Future updateUserData(String vorname, String nachname, String benutzername, String groese, String alter, String gewicht, String uid, String geschlecht, String sumdistanz, String sumtime, String sumspeed, int trackrun,int points) async {
+  return await userCollection.document(uid).setData({
     'vorname': vorname,
     'nachname': nachname,
     'benutzername': benutzername,
     'groese': groese,
     'alter': alter,
     'gewicht': gewicht,
-    'uid': uid, //neu hinzugefügt
+    'uid': uid,
+    'geschlecht': geschlecht, //neu hinzugefügt
+    'sumdistanz': sumdistanz,
+    'sumtime': sumtime,
+    'sumspeed': sumspeed,
     'trackrun' : trackrun,
     'points' : points,
     
@@ -92,6 +97,8 @@ return UserData(
 );
 }
 
+
+//get user doch stream
 //get user data stream
 Stream<UserData> get userData {
   return userCollection.document(uid).snapshots()

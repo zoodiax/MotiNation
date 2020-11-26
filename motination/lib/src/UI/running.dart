@@ -116,6 +116,8 @@ class RunningState extends State<Running> {
       stopstopwatch();
   }
 
+ 
+
   void startstopwatch() {
     setState(() {
       timerisrunning = true;
@@ -179,6 +181,7 @@ class RunningState extends State<Running> {
           CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
     });
   }
+  
 
   Widget _getFAB() {
     if (showRun == false) {
