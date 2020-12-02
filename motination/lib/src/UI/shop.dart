@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:motination/services/auth.dart';
-import 'package:motination/models/user.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'homescreen.dart';
 import 'profile.dart';
-import 'package:motination/shared/theme.dart';
+
 final AuthService _auth = AuthService();
 
 

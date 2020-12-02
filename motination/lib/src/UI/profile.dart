@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:motination/models/user.dart';
-
-import 'package:flutter/material.dart';
-import 'package:motination/models/user.dart';
 import 'package:motination/shared/constants.dart';
-
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/runstats.dart';
 import 'package:motination/src/UI/settings.dart';
 import 'package:motination/src/UI/workoutstats.dart';
-
 import 'package:provider/provider.dart';
 import 'homescreen.dart';
 import 'shop.dart';
@@ -195,7 +190,7 @@ class _ProfileState extends State<Profile> {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(1),
-                            spreadRadius: 5,
+                            spreadRadius: 2,
                             blurRadius: 7,
                             offset: Offset(0, 2),
                           )
@@ -215,7 +210,11 @@ class _ProfileState extends State<Profile> {
                             );
                           },
                         ),
-                        Row(
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.center,
+                                                  child: Row(
+                          
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Column(
@@ -274,6 +273,7 @@ class _ProfileState extends State<Profile> {
                             ),
                           ],
                         ),
+                        ),
                       ],
                     ),
                   ),
@@ -286,7 +286,7 @@ class _ProfileState extends State<Profile> {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(1),
-                            spreadRadius: 5,
+                            spreadRadius: 2,
                             blurRadius: 7,
                             offset: Offset(0, 2),
                           )

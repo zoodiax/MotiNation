@@ -1,13 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong/latlong.dart' as lib2;
 import 'package:location/location.dart';
-
-import 'workout.dart';
 import 'workoutInfo.dart';
-
 import 'profile.dart';
 import 'shop.dart';
 import 'saveRun.dart';
@@ -67,7 +63,7 @@ class RunningState extends State<Running> {
   double _loc = 1;
   int sport = 1;
   Icon _iconSport = Icon(Icons.directions_run);
-
+  int points = 0;
   void startTimer() {
     Timer(dur, keeprunning);
   }
@@ -137,18 +133,32 @@ class RunningState extends State<Running> {
     _stopwatch.stop();
   }
 
+void addPoints(){
+  int point = (time/360).round();
+  setState(() {
+    points = point;
+  });
+   
+  
+}
+
   void endrun() {
+    addPoints();
     latlnglines = [];
+
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SaveRun(
+             
               dis: dis,
               time: time,
               kcal: kcal,
               latlng: latlnglines2,
               altitude: altitude,
-              sport: sport)),
+              sport: sport,
+              points:points,
+              )),
     );
   }
 
@@ -168,7 +178,6 @@ class RunningState extends State<Running> {
 
   void _onMapCreated(GoogleMapController _cntrl) {
     _controller = _cntrl;
-   
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
       _loc = l.altitude;
@@ -176,7 +185,6 @@ class RunningState extends State<Running> {
       double hlplng = l.longitude;
       latlnghlp = lib2.LatLng(hlplat, hlplng);
       linehlp = LatLng(hlplat, hlplng);
-
       _controller.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
     });
@@ -317,7 +325,10 @@ class RunningState extends State<Running> {
                           child: Row(
                             children: <Widget>[
                               Expanded(
-                                child: Column(children: <Widget>[
+                                child: 
+                                
+                                
+                                Column(children: <Widget>[
                                   Expanded(
                                     child: Container(
                                       color: bgColor,
@@ -340,6 +351,11 @@ class RunningState extends State<Running> {
                                     ),
                                   ),
                                 ]),
+
+
+
+
+                                
                               ),
                               Expanded(
                                 child: Column(children: <Widget>[
@@ -399,7 +415,9 @@ class RunningState extends State<Running> {
               ),
               Expanded(
                 flex: 5,
-                child: GoogleMap(
+                child: 
+                
+                GoogleMap(
                   mapType: MapType.terrain,
                   initialCameraPosition: CameraPosition(
                     target: _initialPosition,

@@ -26,6 +26,7 @@ class _RunstatsState extends State<Runstats> {
     return datum.substring(0,9);
   }
     
+  
 
   Icon sporttype(String type) {
     if (type == 'running')
@@ -40,10 +41,27 @@ class _RunstatsState extends State<Runstats> {
       );
   }
 
+   sectomin(String seconds){
+    
+    double sec = double.parse(seconds);
+    assert (sec is double);
+    double min = sec/60;
+    return min;
+  }
+
+  double mtokm(String meter){
+    double m = double.parse(meter);
+    assert (m is double);
+    double km = m/1000;
+    return km;
+  }
+
 // makeListWidget für ListView Firestore
   List<Widget> makeListWidgetUser(AsyncSnapshot snapshot) {
+
     return snapshot.data.documents.map<Widget>((document) {
       return Card(
+        
         color: boxColor,
         child: ListTile(
           title: Text('Datum: ' +
@@ -51,11 +69,11 @@ class _RunstatsState extends State<Runstats> {
                   
                   '  ' +
                   'Distanz: ' + 
-                  document['distanz']  + ' km',
+                  mtokm(document['distanz']).toString()  + ' km',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,)
                   ) ,
                   
-          subtitle: Text('Dauer: ' + document['time']  + ' min'),
+          subtitle: Text('Dauer: ' + sectomin(document['time']).toString()  + ' Min'),
           leading: sporttype(document['sportType']),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +83,7 @@ class _RunstatsState extends State<Runstats> {
             color: Colors.yellow,
           ), 
           Text(
-            document['points'],
+            document['points'].toString(),
             style: TextStyle(
               color: Colors.black
             ),
@@ -82,10 +100,7 @@ class _RunstatsState extends State<Runstats> {
               context,
               MaterialPageRoute(
                   builder: (context) => RunStatsDetails(
-                        currentdistanz: document['distanz'] ?? 'fauler Hund',
-                        currentdate: document['date'] ?? '0',
-                        currenttime: document['time'] ?? '0',
-                        currentkcal: document['kcal'] ?? '0',
+                        document : document,
                       )),
             );
           },

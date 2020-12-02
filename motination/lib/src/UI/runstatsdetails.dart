@@ -1,48 +1,82 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:latlong/latlong.dart';
 import 'package:motination/shared/constants.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 class RunStatsDetails extends StatelessWidget {
   RunStatsDetails({
-    this.currentdistanz = '0',
-    this.currentdate = '0',
-    this.currenttime = '0',
-    this.currentkcal = '0',
+  
+    this.document,
   });
-  final currentdistanz;
-  final currentdate;
-  final currenttime;
-  final currentkcal;
-  final boxColor = Colors.white70;
 
-  String titledate(String datum){
-    return datum.substring(0,9);
+  final DocumentSnapshot document;
+
+
+
+
+  final boxColor = Colors.white70;
+  final Set<Polyline> _polyline = {};
+
+  List<double> latlng = [];
+
+  List<double> getList(List<dynamic> list) {
+    List<double> dList = List<double>.from(list);
+    return dList;
   }
 
-  LatLng _initialPosition = LatLng(37.3318095, -122.030598);
+  List<LatLng> latLngList(List<double> lat, List<double> lng) {
+    if (lat.length == lng.length) {
+      List<LatLng> list = [];
+
+      for (var i = 0; i < lat.length; i++) {
+        list.add(LatLng(lat[i], lng[i]));
+      }
+      return list;
+    } else {
+      print('Lat.length != Lng.lengt');
+      return null;
+    }
+  }
+
+  String titledate(String datum) {
+    return datum.substring(0, 9);
+  }
+
+ buildPolyline(List<LatLng> list) {
+   Set<Polyline> _polyline = {};
+   
+     _polyline.add(Polyline(
+      polylineId: PolylineId('route1'),
+      visible: true,
+      points: list,
+      color: blue,
+      width: 6));
+  return _polyline;
+
+   
+  }
   Widget build(BuildContext context) {
+      
+   
+    List<double> lat = getList(document['lat']);
+    List<double> lng = getList(document['lng']);
+    List<LatLng> latlng = latLngList(lat, lng);
+    LatLng _initialPosition = LatLng(document['latinit'],document['lnginit']);
+     Set<Polyline> _polyline = buildPolyline(latlng);
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: bgColor,
-          title: Text('Lauf vom: ' + titledate(currentdate),
+          title: Text('Lauf vom: ' + titledate(document['date']),
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ))),
-      body:
-          /*Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          /*Expanded(
-            child: Image(
-              image: NetworkImage('https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_800_800/0?e=1610582400&v=beta&t=_0g4xt4l8w_t0issy2U_SXB9DWwnVVKpnIwPJYoqJ_8'),
-            ))*/*/
-
+      body:  
           Column(children: <Widget>[
         Expanded(
             flex: 2,
@@ -63,6 +97,7 @@ class RunStatsDetails extends StatelessWidget {
                   target: _initialPosition,
                   zoom: 16,
                 ),
+                polylines: _polyline,
                 myLocationButtonEnabled: false,
               ),
             )),
@@ -102,7 +137,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          currentdistanz + ' km',
+                          document['distanz'] + ' km',
                           style: TextStyle(
                               fontStyle: FontStyle.normal,
                               fontWeight: FontWeight.bold,
@@ -138,7 +173,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          currenttime,
+                          document['time'],
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -172,7 +207,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          currentkcal,
+                          document['kcal'],
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -205,7 +240,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          currentdistanz,
+                          document['distanz'],
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -239,7 +274,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          currentdistanz + ' m',
+                          document['distanz'] + ' m',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -273,7 +308,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          currentdistanz + ' m',
+                          document['distanz'] + ' m',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -288,4 +323,5 @@ class RunStatsDetails extends StatelessWidget {
       ]),
     );
   }
+
 }

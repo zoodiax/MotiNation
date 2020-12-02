@@ -1,17 +1,8 @@
 import 'dart:ui';
 import 'package:motination/shared/constants.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:flutter/material.dart';
-import 'package:motination/services/auth.dart';
-import 'package:motination/src/UI/challenge.dart';
-import 'package:motination/shared/theme.dart';
-
-import 'workout.dart';
-import 'profile.dart';
-import 'shop.dart';
 import 'running.dart';
-import 'triangle.dart';
+
 
 
 class HomeScreen extends StatefulWidget {
