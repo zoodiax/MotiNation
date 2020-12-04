@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:motination/shared/constants.dart';
 
 /*
 
@@ -31,28 +31,34 @@ class SpzInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text(infotitle),
-      ),
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(infotitle, style:  Theme.of(context).textTheme.headline1,),
+            backgroundColor: bgColor,),
+      
       body: Center(
         child: Card(
             child: Column(children: [
+          Spacer(),
           Icon(Icons.fitness_center),
+          Spacer(),
           ListTile(
-            title: Text(infocategory),
-            subtitle: Text(infotext),
+            title: Text(infocategory,style: Theme.of(context).textTheme.headline5,),
+            subtitle: Text(infotext,style: Theme.of(context).textTheme.bodyText2,),
           ),
           Divider(),
           ListTile(
-            title: Text('Öffnungszeiten:'),
-            subtitle: Text(infoopenhrs),
+            title: Text('Öffnungszeiten:',style: Theme.of(context).textTheme.headline5,),
+            subtitle: Text(infoopenhrs,style: Theme.of(context).textTheme.bodyText2,),
           ),
           Divider(),
           ListTile(
-            title: Text('Adresse'),
-            subtitle: Text(infoaddress),
+            title: Text('Adresse',style: Theme.of(context).textTheme.headline5,),
+            subtitle: Text(infoaddress,style: Theme.of(context).textTheme.bodyText2,),
           ),
           Divider(),
-          ListTile(title: Text('Aktion'), subtitle: Text(infospecial)),
+          ListTile(title: Text('Aktion',style: Theme.of(context).textTheme.headline5,),
+           subtitle: Text(infospecial,style: Theme.of(context).textTheme.bodyText2,)),
+           Spacer(),
         ])),
       ),
     );

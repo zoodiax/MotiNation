@@ -5,6 +5,8 @@ import 'package:motination/shared/loading.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/shared/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 /* Settings Class UI Design
   Content: Update Button, TextField (LastName, FirstName, UserName, Age, Height, Weight)
@@ -26,16 +28,41 @@ class _SettingsState extends State<Settings> {
   String _currentbenutzername;
   String _currentgewicht;
   String _currentuid;
+  int trackrun;
+  int points;
+  String _currentgeschlecht;
+  String _sumdistanz;
+  String _sumtime;
+  String _sumspeed;
 
+
+Future <void> getData(User user) async{
+    try{DocumentSnapshot snapshot = await DatabaseService(uid: user.uid).getUserData();
+    Map<String, dynamic> data = snapshot.data;
+    setState(() {
+    
+    points = data["points"];
+    trackrun = data["trackrun"];
+    _sumdistanz = data["sumdistanz"];
+    _sumspeed = data["sumspeed"];
+    _sumtime = data["sumtime"];
+    }); 
+    }
+    catch(err){
+    print(err.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
-
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
+            getData(user);
+
+            
             return Form(
                 key: _formKey,
                 child: Scaffold(
@@ -59,11 +86,12 @@ class _SettingsState extends State<Settings> {
                               )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihren Nachnamen ein'),
+                                  hintText: 'Geben Sie ihren Nachnamen ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihren Nachnamen ein'
+                                  ? 'Geben Sie ihren Nachnamen ein.'
                                   : null,
                               onChanged: (val) {
+                               
                                 setState(() => _currentnachname = val);
                               })
                         ],
@@ -79,11 +107,12 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihren Vornamen ein'),
+                                  hintText: 'Geben Sie ihren Vornamen ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihren Vornamen ein'
+                                  ? 'Geben Sie ihren Vornamen ein.'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentvorname = val);
                               })
                         ],
@@ -99,11 +128,12 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie einen Benutzername ein'),
+                                  hintText: 'Geben Sie einen Benutzername ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie einen Benutzername ein'
+                                  ? 'Geben Sie einen Benutzername ein.'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentbenutzername = val);
                               })
                         ],
@@ -119,11 +149,12 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihr Alter ein'),
+                                  hintText: 'Geben Sie ihr Alter ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihr Alter ein'
+                                  ? 'Geben Sie ihr Alter ein.'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentalter = val);
                               })
                         ],
@@ -139,11 +170,12 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihre Größe ein'),
+                                  hintText: 'Geben Sie ihre Größe ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihre Größe ein'
+                                  ? 'Geben Sie ihre Größe ein.'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentgroese = val);
                               })
                         ],
@@ -159,15 +191,36 @@ class _SettingsState extends State<Settings> {
                           )),
                           TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Geben Sie ihr Gewicht ein'),
+                                  hintText: 'Geben Sie ihr Gewicht ein.'),
                               validator: (val) => val.isEmpty
-                                  ? 'Geben Sie ihr Gewicht ein'
+                                  ? 'Geben Sie ihr Gewicht ein.'
                                   : null,
                               onChanged: (val) {
+                                
                                 setState(() => _currentgewicht = val);
                               })
                         ],
                       )),
+                      Expanded(
+                          child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                            'Geschlecht',
+                            style: TextStyle(
+                                fontSize: 15, fontStyle: FontStyle.normal),
+                          )),
+                          TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'Geben Sie ihr Geschlecht ein.'),
+                              validator: (val) => val.isEmpty
+                                  ? 'Geben Sie ihr Geschlecht ein.'
+                                  : null,
+                              onChanged: (val) {
+                                setState(() => _currentgeschlecht = val);
+                              })
+                        ],
+                      )),                      
                       RaisedButton(
                           color: Colors.blue[400],
                           child: Text(
@@ -176,7 +229,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              await DatabaseService(uid: user.uid)
+                             await DatabaseService(uid: user.uid)
                                   .updateUserData(
                                 _currentvorname ?? userData.vorname,
                                 _currentnachname ?? userData.nachname,
@@ -185,7 +238,12 @@ class _SettingsState extends State<Settings> {
                                 _currentalter ?? userData.alter,
                                 _currentgewicht ?? userData.gewicht,
                                 _currentuid ?? userData.uid,
-                                userData.trackrun,
+                                _currentgeschlecht ?? userData.geschlecht,
+                                _sumspeed,
+                                _sumtime,
+                                _sumdistanz,
+                                trackrun,
+                                points
                               );
                               Navigator.push(
                                   context,
@@ -199,7 +257,8 @@ class _SettingsState extends State<Settings> {
           } else {
             return Loading();
           }
-         
+          
+         //du schwanz
         });
   }
 }
