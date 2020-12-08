@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'profile.dart';
-import 'homescreen.dart';
-import 'shop.dart';
+import '../profile.dart';
+import '../homescreen.dart';
+import '../shop.dart';
 
 
 
@@ -66,10 +66,10 @@ void getPointsfromSnapshot(DocumentSnapshot snapshot){
   
 // Prototype gets Data from DocumentSnapshot to Variable
 void getStufffromSnapshot(DocumentSnapshot snapshot){
-  Map<String, dynamic> data = snapshot.data;
-  setState(() {
+ // Map<String, dynamic> data = snapshot.data;
+ // setState(() {
     // Variable = data["nameOfFieldDocumentSnapshot"]
-  }); 
+  //}); 
 }
   
 
@@ -85,11 +85,10 @@ void getStufffromSnapshot(DocumentSnapshot snapshot){
     return new Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        title: Text('Challenge'),
+       title: Text('Challenge'),
       ),
 
       body: 
-      
       Container(
 
         child: Column(
@@ -152,20 +151,20 @@ void getStufffromSnapshot(DocumentSnapshot snapshot){
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('Profile'),
+           label: 'Profile',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
+           label: 'Home',
+         ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            title: Text('Challenge'),
+           label: 'Challenge',
             ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
-            title: Text('Shop'),
-          ),
+           label: 'Shop',
+         ),
           
         ],
         onTap: (index) {

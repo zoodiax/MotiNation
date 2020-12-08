@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong/latlong.dart' as lib2;
 import 'package:location/location.dart';
-import 'workoutInfo.dart';
-import 'profile.dart';
-import 'shop.dart';
+
 import 'saveRun.dart';
+import '../../../widgets/bottomBar.dart';
+
+import 'package:motination/shared/constants.dart';
+import 'package:motination/services/auth.dart';
+import 'package:motination/widgets/customAppbar.dart';
 
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
@@ -43,27 +46,27 @@ class RunningState extends State<Running> {
   lib2.LatLng latlngstart = lib2.LatLng(49.012260, 12.096680);
   lib2.LatLng latlngend = lib2.LatLng(49.015982, 12.107087);
   lib2.LatLng latlnghlp = lib2.LatLng(0, 0);
-  final blue = const Color(0xff191970);
-  final pink = const Color(0xFFc71585);
+  
   bool showRun = true;
   bool showSportType = false;
 
   LatLng linehlp = LatLng(0, 0);
   int _currentIndex = 1;
-  final barColor = const Color(0xFF0A79DF);
-  final bgColor = const Color(0xFFFEFDFD);
-
+  
   //polylines:
   final Set<Polyline> _polyline = {};
   List<LatLng> latlnglines = List();
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
-  List<double> altitude2 = List();
-  List<double> altitude3 = [1];
+ List<double> altitude2 = List();
+ 
   double _loc = 1;
   int sport = 1;
-  Icon _iconSport = Icon(Icons.directions_run);
+ 
   int points = 0;
+  final AuthService _auth = AuthService();
+ 
+ 
   void startTimer() {
     Timer(dur, keeprunning);
   }
@@ -72,7 +75,7 @@ class RunningState extends State<Running> {
     if (_stopwatch.isRunning) {
       startTimer();
       latlngstart = latlnghlp;
-      distanceBetween(latlngstart, latlngend);
+      distancemeter += distanceBetween(latlngstart, latlngend);
       latlngend = latlngstart;
       latlnglines.add(linehlp);
       altitude.add(_loc);
@@ -133,17 +136,13 @@ class RunningState extends State<Running> {
     _stopwatch.stop();
   }
 
-void addPoints(){
-  int point = (time/360).round();
-  setState(() {
-    points = point;
-  });
-   
-  
+int addPoints(int distancelocal){
+  int pointlocal = distancelocal~/1000;
+  return pointlocal;
 }
 
   void endrun() {
-    addPoints();
+    points = addPoints(dis);
     latlnglines = [];
 
     Navigator.push(
@@ -165,10 +164,11 @@ void addPoints(){
 
 
 
-  void distanceBetween(lib2.LatLng start, lib2.LatLng end) {
-    double hlp = 0;
-    hlp = distance(start, end);
-    distancemeter += hlp;
+  double distanceBetween(lib2.LatLng start, lib2.LatLng end) {
+    double dis = 0;
+    dis = distance(start, end);
+
+    return dis;
   }
 
 
@@ -249,6 +249,8 @@ void addPoints(){
 
 // Filter Button, different sport disciplines
   Widget _sportType() {
+     
+    Icon _iconSport = Icon(Icons.directions_run);
     return Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
@@ -257,7 +259,7 @@ void addPoints(){
         ),
         child: PopupMenuButton<int>(
           onSelected: (val) {
-            setState(() {
+             setState(() {
               if (val == 1) {
                 sport = 1;
                 _iconSport = Icon(Icons.directions_run);
@@ -266,8 +268,8 @@ void addPoints(){
                 _iconSport = Icon(Icons.directions_bike);
               } else {
                 _iconSport = Icon(Icons.cached);
-              }
-            });
+               }
+             });
           },
           itemBuilder: (context) => [
             PopupMenuItem(
@@ -293,15 +295,14 @@ void addPoints(){
   }
 
   Widget build(context) {
+    
+
     return new WillPopScope(
         onWillPop: () async => false,
         child: new Scaffold(
           backgroundColor: bgColor,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Running' , style:  Theme.of(context).textTheme.headline1,),
-            backgroundColor: bgColor,
-          ),
+          appBar: CustomAppBar(name: 'Running',),
+         
           body: Column(
             children: <Widget>[
               Expanded(
@@ -445,55 +446,8 @@ void addPoints(){
           ]),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: blue,
-            backgroundColor: bgColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                title: Text('Profile'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.timer, color: blue,),
-                title: Text('Running', style: TextStyle(color: blue),),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.fitness_center),
-                title: Text('Workout'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket),
-                title: Text('Shop'),
-              ),
-            ],
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-                if (_currentIndex == 0)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profile()),
-                  );
-                if (_currentIndex == 1)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Running()),
-                  );
-                if (_currentIndex == 3)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Shoping()),
-                  );
-                if (_currentIndex == 2)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WorkoutInfo()),
-                  );
-              });
-            },
-          ),
+          bottomNavigationBar: bottomBar(_currentIndex,context),
+    
         ));
   }
 }

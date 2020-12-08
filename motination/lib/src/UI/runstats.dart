@@ -23,7 +23,7 @@ class _RunstatsState extends State<Runstats> {
   final int sumdistanz = 0;
 
   String randerdatum(String datum){
-    return datum.substring(0,9);
+    return datum.substring(0,10);
   }
     
   

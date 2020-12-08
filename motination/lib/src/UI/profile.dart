@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:motination/models/user.dart';
 import 'package:motination/shared/constants.dart';
-import 'package:motination/src/UI/challenge.dart';
+
 import 'package:motination/src/UI/runstats.dart';
 import 'package:motination/src/UI/settings.dart';
 import 'package:motination/src/UI/workoutstats.dart';
 import 'package:provider/provider.dart';
-import 'homescreen.dart';
-import 'shop.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../widgets/bottomBar.dart';
+
+
 
 /* Profile Class UI Design
   Content: User Information, Profile Settings Button, Bottom Navigation Bar
@@ -355,49 +357,7 @@ class _ProfileState extends State<Profile> {
         },
       ),
       
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: bgColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            title: Text('Challenge'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_basket),
-            title: Text('Shop'),
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            if (_currentIndex == 3)
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Shoping()),
-              );
-            if (_currentIndex == 1)
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
-            if (_currentIndex == 2)
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Challenge()),
-              );
-          });
-        },
-      ),
+      bottomNavigationBar: bottomBar(_currentIndex, context),
     );
   }
 }

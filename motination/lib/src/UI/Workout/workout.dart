@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:motination/shared/constants.dart';
-import 'package:motination/src/UI/challenge.dart';
-import 'package:motination/models/markerz.dart';
-import 'homescreen.dart';
-import 'profile.dart';
-import 'shop.dart';
-import 'spzinfo.dart';
 
+import 'package:motination/models/markerz.dart';
+
+
+import '../../../models/spzinfo.dart';
+
+import '../../../widgets/bottomBar.dart';
 /* Workout Class UI Design & Logic
   Content: List View Column, MapView Column, Floarting Action Button (Filter Function), Center Location, Categroy class(Filter),
           List Categories, class Markerz, List Markerz
@@ -210,55 +210,7 @@ void setBackWorkout(){
             ]),
             // floatingActionButton: FloatingActionButton(onPressed: setBackWorkout),
             // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: 2,
-              selectedItemColor: blue,
-              type: BottomNavigationBarType.fixed,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  title: Text('Profile'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.timer),
-                  title: Text('Running'),
-                ),
-                BottomNavigationBarItem(
-                  
-                  icon: Icon(Icons.fitness_center),
-                  title: Text('Workout'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_basket),
-                  title: Text('Shop'),
-                ),
-              ],
-              onTap: (index) {
-                setState(() {
-                  _currentIndex = index;
-                  if (_currentIndex == 1)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
-                  if (_currentIndex == 0)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Profile()),
-                    );
-                  if (_currentIndex == 3)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Shoping()),
-                    );
-                  if (_currentIndex == 2)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Challenge()),
-                    );
-                });
-              },
-            ),
+            bottomNavigationBar: bottomBar(_currentIndex,context),
           )),
     );
   }

@@ -1,14 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:motination/models/user.dart';
-import 'package:motination/src/UI/basket.dart';
-import 'package:motination/src/UI/profile.dart';
-import 'package:motination/src/UI/challenge.dart';
-import 'package:provider/provider.dart';
-import 'package:motination/src/UI/homescreen.dart';
-import 'package:motination/models/shop.dart';
 
+import 'package:flutter/material.dart';
+import 'package:motination/src/UI/basket.dart';
+
+import '../../widgets/bottomBar.dart';
 
 
 
@@ -100,54 +94,7 @@ class ShopState extends State<Shoping> {
 
       ),
 
-      bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: bgColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                title: Text('Profile'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text('Home'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                title: Text('Challenge'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket),
-                title: Text('Shop'),
-              ),
-            ],
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-                if (_currentIndex == 3)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Shoping()),
-                  );
-                if (_currentIndex == 2)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Challenge()),
-                  );
-                   if (_currentIndex == 1)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                if (_currentIndex == 0)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profile()),
-                  );
-              });
-            },
-          ),
+      bottomNavigationBar: bottomBar(_currentIndex,context),
 
       body:      ListView(
       children: <Widget>[

@@ -56,7 +56,8 @@ class DatabaseService {
       String date,
       String sportType,
       int points,
-      double altitude) async {
+      double altitudeUp,
+      double altitudeDown) async {
     return await userCollection
         .document(uid)
         .collection('Run')
@@ -72,7 +73,8 @@ class DatabaseService {
       'date': date,
       'sportType': sportType,
       'points': points,
-      'altitude': altitude,
+      'altitudeUp': altitudeUp,
+      'altitudeDown': altitudeDown,
     });
   }
 
@@ -116,7 +118,7 @@ class DatabaseService {
 
 // Prototype gets Data from DocumentSnapshot to Variable
   void getStufffromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data;
+   // Map<String, dynamic> data = snapshot.data;
 
     // var = data["nameOfFieldDocumentSnapshot"]
   }
