@@ -8,7 +8,7 @@ import 'saveRun.dart';
 import '../../../widgets/bottomBar.dart';
 
 import 'package:motination/shared/constants.dart';
-import 'package:motination/services/auth.dart';
+
 import 'package:motination/widgets/customAppbar.dart';
 
 /* Running Class UI Design
@@ -64,8 +64,7 @@ class RunningState extends State<Running> {
   int sport = 1;
  
   int points = 0;
-  final AuthService _auth = AuthService();
- 
+
  
   void startTimer() {
     Timer(dur, keeprunning);
