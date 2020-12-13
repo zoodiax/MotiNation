@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong/latlong.dart' as lib2;
 import 'package:location/location.dart';
+//import 'package:motination/src/authentication/sign_in.dart';
 
 import 'saveRun.dart';
 import '../../../widgets/bottomBar.dart';
 
 import 'package:motination/shared/constants.dart';
 
-import 'package:motination/widgets/customAppbar.dart';
+import 'package:motination/services/auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:motination/src/authentication/signIn.dart';
+
 
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
@@ -59,7 +63,7 @@ class RunningState extends State<Running> {
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
  List<double> altitude2 = List();
- 
+ final AuthService _auth = AuthService();
   double _loc = 1;
   int sport = 1;
  
@@ -300,7 +304,37 @@ int addPoints(int distancelocal){
         onWillPop: () async => false,
         child: new Scaffold(
           backgroundColor: bgColor,
-          appBar: CustomAppBar(name: 'Running',),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Motination ',
+                style: GoogleFonts.spartan(
+                    textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600))),
+            backgroundColor: bgColor,
+            actions: <Widget>[
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.person,
+                  color: bgColor,
+                ),
+                label: Text(
+                  'Logout',
+                  style: GoogleFonts.spartan(
+                      textStyle: TextStyle(color: Colors.black)),
+                ),
+                onPressed: () async {
+                  await _auth.signOut();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignIn()),
+                  );
+
+                },
+              )
+            ],
+          ),
          
           body: Column(
             children: <Widget>[
