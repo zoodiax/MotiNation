@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'UI/homescreen.dart';
 //import 'authentication/authenticate.dart';
 import 'authentication/signIn.dart';
+import 'package:motination/src/authentication/firstTime.dart';
+
 
 class Wrapper extends StatelessWidget {
   @override
@@ -11,11 +13,11 @@ class Wrapper extends StatelessWidget {
 
     final user = Provider.of<User>(context);
     
-
-    //reutrn either Home or Authenticate widget
+    return FirstTime();
+    //return either Home or SignIn widget
     if (user == null) {
-      //return Authenticate();
-      return SignIn();
+      
+      return SignIn(); 
     } else {
       return HomeScreen();
     }

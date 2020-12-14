@@ -3,17 +3,19 @@ import 'package:motination/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/src/authentication/signIn.dart';
 import 'package:motination/services/sharedPref.dart';
+import 'package:motination/src/authentication/firstData.dart';
 
-class SendRegister extends StatefulWidget {
+
+
+class FirstTime extends StatefulWidget {
 
   @override
-  _SendRegisterState createState() => _SendRegisterState();
+  _FirstTimeState createState() => _FirstTimeState();
 }
 
-class _SendRegisterState extends State<SendRegister> {
+class _FirstTimeState extends State<FirstTime> {
 
-
-Widget _signIn(){
+Widget _sendFirstData(){
   return RawMaterialButton(
         constraints: BoxConstraints(minHeight: 60),
         fillColor: blue,
@@ -21,23 +23,13 @@ Widget _signIn(){
             borderRadius: BorderRadius.circular(18.0),
             side: BorderSide(color: blue)),
         onPressed: () async {
-          
-            
+         
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => SignIn()));
-            
-    
+                  context, MaterialPageRoute(builder: (context) => FirstData()));
         },
-        child: Text("     Zum Login     ",
+        child: Text("     Weiter     ",
             style: Theme.of(context).textTheme.headline2));}
 
-
-Future <Widget> _getValue() async {
-    final SharedPref _shared = SharedPref();
-    dynamic flag = await _shared.getIntValuesSP(intKey);
-    print("sendRegister flag: " + flag.toString());
-    return flag;
-}
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -45,20 +37,15 @@ Future <Widget> _getValue() async {
         child: new Scaffold(
           backgroundColor: bgColor,
           body: Column(children: [
-            // Expanded(
-            //   flex: 10,
-            //   child:
             Column(
               children: [
                 Container(
                   height: 90,
                 ),
-
-                //Spacer(flex: 4),
                 Container(
                   child: Center(
                     child: Text(
-                      'Erfolgreich registriert',
+                      'Hi Sportsfreund!',
                       style: Theme.of(context).textTheme.headline1,
                       textAlign: TextAlign.center,
                     ),
@@ -67,12 +54,11 @@ Future <Widget> _getValue() async {
                 Container(
                   height: 90,
                 ),
-                //Spacer(),
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                     child: Text(
-                      'Wir haben dir eine E-Mail gesendet. Folge dem Link und aktiviere dein Konto!',
+                      'Schön dich zu sehen - bevor es los geht brauchen wir noch ein paar Infos über dich, um dir ein optimales Sporterlebnis zu bieten. Alle Angaben kannst du später unter Einstellungen wieder ändern',
                       style: Theme.of(context).textTheme.bodyText1,
                       textAlign: TextAlign.center,
                     ),
@@ -81,9 +67,7 @@ Future <Widget> _getValue() async {
                 Container(
                   height: 90,
                 ),
-                //Spacer(flex: 2),
-                
-                _signIn(),
+                _sendFirstData(),
               ],
             ),
            

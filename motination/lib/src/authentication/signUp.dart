@@ -6,6 +6,7 @@ import 'package:motination/services/auth.dart';
 
 import 'package:motination/src/authentication/signIn.dart';
 import 'package:motination/src/authentication/sendRegister.dart';
+import 'package:motination/services/sharedPref.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _SignUpState extends State<SignUp> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-
+  final SharedPref _shared = SharedPref();
   // text field State
   String email = '';
   String password = '';
@@ -52,6 +53,7 @@ class _SignUpState extends State<SignUp> {
                   loading = false;
                 });
               } else {
+                _shared.addIntToSP(intKey, 1);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SendRegister()));
               }

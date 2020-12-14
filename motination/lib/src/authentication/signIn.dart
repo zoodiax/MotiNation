@@ -5,6 +5,9 @@ import 'package:motination/src/UI/Run/running.dart';
 import 'package:motination/services/auth.dart';
 import 'package:motination/src/authentication/forgotPw.dart';
 import 'package:motination/src/authentication/signUp.dart';
+import 'package:motination/services/sharedPref.dart';
+import 'package:motination/src/authentication/firstTime.dart';
+
 
 class SignIn extends StatefulWidget {
   @override
@@ -16,6 +19,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  final SharedPref _shared = SharedPref();
   bool loading = false;
 
   // text field State
@@ -44,6 +48,12 @@ class _SignInState extends State<SignIn> {
                 loading = false;
               });
             } else {
+              int flag = await _shared.getIntValuesSP(intKey);
+              print('Flag Sign In: $flag');
+              if(flag == 1) 
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => FirstTime()));
+              else 
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Running()));
             }
@@ -128,7 +138,10 @@ class _SignInState extends State<SignIn> {
         child: Text("         Jetzt registrieren        "));
   }
 
-  Widget build(context) {
+
+
+  Widget build(context){
+    
     return new WillPopScope(
         onWillPop: () async => false,
         child: new Scaffold(
@@ -141,6 +154,7 @@ class _SignInState extends State<SignIn> {
                 ),
                 Container(
                   child: Center(
+                    
                     child: Text(
                       'Willkommen bei Motination!',
                       style: Theme.of(context).textTheme.headline1,

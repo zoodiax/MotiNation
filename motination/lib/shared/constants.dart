@@ -18,3 +18,4 @@ const orange = const Color(0xFFff9a00);
 const mainColor = Color(0xff191970);
 const buttonColor = Color(0xFFff9a00);
 const boxColor = Colors.white70;
+const String intKey = "status";
