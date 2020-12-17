@@ -87,9 +87,9 @@ class _ProfileState extends State<Profile> {
                         Container(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            snapshot.data['vorname'] +
+                            snapshot.data['firstname'] ?? "" +
                                 ' ' +
-                                snapshot.data['nachname'],
+                                snapshot.data['lastname'] ?? "",
                             style: TextStyle(
                               fontSize: 25,
                               color: Colors.black,
@@ -99,7 +99,7 @@ class _ProfileState extends State<Profile> {
                         Container(
                           alignment: Alignment.topCenter,
                           child: Text(
-                            snapshot.data['benutzername'],
+                            snapshot.data['username'] ?? "",
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.black,
@@ -121,7 +121,7 @@ class _ProfileState extends State<Profile> {
                                       fontSize: 15,
                                     ),
                                   ),
-                                  Text(snapshot.data['alter'],
+                                  Text(snapshot.data['age']??"",
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 20,
@@ -140,7 +140,7 @@ class _ProfileState extends State<Profile> {
                                       fontSize: 15,
                                     ),
                                   ),
-                                  Text(snapshot.data['groese'] + 'cm',
+                                  Text(snapshot.data['height']??"" + 'cm',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 20,
@@ -159,7 +159,7 @@ class _ProfileState extends State<Profile> {
                                       fontSize: 15,
                                     ),
                                   ),
-                                  Text(snapshot.data['gewicht']+'kg',
+                                  Text(snapshot.data['weight']??""+'kg',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 20,
@@ -201,7 +201,7 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         FloatingActionButton(
                           heroTag: null,
-                          backgroundColor: Colors.teal[900],
+                          backgroundColor: blue,//Colors.teal[900],
                           child: Icon(Icons.directions_run,
                               size: 30, color: Colors.white),
                           onPressed: () {
@@ -222,7 +222,7 @@ class _ProfileState extends State<Profile> {
                             Column(
                               children: <Widget>[
                                 Text(
-                                  snapshot.data['sumdistanz'],
+                                  snapshot.data['sumdistance'] ??"0",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 30,
@@ -240,7 +240,7 @@ class _ProfileState extends State<Profile> {
                             Column(
                               children: <Widget>[
                                 Text(
-                                  snapshot.data['sumtime'],
+                                  snapshot.data['sumtime']??"0",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 30,
@@ -258,7 +258,7 @@ class _ProfileState extends State<Profile> {
                             Column(
                               children: <Widget>[
                                 Text(
-                                  snapshot.data['sumspeed'],
+                                  snapshot.data['sumspeed']??"0",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 30,

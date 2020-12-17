@@ -22,7 +22,8 @@ class _SignUpState extends State<SignUp> {
   final SharedPref _shared = SharedPref();
   // text field State
   String email = '';
-  String password = '';
+  String password1 = '';
+  String password2 = '';
   String error = '';
 
   final barColor = const Color(0xFF0A79DF);
@@ -38,24 +39,31 @@ class _SignUpState extends State<SignUp> {
           try {
             if (_formKey.currentState.validate()) {
               setState(() => loading = true);
-              dynamic result =
-                  await _auth.registerWithEmailAndPassword(email, password);
-
-              if (result == null) {
+              if (password1 != password2) {
                 setState(() {
-                  error =
-                      'Bitte geben Sie eine gülitig E-Mail Adresse/Passwort ein';
-                  loading = false;
-                });
-              } else if (result == 'ERROR_EMAIL_ALREADY_IN_USE') {
-                setState(() {
-                  error = 'E-Mail bereits registriert';
+                  error = 'Passwörter stimmen nicht überein';
                   loading = false;
                 });
               } else {
-                _shared.addIntToSP(intKey, 1);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SendRegister()));
+                dynamic result =
+                    await _auth.registerWithEmailAndPassword(email, password1);
+
+                if (result == null) {
+                  setState(() {
+                    error =
+                        'Bitte geben Sie eine gülitig E-Mail Adresse/Passwort ein';
+                    loading = false;
+                  });
+                } else if (result == 'ERROR_EMAIL_ALREADY_IN_USE') {
+                  setState(() {
+                    error = 'E-Mail bereits registriert';
+                    loading = false;
+                  });
+                } else {
+                  _shared.addIntToSP(intKey, 1);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SendRegister()));
+                }
               }
             }
           } catch (e) {
@@ -93,11 +101,24 @@ class _SignUpState extends State<SignUp> {
                       borderSide:
                           const BorderSide(color: Colors.grey, width: 1.0),
                     ),
-                    hintText: 'Neues Passwort'),
+                    hintText: 'Neues Passwort (min. 6 Zeichen lang)'),
                 obscureText: true,
-                validator: (val) => val.length < 6 ? 'Angaben benötigt' : null,
+                validator: (val) => val.length < 6 ? 'Passwort zu kurz' : null,
                 onChanged: (val) {
-                  setState(() => password = val);
+                  setState(() => password1 = val);
+                }),
+            SizedBox(height: 20.0),
+            TextFormField(
+                decoration: InputDecoration(
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                    hintText: 'Passwort wiederholen'),
+                obscureText: true,
+                validator: (val) => val.length < 6 ? 'Passwort zu kurz' : null,
+                onChanged: (val) {
+                  setState(() => password2 = val);
                 }),
             SizedBox(height: 20.0),
             _registerButton(),

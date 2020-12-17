@@ -1,8 +1,6 @@
 import 'dart:ui';
 import 'package:motination/shared/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:motination/src/authentication/signIn.dart';
-import 'package:motination/services/sharedPref.dart';
 import 'package:motination/src/authentication/firstData.dart';
 
 

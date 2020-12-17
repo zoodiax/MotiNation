@@ -40,12 +40,11 @@ Future <void> getData(User user) async{
     try{DocumentSnapshot snapshot = await DatabaseService(uid: user.uid).getUserData();
     Map<String, dynamic> data = snapshot.data;
     setState(() {
-    
-    points = data["points"];
-    trackrun = data["trackrun"];
-    _sumdistanz = data["sumdistanz"];
-    _sumspeed = data["sumspeed"];
-    _sumtime = data["sumtime"];
+    points = data["points"] ?? 0;
+    trackrun = data["trackrun"]?? 0;
+    _sumdistanz = data["sumdistanz"]?? "0";
+    _sumspeed = data["sumspeed"]?? "0";
+    _sumtime = data["sumtime"]?? "0";
     }); 
     }
     catch(err){
@@ -231,14 +230,14 @@ Future <void> getData(User user) async{
                             if (_formKey.currentState.validate()) {
                              await DatabaseService(uid: user.uid)
                                   .updateUserData(
-                                _currentvorname ?? userData.vorname,
-                                _currentnachname ?? userData.nachname,
-                                _currentbenutzername ?? userData.benutzername,
-                                _currentgroese ?? userData.groese,
-                                _currentalter ?? userData.alter,
-                                _currentgewicht ?? userData.gewicht,
+                                _currentvorname ?? userData.firstname,
+                                _currentnachname ?? userData.lastname,
+                                _currentbenutzername ?? userData.username,
+                                _currentgroese ?? userData.height,
+                                _currentalter ?? userData.age,
+                                _currentgewicht ?? userData.weight,
                                 _currentuid ?? userData.uid,
-                                _currentgeschlecht ?? userData.geschlecht,
+                                _currentgeschlecht ?? userData.sex,
                                 _sumspeed,
                                 _sumtime,
                                 _sumdistanz,

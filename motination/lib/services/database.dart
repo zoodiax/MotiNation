@@ -15,28 +15,28 @@ class DatabaseService {
 // Send Data
 
   Future updateUserData(
-      String vorname,
-      String nachname,
-      String benutzername,
-      String groese,
-      String alter,
-      String gewicht,
+      String fistname,
+      String lastname,
+      String username,
+      String height,
+      String age,
+      String weight,
       String uid,
-      String geschlecht,
+      String sex,
       String sumdistanz,
       String sumtime,
       String sumspeed,
       int trackrun,
       int points) async {
-    return await userCollection.document(uid).setData({
-      'vorname': vorname,
-      'nachname': nachname,
-      'benutzername': benutzername,
-      'groese': groese,
-      'alter': alter,
-      'gewicht': gewicht,
+    return await userCollection.document(uid).updateData({
+      'fistname': fistname,
+      'lastname': lastname,
+      'username': username,
+      'height': height,
+      'age': age,
+      'weight': weight,
       'uid': uid,
-      'geschlecht': geschlecht, //neu hinzugefügt
+      'sex': sex, //neu hinzugefügt
       'sumdistanz': sumdistanz,
       'sumtime': sumtime,
       'sumspeed': sumspeed,
@@ -45,8 +45,27 @@ class DatabaseService {
     });
   }
 
+// set Data first Time on Registration
+  Future setUserData(
+    String firstname,
+    String height,
+    String age,
+    String weight,
+    String sex,
+    String uid,
+  ) async {
+    return await userCollection.document(uid).setData({
+      'firstname': firstname,
+      'height': height,
+      'age': age,
+      'weight': weight,
+      'sex': sex, //neu hinzugefügt
+      'uid': uid,
+    });
+  }
+
   Future updateRunData(
-      String distanz,
+      String distance,
       kcal,
       time,
       List<double> lat,
@@ -63,7 +82,7 @@ class DatabaseService {
         .collection('Run')
         .document(date)
         .setData({
-      'distanz': distanz,
+      'distance': distance,
       'kcal': kcal,
       'time': time,
       'lat': lat,
@@ -84,7 +103,72 @@ class DatabaseService {
     });
   }
 
-  Future updateWorkoutData(String name, String date, int points) async {
+    Future updateAge(String age) async {
+    return await userCollection.document(uid).updateData({
+      'age': age,
+    });
+  }
+
+   Future updateSex(String sex) async {
+    return await userCollection.document(uid).updateData({
+      'sex': sex,
+    });
+  }
+
+   Future updateFirstName(String firstName) async {
+    return await userCollection.document(uid).updateData({
+      'firstname': firstName,
+    });
+  }
+
+  Future updateUserName(String userName) async {
+    return await userCollection.document(uid).updateData({
+      'username': userName,
+    });
+  }
+
+    Future updateLastName(String lastName) async {
+    return await userCollection.document(uid).updateData({
+      'lastname': lastName,
+    });
+  }
+
+    Future updateWeight(String weight) async {
+    return await userCollection.document(uid).updateData({
+      'weight': weight,
+    });
+  }
+
+    Future updateSumSpeed(String sumSpeed) async {
+    return await userCollection.document(uid).updateData({
+      'sumspeed': sumSpeed,
+    });
+  }
+
+    Future updateTrackrun(int trackrun) async {
+    return await userCollection.document(uid).updateData({
+      'trackrun': trackrun,
+    });
+  }
+
+  Future updateHeight(String height) async {
+    return await userCollection.document(uid).updateData({
+      'height': height,
+    });
+  }
+  Future updateSumDistance(String sumdistance) async {
+    return await userCollection.document(uid).updateData({
+      'sumdistance': sumdistance,
+    });
+  }
+
+  Future updateSumTime(String sumtime) async {
+    return await userCollection.document(uid).updateData({
+      'sumtime': sumtime,
+    });
+  }
+
+  Future setWorkoutData(String name, String date, int points) async {
     return await userCollection
         .document(uid)
         .collection('Workout')
@@ -118,7 +202,7 @@ class DatabaseService {
 
 // Prototype gets Data from DocumentSnapshot to Variable
   void getStufffromSnapshot(DocumentSnapshot snapshot) {
-   // Map<String, dynamic> data = snapshot.data;
+    // Map<String, dynamic> data = snapshot.data;
 
     // var = data["nameOfFieldDocumentSnapshot"]
   }
@@ -127,12 +211,12 @@ class DatabaseService {
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
       uid: uid,
-      vorname: snapshot.data['vorname'],
-      nachname: snapshot.data['nachname'],
-      benutzername: snapshot['benutzername'],
-      groese: snapshot.data['groese'],
-      alter: snapshot.data['alter'],
-      gewicht: snapshot.data['gewicht'],
+      firstname: snapshot.data['firstname'],
+      lastname: snapshot.data['lastname'],
+      username: snapshot['username'],
+      height: snapshot.data['height'],
+      age: snapshot.data['age'],
+      weight: snapshot.data['weight'],
     );
   }
 

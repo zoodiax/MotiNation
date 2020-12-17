@@ -2,8 +2,6 @@ import 'dart:ui';
 import 'package:motination/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/src/authentication/signIn.dart';
-import 'package:motination/services/sharedPref.dart';
-
 class SendRegister extends StatefulWidget {
 
   @override
@@ -31,13 +29,6 @@ Widget _signIn(){
         child: Text("     Zum Login     ",
             style: Theme.of(context).textTheme.headline2));}
 
-
-Future <Widget> _getValue() async {
-    final SharedPref _shared = SharedPref();
-    dynamic flag = await _shared.getIntValuesSP(intKey);
-    print("sendRegister flag: " + flag.toString());
-    return flag;
-}
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
