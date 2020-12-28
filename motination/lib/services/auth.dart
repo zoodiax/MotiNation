@@ -6,11 +6,17 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
  
+ DateTime currentdate = DateTime.now();
+ //String stringdate;
+
   //compare if User exists with given Mail and Passwort
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
   }
 
+String randerdate(date){
+  return date.substring (0,10);
+}
 
 //auth change user stream
 Stream<User> get user {
@@ -19,19 +25,7 @@ Stream<User> get user {
 }
 
 
-//sign in anon
-/*
-Future signInAnon() async {
-  try{
-    AuthResult result = await _auth.signInAnonymously();
-    FirebaseUser user = result.user;
-    return _userFromFirebaseUser(user);
-  } catch(e) {
-    print(e.toString());
-    return null;
 
-  }
-}*/
 
 // sign in with email & password
 Future signInrWithEmailAndPassword(String email, String password) async {
