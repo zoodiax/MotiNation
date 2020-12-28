@@ -12,7 +12,8 @@ import 'package:motination/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/cupertino.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 
 /* Challenge Class UI Design
@@ -32,123 +33,197 @@ class Challenge extends StatefulWidget {
 class _ChallengeState extends State<Challenge> {
 
 
-  int p = 0;
+ 
   int points = 0;
   int _currentIndex = 2;
-  final barColor = const Color(0xFF0A79DF);
-  final bgColor = const Color(0xFFFEFDFD);
-  
-  final wrktColor = const Color (0xFF28CCD3);
-  final blackColor = const Color(0xBF000000);
-  
-  final String uId= 'gosuBxL9kuT2sGkvIziJQfkQwrt2';
-  DocumentSnapshot doc;
- 
-  void getPoints(){
-    setState(() {
-      p += 10;
-    });
-  }
-
-void loosePoints(){
-    setState(() {
-      p -= 10;
-    });
-  }
-
-// gets Points-Data from DocumentSnapshot to Variable
-void getPointsfromSnapshot(DocumentSnapshot snapshot){
-  Map<String, dynamic> data = snapshot.data;
-  setState(() {
-    points = data["points"];
-  }); 
-}
-  
-// Prototype gets Data from DocumentSnapshot to Variable
-void getStufffromSnapshot(DocumentSnapshot snapshot){
-  Map<String, dynamic> data = snapshot.data;
-  setState(() {
-    // Variable = data["nameOfFieldDocumentSnapshot"]
-  }); 
-}
-  
-
-
+  DateTime _dateTime = DateTime.now();  
+  String _currentmale; 
+  int _currentgroese = 180;
+  double currentgewicht= 1.0;
 
   @override
   Widget build(BuildContext context) {
 
    User user = Provider.of<User>(context);
   
+  void _showCupertinoDatePicker(BuildContext context){
+    showModalBottomSheet(
+      context:context,
+      builder: (BuildContext context) {
+        return Container(
+          child: CupertinoDatePicker(
+        initialDateTime: _dateTime,
+        mode: CupertinoDatePickerMode.date,
+        onDateTimeChanged: (datetime){
+          setState(() {
+            _dateTime = datetime;     
+          });
+      }
+     ),);
+      });} 
 
+    void _showNumberGrosePicker(BuildContext context){
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context){
+          return Container(
+            child: NumberPicker.integer(
+              initialValue: _currentgroese, 
+              minValue: 120, 
+              maxValue: 280, 
+              onChanged: (currentgroese){
+                setState((){
+                  _currentgroese = currentgroese;
+                });
+              }
+              ),
+          );
+        }
+      );
+    }
    
+  void _showCupertinoMalePicker(BuildContext context){
+    showModalBottomSheet(
+      context:context,
+      builder: (BuildContext context){
+        return Container(
+          child: CupertinoPicker(
+            itemExtent: 50,
+            onSelectedItemChanged: ( male){
+              /*setState((){
+                _currentmale = male;
+              });*/
+              print(male);
+              if (male == 0){
+                 _currentmale = 'männlich';
+              
+              }
+              if (male == 1){
+                 _currentmale ='weiblich';
+              }
+              if (male == 2){
+                 _currentmale = 'divers';
+              }
+              
+              
+            },
+            children: <Widget>[
+              Text("männlich"),
+              Text("weiblich"),
+              Text("divers"),
+            ],
+          ),
+        );
+      }
+    );
+  }
+  double _currentPrice = 1.0;
+
+  void _showDialog(BuildContext context) {
+    showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return new NumberPicker.decimal(
+          minValue: 1,
+          maxValue: 10,
+          initialValue: _currentPrice,
+          onChanged: (price) {
+            _currentPrice = price;
+          }
+        );
+      });
+  }
+/*void _showNumberGrosePicker(BuildContext context){
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context){
+          return Container(
+            child: NumberPicker.integer(
+              initialValue: _currentgroese, 
+              minValue: 120, 
+              maxValue: 280, 
+              onChanged: (currentgroese){
+                setState((){
+                  _currentgroese = currentgroese;
+                });
+              }
+              ),
+          );
+        }
+      );
+    }*/
+  double currentgewicht = 80.0; 
+  void _showCupertinoWeightPicker (BuildContext context){
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context){
+        return Container(
+          child: NumberPicker.decimal(
+          minValue: 20,
+          maxValue: 200,
+          initialValue: currentgewicht,
+          onChanged: (_currentgewicht){
+            currentgewicht = _currentgewicht;
+          }
+        ));
+      } 
+    );
+  }
+    /*void _showDialog() {
+    showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return new NumberPickerDialog.decimal(
+          minValue: 1,
+          maxValue: 10,
+          title: new Text("Pick a new price"),
+          initialDoubleValue: _currentPrice,
+        );
+      }
+    ).then((int value)) {
+      if (value != null) {
+        setState(() => _currentPrice = value);
+      }
+    });
+  }*/
+
+
     return new Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Challenge'),
       ),
 
-      body: 
-      
-      Container(
+      body: /*FlatButton(
+        onPressed:(){
+          _showCupertinoDatePicker(context);
+        },
+        child: Text('Geburtsdatum'),
+        color: Colors.blue,
 
-        child: Column(
-          children:  [
-              Spacer(),
-              Text('Points added: ' + p.toString(),style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w500,fontSize: 25),),
-              Text('Points from Database: ' + points.toString(), style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w500, fontSize: 25),),
-              ButtonBar(alignment: MainAxisAlignment.center, children: [
-        RaisedButton(
-          onPressed: getPoints,
-          color: Colors.blue,
-          child: Icon(Icons.add),
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(300)),
-        ),
-        RaisedButton(
-          onPressed: loosePoints,
-          color: Colors.blue,
-          child: Icon(Icons.remove),
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(300)),
-        ),
-        RaisedButton(
-          onPressed: () async {
-                doc = await DatabaseService(uid: user.uid).getData(user);
-                getPointsfromSnapshot(doc);
-                
-          },
-          color: Colors.blue,
-          child: Icon(Icons.archive),
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(300)),
-        ),
-        RaisedButton(
-          onPressed: () async {await DatabaseService(uid: user.uid).updatePoints(points+p);
-          setState(() {
-            p=0;
-          });
-          
-          },
-          color: Colors.blue,
-          child: Icon(Icons.publish),
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(300)),
-        ),
-      ]),     
-      Spacer(),
-          ],
-        ), 
-       
+      ),*/
+      FlatButton(
+        onPressed: (){
+          _showCupertinoWeightPicker(context);
+        },
+        child: Text('Gewicht'),
       ),
-     
-     
+   
+/*CupertinoDatePicker(
+        initialDateTime: _dateTime,
+        mode: CupertinoDatePickerMode.date,
+        onDateTimeChanged: (datetime){
+          setState(() {
+            _dateTime = datetime;     
+          }
+          );
+      }
+     )   */   
        bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: bgColor,
+        backgroundColor: Colors.white
+        ,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

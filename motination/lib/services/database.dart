@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motination/models/user.dart';
 
@@ -18,9 +20,9 @@ class DatabaseService {
       String vorname,
       String nachname,
       String benutzername,
-      String groese,
+      int groese,
       String alter,
-      String gewicht,
+      double gewicht,
       String uid,
       String geschlecht,
       String sumdistanz,

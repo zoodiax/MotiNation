@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong/latlong.dart' as lib2;
 import 'package:location/location.dart';
+import 'package:motination/src/UI/challenge.dart';
 import 'workoutInfo.dart';
 import 'profile.dart';
 import 'shop.dart';
 import 'saveRun.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:motination/services/auth.dart';
 
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
@@ -47,7 +50,7 @@ class RunningState extends State<Running> {
   final pink = const Color(0xFFc71585);
   bool showRun = true;
   bool showSportType = false;
-
+  final AuthService _auth = AuthService();
   LatLng linehlp = LatLng(0, 0);
   int _currentIndex = 1;
   final barColor = const Color(0xFF0A79DF);
@@ -301,9 +304,31 @@ void addPoints(){
             automaticallyImplyLeading: false,
             title: Text('Running' , style:  Theme.of(context).textTheme.headline1,),
             backgroundColor: bgColor,
+            actions: <Widget>[
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.person,
+                  color: Colors.black,
+                ),
+                label: Text(
+                  'Logout',
+                  style: GoogleFonts.spartan(
+                      textStyle: TextStyle(color: Colors.black)),
+                ),
+                onPressed: () async {
+                  await _auth.signOut();
+                }
+              ),
+            ]
           ),
+          
           body: Column(
             children: <Widget>[
+              FloatingActionButton(onPressed: () =>  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Challenge())
+              ) 
+                    ),
               Expanded(
                 flex: 4,
                 child: Container(
@@ -482,7 +507,7 @@ void addPoints(){
                     MaterialPageRoute(builder: (context) => Running()),
                   );
                 if (_currentIndex == 3)
-                  Navigator.push(
+                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Shoping()),
                   );

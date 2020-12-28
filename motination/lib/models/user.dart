@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class User {
 
   final String uid;
@@ -11,10 +13,10 @@ class UserData {
 final String uid;
 final String vorname;
 final String nachname;
-final String groese;
+final int groese;
 final String alter;
 final String benutzername;
-final String gewicht;
+final Double gewicht;
 final String geschlecht;
 final String sumdistanz;
 final String sumtime; 
