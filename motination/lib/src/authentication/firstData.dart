@@ -15,10 +15,11 @@ class FirstData extends StatefulWidget {
 class _FirstDataState extends State<FirstData> {
   String _currentvorname;
   String _currentalter;
-  String _currentgroese;
-  String _currentgewicht;
+  int _currentgroese;
+  double _currentgewicht;
   String _currentgeschlecht;
   String _currentnachname;
+  String _currentusername;
 
   final SharedPref _shared = SharedPref();
 
@@ -35,9 +36,10 @@ class _FirstDataState extends State<FirstData> {
           await DatabaseService(uid: user.uid).setUserData(
             _currentvorname,
             _currentnachname,
-            _currentgroese,
+            _currentusername,
+            180,//_currentgroese,
             _currentalter,
-            _currentgewicht,
+            80.0,//_currentgewicht,
             _currentgeschlecht,
             user.uid,
           );
@@ -117,6 +119,30 @@ class _FirstDataState extends State<FirstData> {
                             })
                       ],
                     ),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          height: 20,
+                        ),
+                        Container(
+                            child: Text(
+                          'Dein Benutzername',
+                          style: TextStyle(
+                              fontSize: 15, fontStyle: FontStyle.normal),
+                        )),
+                        TextFormField(
+                            
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Gebe dein Benutzername ein.'),
+                            validator: (val) => val.isEmpty
+                                ? 'Gebe dein Benutzername ein.'
+                                : null,
+                            onChanged: (val) {
+                              setState(() => _currentusername = val);
+                            })
+                      ],
+                    ),
+
                     // ),
                     // Expanded(
                     //     child: 
@@ -162,7 +188,7 @@ class _FirstDataState extends State<FirstData> {
                             validator: (val) =>
                                 val.isEmpty ? 'Gebe deine Größe ein.' : null,
                             onChanged: (val) {
-                              setState(() => _currentgroese = val);
+                              setState(() => _currentgroese = int.parse(val));
                             })
                       ],
                     // )
@@ -186,7 +212,7 @@ class _FirstDataState extends State<FirstData> {
                             validator: (val) =>
                                 val.isEmpty ? 'Gebe dein Gewicht ein.' : null,
                             onChanged: (val) {
-                              setState(() => _currentgewicht = val);
+                              setState(() => _currentgewicht = double.parse(val));
                             })
                       ],
                     // )

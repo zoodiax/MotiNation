@@ -52,7 +52,7 @@ class RunningState extends State<Running> {
 
   bool showRun = true;
   bool showSportType = false;
-
+  final AuthService _auth = AuthService();
   LatLng linehlp = LatLng(0, 0);
   int _currentIndex = 1;
   Icon _iconSport = Icon(Icons.directions_run);
@@ -62,7 +62,7 @@ class RunningState extends State<Running> {
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
   List<double> altitude2 = List();
-  final AuthService _auth = AuthService();
+ 
   double _loc = 1;
   int sport = 1;
 
@@ -319,6 +319,7 @@ class RunningState extends State<Running> {
               )
             ],
           ),
+          
           body: Column(
             children: <Widget>[
               Expanded(

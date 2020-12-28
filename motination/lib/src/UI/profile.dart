@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../widgets/bottomBar.dart';
 
 
+import 'package:motination/services/database.dart';
 
 /* Profile Class UI Design
   Content: User Information, Profile Settings Button, Bottom Navigation Bar
@@ -28,17 +29,51 @@ class Profile extends StatefulWidget {
  
 class _ProfileState extends State<Profile> {
   int _currentIndex = 0;
-   void printStatus(){
-    print("status");
+  int _groese;
+  double currentgewicht;
+  String vorname;
+  String nachname;
+  String benutzername;
+  String sumdistanz;
+  String sumtime;
+  String sumspeed;
+  double bmi;
+  Future<void> getData(User user) async {
+    try {
+      DocumentSnapshot snapshot =
+          await DatabaseService(uid: user.uid).getUserData();
+      Map<String, dynamic> data = snapshot.data;
+      setState(() {
+        _groese = data['height'];
+        currentgewicht = data['weight'];
+        vorname = data['firstname'];
+        nachname = data['lastname'];
+        benutzername = data['username'];
+        sumdistanz = data['sumdistance'];
+        sumtime = data['sumtime'];
+        sumspeed = data['sumspeed'];
+      });
+    } catch (err) {
+      print(err.toString());
+    }
   }
+
+  void _bmirechner() {
+    bmi = currentgewicht / ((_groese / 100) * _groese / 100);
+  }
+
+  String randerbmi(String date) {
+    return date.substring(0, 2);
+  }
+
   Widget build(context) {
     User user = Provider.of<User>(context);
-   printStatus();
-    
+    getData(user);
+    _bmirechner();
     return new Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+        automaticallyImplyLeading: false,
         title: Text(
           'Profil',
           style: TextStyle(
@@ -55,310 +90,299 @@ class _ProfileState extends State<Profile> {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: Firestore.instance
-            .collection('user')
-            .document(user.uid)
-            .snapshots(),
-        /*DatabaseService(uid: user.uid).userData,*/
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return new Text('Loading');
-          }
-
-          return Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_200_200/0/1573047022324?e=1611792000&v=beta&t=RF6cdGacErRqLLs90TuK1KW_H9jtKYplI_Z_9KJgc88'),
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                height: 150,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage(
+                        'https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_200_200/0/1573047022324?e=1611792000&v=beta&t=RF6cdGacErRqLLs90TuK1KW_H9jtKYplI_Z_9KJgc88'),
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        vorname + ' ' + nachname,
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Container(
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        benutzername,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            snapshot.data['firstname'] ?? "" +
-                                ' ' +
-                                snapshot.data['lastname'] ?? "",
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.black,
-                            ),
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: Row(
+                            children: <Widget>[],
                           ),
                         ),
                         Container(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            snapshot.data['username'] ?? "",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                'Größe: ',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(_groese.toString() + 'cm',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                  )),
+                            ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Alter: ',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Text(snapshot.data['age']??"",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                      ))
-                                ],
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                'Gewicht: ',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Größe: ',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Text(snapshot.data['height']??"" + 'cm',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                      )),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Gewicht: ',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Text(snapshot.data['weight']??""+'kg',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      'Gesamtstatistik',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: boxColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(1),
-                            spreadRadius: 2,
-                            blurRadius: 7,
-                            offset: Offset(0, 2),
-                          )
-                        ]),
-                    child: Column(
-                      children: <Widget>[
-                        FloatingActionButton(
-                          heroTag: null,
-                          backgroundColor: blue,//Colors.teal[900],
-                          child: Icon(Icons.directions_run,
-                              size: 30, color: Colors.white),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Runstats()),
-                            );
-                          },
+                              Text(currentgewicht.toString() + ' kg',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                  )),
+                            ],
+                          ),
                         ),
                         Container(
-                          padding: EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                                                  child: Row(
-                          
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  snapshot.data['sumdistance'] ??"0",
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                'BMI: ',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(randerbmi(bmi.toString()),
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                Text(
-                                  'Kilomter',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  snapshot.data['sumtime']??"0",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                Text(
-                                  'Stunden',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  snapshot.data['sumspeed']??"0",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                Text(
-                                  'Speed',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                    fontSize: 17,
+                                  )),
+                            ],
+                          ),
                         ),
                       ],
                     ),
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Gesamtstatistik',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: boxColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(1),
-                            spreadRadius: 2,
-                            blurRadius: 7,
-                            offset: Offset(0, 2),
-                          )
-                        ]),
-                    child: Column(
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: boxColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(1),
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0, 2),
+                      )
+                    ]),
+                child: Column(
+                  children: <Widget>[
+                    FloatingActionButton(
+                      heroTag: null,
+                      backgroundColor: Colors.teal[900],
+                      child: Icon(Icons.directions_run,
+                          size: 30, color: Colors.white),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Runstats()),
+                        );
+                      },
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                sumdistanz,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 30,
+                                ),
+                              ),
+                              Text(
+                                'Kilomter',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                sumtime,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 30,
+                                ),
+                              ),
+                              Text(
+                                'Stunden',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                sumspeed,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 30,
+                                ),
+                              ),
+                              Text(
+                                'Speed',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: boxColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(1),
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0, 2),
+                      )
+                    ]),
+                child: Column(
+                  children: <Widget>[
+                    FloatingActionButton(
+                      heroTag: null,
+                      backgroundColor: buttonColor,
+                      child: Icon(Icons.fitness_center_rounded,
+                          size: 30, color: Colors.white),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WorkoutStats()),
+                        );
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        FloatingActionButton(
-                          heroTag: null,
-                          backgroundColor: buttonColor,
-                          child: Icon(Icons.fitness_center_rounded,
-                              size: 30, color: Colors.white),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => WorkoutStats()),
-                            );
-                          },
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        Column(
                           children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  '15',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                Text(
-                                  'Besuche',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              '15',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30,
+                              ),
                             ),
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  '35',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                Text(
-                                  'Stunden',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              'Besuche',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              '35',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30,
+                              ),
+                            ),
+                            Text(
+                              'Stunden',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                              ),
                             ),
                           ],
                         ),
                       ],
                     ),
-                  ),
-                ]),
-          );
-        },
+                  ],
+                ),
+              ),
+            ]),
       ),
       
       bottomNavigationBar: bottomBar(_currentIndex, context),

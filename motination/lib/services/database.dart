@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motination/models/user.dart';
 
@@ -18,12 +20,12 @@ class DatabaseService {
       String fistname,
       String lastname,
       String username,
-      String height,
+      int height,
       String age,
-      String weight,
+      double weight,
       String uid,
       String sex,
-      String sumdistanz,
+      String sumdistance,
       String sumtime,
       String sumspeed,
       int trackrun,
@@ -37,7 +39,7 @@ class DatabaseService {
       'weight': weight,
       'uid': uid,
       'sex': sex, //neu hinzugefügt
-      'sumdistanz': sumdistanz,
+      'sumdistance': sumdistance,
       'sumtime': sumtime,
       'sumspeed': sumspeed,
       'trackrun': trackrun,
@@ -49,20 +51,25 @@ class DatabaseService {
   Future setUserData(
     String firstname,
     String lastname,
-    String height,
+    String username,
+    int height,
     String age,
-    String weight,
+    double weight,
     String sex,
     String uid,
   ) async {
     return await userCollection.document(uid).setData({
       'firstname': firstname,
       'lastname': lastname,
+      'username': username,
       'height': height,
       'age': age,
       'weight': weight,
       'sex': sex, //neu hinzugefügt
       'uid': uid,
+      'sumtime': "0",
+      'sumspeed': '0',
+      'sumdistance': "0",
     });
   }
 
