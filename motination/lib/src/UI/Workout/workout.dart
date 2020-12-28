@@ -4,12 +4,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:motination/shared/constants.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+import 'package:motination/src/UI/Workout/workoutInfo.dart';
+
+
+
 import 'package:motination/models/markerz.dart';
 
 
 import '../../../models/spzinfo.dart';
 
 import '../../../widgets/bottomBar.dart';
+import 'package:motination/services/auth.dart';
 /* Workout Class UI Design & Logic
   Content: List View Column, MapView Column, Floarting Action Button (Filter Function), Center Location, Categroy class(Filter),
           List Categories, class Markerz, List Markerz
@@ -31,6 +37,8 @@ class WorkoutState extends State<Workout> {
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
   final black = const Color(0xFF000000);
+  final AuthService _auth = AuthService();
+
 
   void initState() {
     super.initState();
@@ -163,6 +171,27 @@ void setBackWorkout(){
           length: 2,
           child: Scaffold(
             appBar: AppBar(
+               actions: <Widget>[
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.help,
+                  color: blue,
+                ),
+                label: Text(
+                  '',
+                  style: GoogleFonts.spartan(
+                      textStyle: TextStyle(color: Colors.black)),
+                ),
+                onPressed: () async {
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WorkoutInfo()),
+                  );
+
+                },
+              )
+            ],
             automaticallyImplyLeading: false,
             title: Text('Workout' , style:  Theme.of(context).textTheme.headline1,),
             backgroundColor: bgColor,

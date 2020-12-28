@@ -145,56 +145,71 @@ class _SignUpState extends State<SignUp> {
         child: Text("       Zurück zum Login      "));
   }
 
+
   Widget build(context) {
+    //double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+   // double blockSize = width / 100;
+    double blockSizeVertical = height / 100;
+
     return new WillPopScope(
         onWillPop: () async => false,
         child: new Scaffold(
-          backgroundColor: bgColor,
-          body: Column(children: [
-            Column(
-              children: [
-                Container(
-                  height: 90,
-                ),
-                Container(
-                  child: Center(
-                    child: Text(
-                      'Willkommen bei Motination!',
-                      style: Theme.of(context).textTheme.headline1,
-                      textAlign: TextAlign.center,
+            backgroundColor: bgColor,
+            body: SingleChildScrollView(
+                child: Stack(children: [
+              Column(children: [
+                Column(children: [
+                  Column(children: [
+                    Column(
+                      children: [
+                        Container(
+                          height: blockSizeVertical * 7,
+                        ),
+                        Container(
+                          child: Center(
+                            child: Text(
+                              'Willkommen bei Motination!',
+                              style: Theme.of(context).textTheme.headline1,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: blockSizeVertical * 5,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              'Lieblingssport machen, Punkte in Running oder Workout sammeln und coole Prämien absahnen',
+                              style: Theme.of(context).textTheme.bodyText1,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: blockSizeVertical * 5,
+                        ),
+                        Container(
+                          child: Center(
+                            child: Text(
+                              'Jetzt registrieren:',
+                              style: Theme.of(context).textTheme.headline1,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        _registerField(),
+                        _signIn(),
+                        Container(
+                          height: blockSizeVertical * 2,
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                Container(
-                  height: 90,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      'Lieblingssport machen, Punkte in Running oder Workout sammeln und coole Prämien absahnen',
-                      style: Theme.of(context).textTheme.bodyText1,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 90,
-                ),
-                Container(
-                  child: Center(
-                    child: Text(
-                      'Jetzt registrieren:',
-                      style: Theme.of(context).textTheme.headline1,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                _registerField(),
-                _signIn(),
-              ],
-            ),
-          ]),
-        ));
+                  ]),
+                ])
+              ])
+            ]))));
   }
 }

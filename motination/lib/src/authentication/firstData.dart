@@ -52,115 +52,151 @@ class _FirstDataState extends State<FirstData> {
 
     return new WillPopScope(
         onWillPop: () async => false,
-        child: new Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Motination',
-                  style: Theme.of(context).textTheme.headline1),
-              backgroundColor: bgColor,
-            ),
-            body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Spacer(),
-                  Expanded(
-                      child: Column(
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                        'Dein Vorname',
-                        style: TextStyle(
-                            fontSize: 15, fontStyle: FontStyle.normal),
-                      )),
-                      TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Gebe deinen Vornamen ein.'),
-                          validator: (val) =>
-                              val.isEmpty ? 'Gebe deinen Vornamen ein.' : null,
-                          onChanged: (val) {
-                            setState(() => _currentvorname = val);
-                          })
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                        'Dein Alter',
-                        style: TextStyle(
-                            fontSize: 15, fontStyle: FontStyle.normal),
-                      )),
-                      TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Gebe dein Alter ein.'),
-                          validator: (val) =>
-                              val.isEmpty ? 'Gebe dein Alter ein.' : null,
-                          onChanged: (val) {
-                            setState(() => _currentalter = val);
-                          })
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                        'Deine Größe',
-                        style: TextStyle(
-                            fontSize: 15, fontStyle: FontStyle.normal),
-                      )),
-                      TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Gebe deine Größe ein.'),
-                          validator: (val) =>
-                              val.isEmpty ? 'Gebe deine Größe ein.' : null,
-                          onChanged: (val) {
-                            setState(() => _currentgroese = val);
-                          })
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                        'Dein Gewicht',
-                        style: TextStyle(
-                            fontSize: 15, fontStyle: FontStyle.normal),
-                      )),
-                      TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Gebe dein Gewicht ein.'),
-                          validator: (val) =>
-                              val.isEmpty ? 'Gebe dein Gewicht ein.' : null,
-                          onChanged: (val) {
-                            setState(() => _currentgewicht = val);
-                          })
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                        'Dein Geschlecht',
-                        style: TextStyle(
-                            fontSize: 15, fontStyle: FontStyle.normal),
-                      )),
-                      TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Gebe dein Geschlecht ein.'),
-                          validator: (val) =>
-                              val.isEmpty ? 'Gebe dein Geschlecht ein.' : null,
-                          onChanged: (val) {
-                            setState(() => _currentgeschlecht = val);
-                          })
-                    ],
-                  )),
-                  _sendFirstData(user),
-                  Spacer(),
-                ])));
+        child: 
+          Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: Text('Motination',
+                    style: Theme.of(context).textTheme.headline1),
+                backgroundColor: bgColor,
+              ),
+              body: 
+              SingleChildScrollView(
+                 child: Stack(children: [Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    //Spacer(),
+                    // Expanded(
+                    //     child: 
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          height: 20,
+                        ),
+                        Container(
+                            child: Text(
+                          'Dein Vorname',
+                          style: TextStyle(
+                              fontSize: 15, fontStyle: FontStyle.normal),
+                        )),
+                        TextFormField(
+                            
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Gebe deinen Vornamen ein.'),
+                            validator: (val) => val.isEmpty
+                                ? 'Gebe deinen Vornamen ein.'
+                                : null,
+                            onChanged: (val) {
+                              setState(() => _currentvorname = val);
+                            })
+                      ],
+                    ),
+                    // ),
+                    // Expanded(
+                    //     child: 
+                        Column(
+                      children: <Widget>[
+                         Container(
+                          height: 20,
+                        ),
+                        Container(
+                            child: Text(
+                          'Dein Alter',
+                          style: TextStyle(
+                              fontSize: 15, fontStyle: FontStyle.normal),
+                        )),
+                        TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Gebe dein Alter ein.'),
+                            validator: (val) =>
+                                val.isEmpty ? 'Gebe dein Alter ein.' : null,
+                            onChanged: (val) {
+                              setState(() => _currentalter = val);
+                            })
+                      ],
+                    // )
+                    ),
+                    // Expanded(
+                    //     child: 
+                        Column(
+                          
+                      children: <Widget>[
+                         Container(
+                          height: 20,
+                        ),
+                        Container(
+                            child: Text(
+                          'Deine Größe',
+                          style: TextStyle(
+                              fontSize: 15, fontStyle: FontStyle.normal),
+                        )),
+                        TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Gebe deine Größe ein.'),
+                            validator: (val) =>
+                                val.isEmpty ? 'Gebe deine Größe ein.' : null,
+                            onChanged: (val) {
+                              setState(() => _currentgroese = val);
+                            })
+                      ],
+                    // )
+                    ),
+                    // Expanded(
+                    //     child: 
+                        Column(
+                      children: <Widget>[
+                         Container(
+                          height: 20,
+                        ),
+                        Container(
+                            child: Text(
+                          'Dein Gewicht',
+                          style: TextStyle(
+                              fontSize: 15, fontStyle: FontStyle.normal),
+                        )),
+                        TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Gebe dein Gewicht ein.'),
+                            validator: (val) =>
+                                val.isEmpty ? 'Gebe dein Gewicht ein.' : null,
+                            onChanged: (val) {
+                              setState(() => _currentgewicht = val);
+                            })
+                      ],
+                    // )
+                    ),
+                    // Expanded(
+                    //     child: 
+                        Column(
+                      children: <Widget>[
+                         Container(
+                          height: 20,
+                        ),
+                        Container(
+                            child: Text(
+                          'Dein Geschlecht',
+                          style: TextStyle(
+                              fontSize: 15, fontStyle: FontStyle.normal),
+                        )),
+                        TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Gebe dein Geschlecht ein.'),
+                            validator: (val) => val.isEmpty
+                                ? 'Gebe dein Geschlecht ein.'
+                                : null,
+                            onChanged: (val) {
+                              setState(() => _currentgeschlecht = val);
+                            })
+                      ],
+                    // )
+                    ),
+                     Container(
+                          height: 20,
+                        ),
+                    _sendFirstData(user),
+                    //Spacer(),
+                  ])])
+        )));
   }
 }

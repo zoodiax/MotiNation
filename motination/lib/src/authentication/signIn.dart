@@ -67,13 +67,14 @@ class _SignInState extends State<SignIn> {
 
   Widget _loginField() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+      padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 50),
       child: Form(
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 20.0),
+            SizedBox(height: 10.0),
             TextFormField(
+              autofocus: true,
                 decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide:
@@ -84,8 +85,9 @@ class _SignInState extends State<SignIn> {
                 onChanged: (val) {
                   setState(() => email = val);
                 }),
-            SizedBox(height: 20.0),
+            SizedBox(height: 10.0),
             TextFormField(
+                autofocus: true,
                 decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide:
@@ -141,16 +143,24 @@ class _SignInState extends State<SignIn> {
 
 
   Widget build(context){
+    //double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+   // double blockSize = width / 100;
+    double blockSizeVertical = height / 100;
+
     
     return new WillPopScope(
         onWillPop: () async => false,
         child: new Scaffold(
+          resizeToAvoidBottomInset: true,
           backgroundColor: bgColor,
-          body: Column(children: [
+          body: 
+          SingleChildScrollView(
+            child:Stack(children: [Column(children: [
             Column(
               children: [
                 Container(
-                  height: 90,
+                  height: blockSizeVertical * 7
                 ),
                 Container(
                   child: Center(
@@ -163,7 +173,7 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 Container(
-                  height: 90,
+                  height: blockSizeVertical *2,
                 ),
                 Container(
                   padding: const EdgeInsets.all(8.0),
@@ -176,7 +186,7 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 Container(
-                  height: 90,
+                  height: blockSizeVertical*2
                 ),
                 Container(
                   child: Center(
@@ -190,9 +200,12 @@ class _SignInState extends State<SignIn> {
                 _loginField(),
                 _forgotPW(),
                 _register(),
+               
+
               ],
             ),
-          ]),
+          ]),],))
+            
         ));
   }
 }

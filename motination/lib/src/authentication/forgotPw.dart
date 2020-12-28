@@ -6,7 +6,6 @@ import 'package:motination/src/authentication/signIn.dart';
 import 'package:motination/src/authentication/sendPW.dart';
 import 'package:motination/src/authentication/signUp.dart';
 
-
 class ForgotPW extends StatefulWidget {
   @override
   createState() {
@@ -16,7 +15,7 @@ class ForgotPW extends StatefulWidget {
 
 class _ForgotPWState extends State<ForgotPW> {
   final AuthService _auth = AuthService();
-  
+
   bool loading = false;
 
   // text field State
@@ -34,21 +33,19 @@ class _ForgotPWState extends State<ForgotPW> {
             borderRadius: BorderRadius.circular(18.0),
             side: BorderSide(color: blue)),
         onPressed: () async {
-            
-            setState(() => loading = true);
-            try{await _auth.resetPassword(email);
+          setState(() => loading = true);
+          try {
+            await _auth.resetPassword(email);
             print('Email send to $email');
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => SendPW()));
-            } catch(e){
-              setState(() {
-                loading = false;
-                error = 'Registrierte E-Mail eingeben oder jetzt registrieren';
-                print(e.toString());
-              });
-            }
-            
-    
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SendPW()));
+          } catch (e) {
+            setState(() {
+              loading = false;
+              error = 'Registrierte E-Mail eingeben oder jetzt registrieren';
+              print(e.toString());
+            });
+          }
         },
         child: Text("     Absenden     ",
             style: Theme.of(context).textTheme.headline2));
@@ -58,7 +55,6 @@ class _ForgotPWState extends State<ForgotPW> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
       child: Form(
-        
         child: Column(
           children: <Widget>[
             SizedBox(height: 20.0),
@@ -88,8 +84,6 @@ class _ForgotPWState extends State<ForgotPW> {
     );
   }
 
-
-
   Widget _register() {
     return RawMaterialButton(
         fillColor: bgColor,
@@ -102,7 +96,7 @@ class _ForgotPWState extends State<ForgotPW> {
         child: Text("         Jetzt registrieren        "));
   }
 
-  Widget _signIn(){
+  Widget _signIn() {
     return RawMaterialButton(
         fillColor: bgColor,
         shape:
@@ -118,12 +112,12 @@ class _ForgotPWState extends State<ForgotPW> {
     return new WillPopScope(
         onWillPop: () async => false,
         child: new Scaffold(
-          backgroundColor: bgColor,
-          body: Column(children: [
-            Column(
-              children: [
+            backgroundColor: bgColor,
+            body: SingleChildScrollView(
+                child: Stack(children: [
+              Column(children: [
                 Container(
-                  height: 90,
+                  height: 60,
                 ),
                 Container(
                   child: Center(
@@ -135,7 +129,7 @@ class _ForgotPWState extends State<ForgotPW> {
                   ),
                 ),
                 Container(
-                  height: 90,
+                  height: 20,
                 ),
                 Container(
                   padding: const EdgeInsets.all(8.0),
@@ -148,7 +142,7 @@ class _ForgotPWState extends State<ForgotPW> {
                   ),
                 ),
                 Container(
-                  height: 90,
+                  height: 20,
                 ),
                 Container(
                   child: Center(
@@ -162,9 +156,7 @@ class _ForgotPWState extends State<ForgotPW> {
                 _newPasswordField(),
                 _signIn(),
                 _register(),
-              ],
-            ),
-          ]),
-        ));
+              ]),
+            ]))));
   }
 }

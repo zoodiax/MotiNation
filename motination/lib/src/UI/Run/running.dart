@@ -56,7 +56,7 @@ class RunningState extends State<Running> {
 
   LatLng linehlp = LatLng(0, 0);
   int _currentIndex = 1;
-  
+  Icon _iconSport = Icon(Icons.directions_run);
   //polylines:
   final Set<Polyline> _polyline = {};
   List<LatLng> latlnglines = List();
@@ -188,8 +188,8 @@ int addPoints(int distancelocal){
       double hlplng = l.longitude;
       latlnghlp = lib2.LatLng(hlplat, hlplng);
       linehlp = LatLng(hlplat, hlplng);
-      _controller.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
+      // _controller.animateCamera(CameraUpdate.newCameraPosition(
+      //     CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
     });
   }
   
@@ -253,7 +253,6 @@ int addPoints(int distancelocal){
 // Filter Button, different sport disciplines
   Widget _sportType() {
      
-    Icon _iconSport = Icon(Icons.directions_run);
     return Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
@@ -261,12 +260,16 @@ int addPoints(int distancelocal){
           color: bgColor,
         ),
         child: PopupMenuButton<int>(
+         
           onSelected: (val) {
              setState(() {
+               _iconSport = Icon(Icons.directions_run);
               if (val == 1) {
-                sport = 1;
-                _iconSport = Icon(Icons.directions_run);
-              } else if (val == 2) {
+                print("run selectet");
+                sport = 1;}
+             
+               else if (val == 2) {
+                print("bike selectet");
                 sport = 2;
                 _iconSport = Icon(Icons.directions_bike);
               } else {
@@ -292,13 +295,18 @@ int addPoints(int distancelocal){
               ),
             ),
           ],
-          icon: _iconSport,
+            icon: _iconSport,
+         
           offset: Offset(0, -120),
         ));
   }
 
+  void printStatus(){
+    print("status");
+  }
   Widget build(context) {
     
+    printStatus();
 
     return new WillPopScope(
         onWillPop: () async => false,
@@ -317,7 +325,7 @@ int addPoints(int distancelocal){
               FlatButton.icon(
                 icon: Icon(
                   Icons.person,
-                  color: bgColor,
+                  color: blue,
                 ),
                 label: Text(
                   'Logout',

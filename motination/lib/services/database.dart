@@ -168,6 +168,8 @@ class DatabaseService {
     });
   }
 
+
+
   Future setWorkoutData(String name, String date, int points) async {
     return await userCollection
         .document(uid)
@@ -207,6 +209,10 @@ class DatabaseService {
     // var = data["nameOfFieldDocumentSnapshot"]
   }
 
+  Map<String,dynamic> snapshot2map(DocumentSnapshot snapshot){
+    Map<String,dynamic> data = snapshot.data;
+    return data;
+  }
 //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
@@ -219,6 +225,8 @@ class DatabaseService {
       weight: snapshot.data['weight'],
     );
   }
+
+  
 
 //get user data stream
   Stream<UserData> get userData {

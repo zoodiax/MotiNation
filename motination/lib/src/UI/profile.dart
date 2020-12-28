@@ -25,12 +25,16 @@ class Profile extends StatefulWidget {
   }
 }
 
+ 
 class _ProfileState extends State<Profile> {
   int _currentIndex = 0;
-
+   void printStatus(){
+    print("status");
+  }
   Widget build(context) {
     User user = Provider.of<User>(context);
-
+   printStatus();
+    
     return new Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(

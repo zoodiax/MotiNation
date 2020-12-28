@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/database.dart';
@@ -24,6 +25,7 @@ class SaveRun extends StatefulWidget {
   final List<double> altitude;
   final int sport;
   final int points;
+  
 
   SaveRun(
       {Key key,
@@ -52,10 +54,11 @@ class _SaveRunState extends State<SaveRun> {
   String sportType;
   double latmin, latmax, lngmin, lngmax, latinit, lnginit;
   double altitudeUp = 0, altitudeDown = 0;
+  String _sumdis, _sumtime, _sumspeed;
 
   //String _currenttime, _currentspeed, _currentdistance;
 
-  List<double> testAlt = [-1, 7, 3, -1, 3];
+  //List<double> testAlt = [-1, 7, 3, -1, 3];
   void buildPolyline(List<LatLng> list) {
     _polyline.add(Polyline(
       polylineId: PolylineId('route1'),
@@ -65,6 +68,35 @@ class _SaveRunState extends State<SaveRun> {
       width: 4,
     ));
   }
+
+  Future <void> getData(User user) async{
+    try{
+      DocumentSnapshot snapshot = await DatabaseService(uid: user.uid).getUserData();
+    Map<String, dynamic> data = snapshot.data;
+    setState(() {
+    
+    _sumdis = data["sumdistanz"]?? "0";
+    // _sumspeed = data["sumspeed"]?? "0";
+    // _sumtime = data["sumtime"]?? "0";
+    print('getdata finished');
+    }); 
+    
+    }
+    catch(err){
+    print(err.toString());
+    }
+  }
+
+  void changeSumData(int distance){
+    int dis = int.parse(_sumdis) + distance;
+    
+    setState(() {
+      _sumdis = dis.toString();
+    });
+    print('sumdis = $_sumdis');
+  }
+
+  
 
   void data2collection(List<LatLng> list, List<double> altitude) {
     latmin = list[0].latitude;
@@ -118,6 +150,10 @@ class _SaveRunState extends State<SaveRun> {
       sportType = 'bike';
     } else
       sportType = null;
+  }
+
+  void sumUpdate(int dis, int time){
+
   }
 
   // Höhenmeter berechen; Übergabe: List<double> list, setState double altitude
@@ -198,7 +234,13 @@ class _SaveRunState extends State<SaveRun> {
         // DocumentSnapshot doc =
         //     await DatabaseService(uid: user.uid).getData(user);
         // getDatafromSnapshot(doc);
+        await getData(user);
+         
+        changeSumData(widget.dis);
+         
 
+        await DatabaseService(uid: user.uid).updateSumDistance(_sumdis);
+         
         await DatabaseService(uid: user.uid).updateRunData(
             widget.dis.toString(),
             widget.kcal.toString(),
@@ -212,6 +254,7 @@ class _SaveRunState extends State<SaveRun> {
             widget.points,
             altitudeUp,
             altitudeDown);
+        
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Running()),
@@ -229,8 +272,8 @@ class _SaveRunState extends State<SaveRun> {
     initposition();
     getDate();
     getSport();
-    //calcAlt(widget.altitude);
-    calcAlt(testAlt);
+    calcAlt(widget.altitude);
+    //calcAlt(testAlt);
 
     return new Scaffold(
       backgroundColor: bgColor,
@@ -311,13 +354,13 @@ class _SaveRunState extends State<SaveRun> {
                                 Icons.trending_up_rounded,
                                  Colors.green[500],
                                 altitudeUp.toString(),
-                                'Höhenmeter [m]',
+                                'Höhenmeter[m]',
                                 context),
                             gridItem(
                                 Icons.trending_down_rounded,
                                 Colors.red[500],
                                 altitudeDown.toString(),
-                                'Tiefenmeter [m]',
+                                'Tiefenmeter[m]',
                                 context),
                                   
                           ],
