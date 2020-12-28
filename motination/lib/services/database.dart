@@ -48,6 +48,7 @@ class DatabaseService {
 // set Data first Time on Registration
   Future setUserData(
     String firstname,
+    String lastname,
     String height,
     String age,
     String weight,
@@ -56,6 +57,7 @@ class DatabaseService {
   ) async {
     return await userCollection.document(uid).setData({
       'firstname': firstname,
+      'lastname': lastname,
       'height': height,
       'age': age,
       'weight': weight,

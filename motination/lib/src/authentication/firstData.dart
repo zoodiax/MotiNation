@@ -18,6 +18,7 @@ class _FirstDataState extends State<FirstData> {
   String _currentgroese;
   String _currentgewicht;
   String _currentgeschlecht;
+  String _currentnachname;
 
   final SharedPref _shared = SharedPref();
 
@@ -33,6 +34,7 @@ class _FirstDataState extends State<FirstData> {
           // User in firebase anlegen
           await DatabaseService(uid: user.uid).setUserData(
             _currentvorname,
+            _currentnachname,
             _currentgroese,
             _currentalter,
             _currentgewicht,
@@ -89,6 +91,29 @@ class _FirstDataState extends State<FirstData> {
                                 : null,
                             onChanged: (val) {
                               setState(() => _currentvorname = val);
+                            })
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          height: 20,
+                        ),
+                        Container(
+                            child: Text(
+                          'Dein Nachname',
+                          style: TextStyle(
+                              fontSize: 15, fontStyle: FontStyle.normal),
+                        )),
+                        TextFormField(
+                            
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Gebe dein Nachname ein.'),
+                            validator: (val) => val.isEmpty
+                                ? 'Gebe dein Nachnamen ein.'
+                                : null,
+                            onChanged: (val) {
+                              setState(() => _currentnachname = val);
                             })
                       ],
                     ),

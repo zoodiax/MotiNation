@@ -15,7 +15,6 @@ import 'package:motination/models/markerz.dart';
 import '../../../models/spzinfo.dart';
 
 import '../../../widgets/bottomBar.dart';
-import 'package:motination/services/auth.dart';
 /* Workout Class UI Design & Logic
   Content: List View Column, MapView Column, Floarting Action Button (Filter Function), Center Location, Categroy class(Filter),
           List Categories, class Markerz, List Markerz
@@ -37,7 +36,7 @@ class WorkoutState extends State<Workout> {
   final barColor = const Color(0xFF0A79DF);
   final bgColor = const Color(0xFFFEFDFD);
   final black = const Color(0xFF000000);
-  final AuthService _auth = AuthService();
+ 
 
 
   void initState() {

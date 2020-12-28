@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:motination/shared/constants.dart';
 import '../src/UI/Run/running.dart';
-import '../src/UI/Workout/workoutInfo.dart';
+import '../src/UI/Workout/workout.dart';
 import '../src/UI/shop.dart';
 import '../src/UI/profile.dart';
 
@@ -46,7 +46,7 @@ Widget bottomBar(int index, BuildContext context){
                 if (indexTab == 2)
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => WorkoutInfo()),
+                    MaterialPageRoute(builder: (context) => Workout()),
                 );
 
                 if (indexTab== 3)

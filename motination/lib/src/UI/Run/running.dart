@@ -14,7 +14,6 @@ import 'package:motination/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motination/src/authentication/signIn.dart';
 
-
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
   Function: startTimer, keeprunning, startstopwatch, stopstopwatch, distanceBetween, onMapCreated
@@ -50,7 +49,7 @@ class RunningState extends State<Running> {
   lib2.LatLng latlngstart = lib2.LatLng(49.012260, 12.096680);
   lib2.LatLng latlngend = lib2.LatLng(49.015982, 12.107087);
   lib2.LatLng latlnghlp = lib2.LatLng(0, 0);
-  
+
   bool showRun = true;
   bool showSportType = false;
 
@@ -62,14 +61,13 @@ class RunningState extends State<Running> {
   List<LatLng> latlnglines = List();
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
- List<double> altitude2 = List();
- final AuthService _auth = AuthService();
+  List<double> altitude2 = List();
+  final AuthService _auth = AuthService();
   double _loc = 1;
   int sport = 1;
- 
+
   int points = 0;
 
- 
   void startTimer() {
     Timer(dur, keeprunning);
   }
@@ -118,8 +116,6 @@ class RunningState extends State<Running> {
       stopstopwatch();
   }
 
- 
-
   void startstopwatch() {
     setState(() {
       timerisrunning = true;
@@ -139,10 +135,10 @@ class RunningState extends State<Running> {
     _stopwatch.stop();
   }
 
-int addPoints(int distancelocal){
-  int pointlocal = distancelocal~/1000;
-  return pointlocal;
-}
+  int addPoints(int distancelocal) {
+    int pointlocal = distancelocal ~/ 1000;
+    return pointlocal;
+  }
 
   void endrun() {
     points = addPoints(dis);
@@ -152,20 +148,16 @@ int addPoints(int distancelocal){
       context,
       MaterialPageRoute(
           builder: (context) => SaveRun(
-             
-              dis: dis,
-              time: time,
-              kcal: kcal,
-              latlng: latlnglines2,
-              altitude: altitude,
-              sport: sport,
-              points:points,
+                dis: dis,
+                time: time,
+                kcal: kcal,
+                latlng: latlnglines2,
+                altitude: altitude,
+                sport: sport,
+                points: points,
               )),
     );
   }
-
-
-
 
   double distanceBetween(lib2.LatLng start, lib2.LatLng end) {
     double dis = 0;
@@ -173,11 +165,6 @@ int addPoints(int distancelocal){
 
     return dis;
   }
-
-
-
-
-
 
   void _onMapCreated(GoogleMapController _cntrl) {
     _controller = _cntrl;
@@ -192,7 +179,6 @@ int addPoints(int distancelocal){
       //     CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
     });
   }
-  
 
   Widget _getFAB() {
     if (showRun == false) {
@@ -225,9 +211,6 @@ int addPoints(int distancelocal){
         ],
         mainAxisAlignment: MainAxisAlignment.center,
       );
-      
-
-
     } else {
       return RawMaterialButton(
         onPressed: (timerisrunning == true) ? stopstopwatch : startstopwatch,
@@ -252,7 +235,6 @@ int addPoints(int distancelocal){
 
 // Filter Button, different sport disciplines
   Widget _sportType() {
-     
     return Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
@@ -260,52 +242,47 @@ int addPoints(int distancelocal){
           color: bgColor,
         ),
         child: PopupMenuButton<int>(
-         
           onSelected: (val) {
-             setState(() {
-               _iconSport = Icon(Icons.directions_run);
+            setState(() {
+              _iconSport = Icon(Icons.directions_run);
               if (val == 1) {
                 print("run selectet");
-                sport = 1;}
-             
-               else if (val == 2) {
+                sport = 1;
+              } else if (val == 2) {
                 print("bike selectet");
                 sport = 2;
                 _iconSport = Icon(Icons.directions_bike);
               } else {
                 _iconSport = Icon(Icons.cached);
-               }
-             });
+              }
+            });
           },
           itemBuilder: (context) => [
             PopupMenuItem(
               value: 1,
               child: Text(
                 "Running",
-                style:
-                    Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
             PopupMenuItem(
               value: 2,
               child: Text(
                 "Cycling",
-                style:
-                     Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
           ],
-            icon: _iconSport,
-         
+          icon: _iconSport,
           offset: Offset(0, -120),
         ));
   }
 
-  void printStatus(){
+  void printStatus() {
     print("status");
   }
+
   Widget build(context) {
-    
     printStatus();
 
     return new WillPopScope(
@@ -338,12 +315,10 @@ int addPoints(int distancelocal){
                     context,
                     MaterialPageRoute(builder: (context) => SignIn()),
                   );
-
                 },
               )
             ],
           ),
-         
           body: Column(
             children: <Widget>[
               Expanded(
@@ -367,17 +342,16 @@ int addPoints(int distancelocal){
                           child: Row(
                             children: <Widget>[
                               Expanded(
-                                child: 
-                                
-                                
-                                Column(children: <Widget>[
+                                child: Column(children: <Widget>[
                                   Expanded(
                                     child: Container(
                                       color: bgColor,
                                       alignment: Alignment.center,
                                       child: Text(
                                         distancedisplay,
-                                        style: Theme.of(context).textTheme.bodyText1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
                                       ),
                                     ),
                                   ),
@@ -388,16 +362,13 @@ int addPoints(int distancelocal){
                                       alignment: Alignment.topCenter,
                                       child: Text(
                                         'Distanz km',
-                                        style: Theme.of(context).textTheme.bodyText2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
                                       ),
                                     ),
                                   ),
                                 ]),
-
-
-
-
-                                
                               ),
                               Expanded(
                                 child: Column(children: <Widget>[
@@ -407,7 +378,9 @@ int addPoints(int distancelocal){
                                       alignment: Alignment.center,
                                       child: Text(
                                         caldisplay,
-                                        style: Theme.of(context).textTheme.bodyText1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
                                       ),
                                     ),
                                   ),
@@ -418,7 +391,9 @@ int addPoints(int distancelocal){
                                       alignment: Alignment.topCenter,
                                       child: Text(
                                         'Kalorien kcal',
-                                        style: Theme.of(context).textTheme.bodyText2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
                                       ),
                                     ),
                                   ),
@@ -432,7 +407,9 @@ int addPoints(int distancelocal){
                                       alignment: Alignment.center,
                                       child: Text(
                                         tempodisplay,
-                                        style: Theme.of(context).textTheme.bodyText1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
                                       ),
                                     ),
                                   ),
@@ -443,7 +420,9 @@ int addPoints(int distancelocal){
                                       alignment: Alignment.topCenter,
                                       child: Text(
                                         'ø Tempo /km',
-                                        style: Theme.of(context).textTheme.bodyText2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
                                       ),
                                     ),
                                   ),
@@ -457,9 +436,7 @@ int addPoints(int distancelocal){
               ),
               Expanded(
                 flex: 5,
-                child: 
-                
-                GoogleMap(
+                child: GoogleMap(
                   mapType: MapType.terrain,
                   initialCameraPosition: CameraPosition(
                     target: _initialPosition,
@@ -487,8 +464,7 @@ int addPoints(int distancelocal){
           ]),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          bottomNavigationBar: bottomBar(_currentIndex,context),
-    
+          bottomNavigationBar: bottomBar(_currentIndex, context),
         ));
   }
 }
