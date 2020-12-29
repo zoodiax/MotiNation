@@ -63,11 +63,12 @@ class RunningState extends State<Running> {
   List<double> altitude = List();
   List<double> altitude2 = List();
  
+  LocationData currentLocation;
   double _loc = 1;
   int sport = 1;
 
   int points = 0;
-
+  double maxSpeed = 0;
   void startTimer() {
     Timer(dur, keeprunning);
   }
@@ -80,7 +81,14 @@ class RunningState extends State<Running> {
       latlngend = latlngstart;
       latlnglines.add(linehlp);
       altitude.add(_loc);
-
+      _location.onLocationChanged().listen((event) {
+        setState(() {
+        currentLocation = event;
+        maxSpeed < event.speed ? maxSpeed = event.speed: maxSpeed = maxSpeed; 
+       
+      });
+      });
+      
       setState(() {
         timerdisplay = (_stopwatch.elapsed.inHours.toString().padLeft(2, '0')) +
             ':' +
@@ -112,6 +120,7 @@ class RunningState extends State<Running> {
         latlnglines2.add(linehlp);
         altitude2.add(_loc);
       });
+      
     } else
       stopstopwatch();
   }
@@ -140,10 +149,15 @@ class RunningState extends State<Running> {
     return pointlocal;
   }
 
+void ms2kmh(double speedMeter){
+  setState(() {
+    maxSpeed = speedMeter * 3.6;
+  });
+}
   void endrun() {
     points = addPoints(dis);
     latlnglines = [];
-
+    ms2kmh(maxSpeed);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -155,6 +169,8 @@ class RunningState extends State<Running> {
                 altitude: altitude,
                 sport: sport,
                 points: points,
+                tempo: tempodisplay,
+                maxspeed: maxSpeed,
               )),
     );
   }
@@ -166,15 +182,23 @@ class RunningState extends State<Running> {
     return dis;
   }
 
+
   void _onMapCreated(GoogleMapController _cntrl) {
     _controller = _cntrl;
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
+
       _loc = l.altitude;
       double hlplat = l.latitude;
       double hlplng = l.longitude;
       latlnghlp = lib2.LatLng(hlplat, hlplng);
       linehlp = LatLng(hlplat, hlplng);
+      // setState(() {
+      //   currentLocation = l;
+       
+      // });
+      // print('Speed:' + currentLocation.speed.toString());
+
       // _controller.animateCamera(CameraUpdate.newCameraPosition(
       //     CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
     });
@@ -278,12 +302,10 @@ class RunningState extends State<Running> {
         ));
   }
 
-  void printStatus() {
-    print("status");
-  }
+ 
 
   Widget build(context) {
-    printStatus();
+    
 
     return new WillPopScope(
         onWillPop: () async => false,
@@ -420,7 +442,7 @@ class RunningState extends State<Running> {
                                       color: bgColor,
                                       alignment: Alignment.topCenter,
                                       child: Text(
-                                        'ø Tempo /km',
+                                        'ø  Min/km',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText2,

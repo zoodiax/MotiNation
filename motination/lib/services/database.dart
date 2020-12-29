@@ -85,7 +85,9 @@ class DatabaseService {
       String sportType,
       int points,
       double altitudeUp,
-      double altitudeDown) async {
+      double altitudeDown,
+      String tempo,
+      double maxspeed) async {
     return await userCollection
         .document(uid)
         .collection('Run')
@@ -103,6 +105,8 @@ class DatabaseService {
       'points': points,
       'altitudeUp': altitudeUp,
       'altitudeDown': altitudeDown,
+      'tempo': tempo,
+      'maxspeed':maxspeed
     });
   }
 

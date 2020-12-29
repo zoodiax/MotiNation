@@ -25,7 +25,8 @@ class SaveRun extends StatefulWidget {
   final List<double> altitude;
   final int sport;
   final int points;
-  
+  final String tempo;
+  final double maxspeed;
 
   SaveRun(
       {Key key,
@@ -36,7 +37,9 @@ class SaveRun extends StatefulWidget {
       this.polyline,
       this.altitude,
       this.sport,
-      this.points})
+      this.points,
+      this.tempo,
+      this.maxspeed})
       : super(key: key);
   @override
   _SaveRunState createState() => new _SaveRunState();
@@ -69,34 +72,33 @@ class _SaveRunState extends State<SaveRun> {
     ));
   }
 
-  Future <void> getData(User user) async{
-    try{
-      DocumentSnapshot snapshot = await DatabaseService(uid: user.uid).getUserData();
-    Map<String, dynamic> data = snapshot.data;
-    setState(() {
-    
-    _sumdis = data["sumdistanz"]?? "0";
-    // _sumspeed = data["sumspeed"]?? "0";
-    // _sumtime = data["sumtime"]?? "0";
-    print('getdata finished');
-    }); 
-    
-    }
-    catch(err){
-    print(err.toString());
+  Future<void> getData(User user) async {
+    try {
+      DocumentSnapshot snapshot =
+          await DatabaseService(uid: user.uid).getUserData();
+      Map<String, dynamic> data = snapshot.data;
+      setState(() {
+        _sumdis = data["sumdistance"] ?? "0";
+        // _sumspeed = data["sumspeed"]?? "0";
+        // _sumtime = data["sumtime"]?? "0";
+        print(_sumdis);
+        print('getdata finished');
+      });
+    } catch (err) {
+      print(err.toString());
     }
   }
 
-  void changeSumData(int distance){
-    int dis = int.parse(_sumdis) + distance;
-    
+  void changeSumData(int newdistance) {
+    print('new distance $newdistance');
+    print('old distance $_sumdis');
+    int dis = int.parse(_sumdis) + newdistance;
+
     setState(() {
       _sumdis = dis.toString();
     });
-    print('sumdis = $_sumdis');
+    print('total dis = $_sumdis');
   }
-
-  
 
   void data2collection(List<LatLng> list, List<double> altitude) {
     latmin = list[0].latitude;
@@ -152,9 +154,7 @@ class _SaveRunState extends State<SaveRun> {
       sportType = null;
   }
 
-  void sumUpdate(int dis, int time){
-
-  }
+  void sumUpdate(int dis, int time) {}
 
   // Höhenmeter berechen; Übergabe: List<double> list, setState double altitude
   void calcAlt(List<double> alt) {
@@ -176,8 +176,6 @@ class _SaveRunState extends State<SaveRun> {
       altitudeUp = altListUp;
       altitudeDown = altListDown;
     });
-    print('alt Up:' + altListUp.toString());
-    print('alt Down: ' + altListDown.toString());
   }
 
   // void getDatafromSnapshot(DocumentSnapshot snapshot) {
@@ -228,19 +226,60 @@ class _SaveRunState extends State<SaveRun> {
       );
   }
 
-  FloatingActionButton saveRun(User user) {
-    return FloatingActionButton(
-      onPressed: () async {
-        // DocumentSnapshot doc =
+  // FloatingActionButton saveRun(User user) {
+  //   return FloatingActionButton(
+  //     onPressed: () async {
+  //       // DocumentSnapshot doc =
+  //       //     await DatabaseService(uid: user.uid).getData(user);
+  //       // getDatafromSnapshot(doc);
+  //       await getData(user);
+
+  //       changeSumData(widget.dis);
+
+  //       await DatabaseService(uid: user.uid).updateSumDistance(_sumdis);
+
+  //       await DatabaseService(uid: user.uid).updateRunData(
+  //           widget.dis.toString(),
+  //           widget.kcal.toString(),
+  //           widget.time.toString(),
+  //           lat,
+  //           lng,
+  //           latinit,
+  //           lnginit,
+  //           date,
+  //           sportType,
+  //           widget.points,
+  //           altitudeUp,
+  //           altitudeDown,
+  //           widget.tempo,
+  //           widget.maxspeed);
+
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => Running()),
+        // );
+  //     },
+  //     child: Icon(Icons.save),
+  //     backgroundColor: blue,
+  //   );
+  // }
+Widget _saveRun(User user){
+  return RawMaterialButton(
+        constraints: BoxConstraints(minHeight: 60),
+        fillColor: blue,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            side: BorderSide(color: blue)),
+        onPressed: () async {
+             // DocumentSnapshot doc =
         //     await DatabaseService(uid: user.uid).getData(user);
         // getDatafromSnapshot(doc);
         await getData(user);
-         
+
         changeSumData(widget.dis);
-         
 
         await DatabaseService(uid: user.uid).updateSumDistance(_sumdis);
-         
+
         await DatabaseService(uid: user.uid).updateRunData(
             widget.dis.toString(),
             widget.kcal.toString(),
@@ -253,17 +292,16 @@ class _SaveRunState extends State<SaveRun> {
             sportType,
             widget.points,
             altitudeUp,
-            altitudeDown);
-        
-        Navigator.push(
+            altitudeDown,
+            widget.tempo,
+            widget.maxspeed);
+           Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Running()),
         );
-      },
-      child: Icon(Icons.save),
-      backgroundColor: blue,
-    );
-  }
+        },
+        child: Text("     Speichern     ",
+            style: Theme.of(context).textTheme.headline2));}
 
   Widget build(context) {
     User user = Provider.of<User>(context);
@@ -287,7 +325,7 @@ class _SaveRunState extends State<SaveRun> {
           ]),
       body: SingleChildScrollView(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: 1100),
+          constraints: BoxConstraints(maxHeight: 1400),
           child: Container(
             alignment: Alignment.center,
             child: Column(children: <Widget>[
@@ -328,41 +366,51 @@ class _SaveRunState extends State<SaveRun> {
                             //Distanz Feld
                             gridItem(
                                 Icons.alt_route,
-                                Colors.black87,
+                                Colors.deepOrange,
                                 (widget.dis / 1000).toStringAsFixed(2),
                                 'Distanz [Km]',
                                 context),
                             gridItem(
-                                Icons.timer,
-                                blue,
-                                showTime(widget.time),
-                                'Zeit [Min]',
+                                Icons.timer, 
+                                Colors.teal,
+                                showTime(widget.time), 
+                                'Zeit [Min]', 
+                                context),
+                            gridItem(
+                                Icons.schedule, 
+                                Colors.teal,
+                                widget.tempo.toString(), 'ø Min/km', context),
+                            gridItem(
+                                Icons.speed,
+                                Colors.deepOrangeAccent,
+                                widget.maxspeed.toStringAsFixed(2),
+                                'Max. km/h',
                                 context),
                             gridItem(
                                 Icons.local_fire_department_sharp,
-                                Colors.orange,
+                                Colors.deepOrangeAccent,
                                 widget.kcal.toString(),
                                 'Kalorien',
                                 context),
+
                             gridItem(
-                               MaterialIcons.monetization_on,
-                               Colors.yellow,
+                                MaterialIcons.stars,
+                                Colors.teal,
                                 widget.points.toString(),
                                 'Punkte',
                                 context),
                             gridItem(
                                 Icons.trending_up_rounded,
-                                 Colors.green[500],
+                                Colors.teal,
                                 altitudeUp.toString(),
                                 'Höhenmeter[m]',
                                 context),
                             gridItem(
                                 Icons.trending_down_rounded,
-                                Colors.red[500],
+                                Colors.deepOrangeAccent,
                                 altitudeDown.toString(),
                                 'Tiefenmeter[m]',
                                 context),
-                                  
                           ],
                         ),
                       ),
@@ -372,7 +420,7 @@ class _SaveRunState extends State<SaveRun> {
           ),
         ),
       ),
-      floatingActionButton: saveRun(user),
+      floatingActionButton: _saveRun(user),//saveRun(user,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
