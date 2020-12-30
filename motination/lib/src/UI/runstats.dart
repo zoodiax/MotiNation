@@ -69,7 +69,7 @@ class _RunstatsState extends State<Runstats> {
                   
                   '  ' +
                   'Distanz: ' + 
-                  mtokm(document['distanz']).toString()  + ' km',
+                  mtokm(document['distance']).toString()  + ' km',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,)
                   ) ,
                   

@@ -137,7 +137,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          document['distanz'] + ' km',
+                          document['distance'] + ' km',
                           style: TextStyle(
                               fontStyle: FontStyle.normal,
                               fontWeight: FontWeight.bold,
