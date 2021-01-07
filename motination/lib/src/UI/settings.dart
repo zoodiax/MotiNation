@@ -293,7 +293,7 @@ class _SettingsState extends State<Settings> {
               ),
               Row(children: <Widget>[
                 Text(
-                  'Geburstag:',
+                  'Geburtstag:',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 Spacer(),
