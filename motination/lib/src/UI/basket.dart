@@ -1,6 +1,7 @@
+import 'Workout/workout.dart';
 import 'shop.dart';
 import 'package:motination/src/UI/shopitem.dart';
-import 'package:motination/src/UI/challenge.dart';
+import 'package:motination/src/UI/OldButGold/challenge.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:motination/src/UI/homescreen.dart';

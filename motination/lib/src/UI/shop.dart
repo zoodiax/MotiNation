@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:motination/src/UI/basket.dart';
-import 'package:motination/src/UI/points.dart';
+import 'package:motination/src/UI/OldButGold/points.dart';
 import 'package:motination/src/UI/profile.dart';
-import 'package:motination/src/UI/challenge.dart';
+import 'package:motination/src/UI/OldButGold/challenge.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/src/UI/homescreen.dart';
 import 'package:motination/src/UI/shopitem.dart';
 import 'package:motination/models/user.dart';
-
+import 'package:motination/widgets/bottomBar.dart';
 
 
 
