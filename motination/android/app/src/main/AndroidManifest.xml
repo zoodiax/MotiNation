@@ -9,7 +9,7 @@
     
      <meta-data 
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAzdnVg_6GT8mn3qALoyzNUj9yGW-9x5_M"/>
+            android:value="AIzaSyC8gPo40o4vFqm7webEPEZh7EPzEfe6c8Y"/>
     
     
     <application
@@ -17,7 +17,7 @@
         android:label="motination"
         android:icon="@mipmap/motination_logo">
          <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAzdnVg_6GT8mn3qALoyzNUj9yGW-9x5_M"/>
+            android:value="AIzaSyC8gPo40o4vFqm7webEPEZh7EPzEfe6c8Y"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
