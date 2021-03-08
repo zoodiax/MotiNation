@@ -23,7 +23,7 @@ class _RunstatsState extends State<Runstats> {
   final int sumdistanz = 0;
 
   String randerdatum(String datum){
-    return datum.substring(0,9);
+    return datum.substring(0,10);
   }
     
   
@@ -69,7 +69,7 @@ class _RunstatsState extends State<Runstats> {
                   
                   '  ' +
                   'Distanz: ' + 
-                  mtokm(document['distanz']).toString()  + ' km',
+                  mtokm(document['distance']).toString()  + ' km',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,)
                   ) ,
                   

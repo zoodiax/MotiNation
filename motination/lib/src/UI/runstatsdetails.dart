@@ -17,9 +17,9 @@ class RunStatsDetails extends StatelessWidget {
 
 
   final boxColor = Colors.white70;
-  final Set<Polyline> _polyline = {};
+  // final Set<Polyline> _polyline = {};
 
-  List<double> latlng = [];
+  final List<double> latlng = [];
 
   List<double> getList(List<dynamic> list) {
     List<double> dList = List<double>.from(list);
@@ -41,7 +41,7 @@ class RunStatsDetails extends StatelessWidget {
   }
 
   String titledate(String datum) {
-    return datum.substring(0, 9);
+    return datum.substring(0, 10);
   }
 
  buildPolyline(List<LatLng> list) {
@@ -137,7 +137,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          document['distanz'] + ' km',
+                          document['distance'] + ' km',
                           style: TextStyle(
                               fontStyle: FontStyle.normal,
                               fontWeight: FontWeight.bold,
@@ -240,7 +240,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          document['distanz'],
+                          document['points'].toString(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -274,7 +274,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          document['distanz'] + ' m',
+                          document['altitudeUp'].toString() + ' m',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -308,7 +308,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          document['distanz'] + ' m',
+                          document['altitudeDown'].toString() + ' m',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),

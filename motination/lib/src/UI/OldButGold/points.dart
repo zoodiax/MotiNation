@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'profile.dart';
-import 'homescreen.dart';
-import 'shop.dart';
+import '../profile.dart';
+import '../homescreen.dart';
+import '../shop.dart';
 
 import 'package:motination/services/database.dart';
 import 'package:motination/models/user.dart';
@@ -138,19 +138,19 @@ void getPointsfromSnapshot(DocumentSnapshot snapshot){
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('Profile'),
+            label: 'Profile',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            title: Text('Points'),
+            label: 'Points',
             ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
-            title: Text('Shop'),
+            label: 'Shop',
           ),
           
         ],

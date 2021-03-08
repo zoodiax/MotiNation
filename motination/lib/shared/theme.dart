@@ -38,13 +38,18 @@ getTheme(){
       bodyText1: GoogleFonts.spartan(
                         textStyle: TextStyle(
                             color: Colors.black,
-                            fontSize: 23,
+                            fontSize: 20,
                             fontWeight: FontWeight.w400)),
       bodyText2: GoogleFonts.spartan(
                         textStyle: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
                             fontWeight: FontWeight.w400)),
+      /*bodyText3: GoogleFonts.spartan(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400)), */                    
       
     ),
   );

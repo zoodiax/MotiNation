@@ -93,54 +93,7 @@ final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahres
             
           ),
 
-      bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: bgColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                title: Text('Profile'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text('Home'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                title: Text('Challenge'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket),
-                title: Text('Shop'),
-              ),
-            ],
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-                if (_currentIndex == 3)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Shoping()),
-                  );
-                if (_currentIndex == 2)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Challenge()),
-                  );
-                   if (_currentIndex == 1)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                if (_currentIndex == 0)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profile()),
-                  );
-              });
-            },
-          ),
+      bottomNavigationBar: bottomBar(_currentIndex,context),
 
 
       // Main List View With Builder

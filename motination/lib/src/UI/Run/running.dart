@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong/latlong.dart' as lib2;
 import 'package:location/location.dart';
-import 'workoutInfo.dart';
-import 'profile.dart';
-import 'shop.dart';
+//import 'package:motination/src/authentication/sign_in.dart';
+
 import 'saveRun.dart';
+import '../../../widgets/bottomBar.dart';
+
+import 'package:motination/shared/constants.dart';
+
+import 'package:motination/services/auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:motination/src/authentication/signIn.dart';
 
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
@@ -43,27 +49,26 @@ class RunningState extends State<Running> {
   lib2.LatLng latlngstart = lib2.LatLng(49.012260, 12.096680);
   lib2.LatLng latlngend = lib2.LatLng(49.015982, 12.107087);
   lib2.LatLng latlnghlp = lib2.LatLng(0, 0);
-  final blue = const Color(0xff191970);
-  final pink = const Color(0xFFc71585);
+
   bool showRun = true;
   bool showSportType = false;
-
+  final AuthService _auth = AuthService();
   LatLng linehlp = LatLng(0, 0);
   int _currentIndex = 1;
-  final barColor = const Color(0xFF0A79DF);
-  final bgColor = const Color(0xFFFEFDFD);
-
+  Icon _iconSport = Icon(Icons.directions_run);
   //polylines:
   final Set<Polyline> _polyline = {};
   List<LatLng> latlnglines = List();
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
   List<double> altitude2 = List();
-  List<double> altitude3 = [1];
+ 
+  LocationData currentLocation;
   double _loc = 1;
   int sport = 1;
-  Icon _iconSport = Icon(Icons.directions_run);
+
   int points = 0;
+  double maxSpeed = 0;
   void startTimer() {
     Timer(dur, keeprunning);
   }
@@ -72,11 +77,18 @@ class RunningState extends State<Running> {
     if (_stopwatch.isRunning) {
       startTimer();
       latlngstart = latlnghlp;
-      distanceBetween(latlngstart, latlngend);
+      distancemeter += distanceBetween(latlngstart, latlngend);
       latlngend = latlngstart;
       latlnglines.add(linehlp);
       altitude.add(_loc);
-
+      _location.onLocationChanged().listen((event) {
+        setState(() {
+        currentLocation = event;
+        maxSpeed < event.speed ? maxSpeed = event.speed: maxSpeed = maxSpeed; 
+       
+      });
+      });
+      
       setState(() {
         timerdisplay = (_stopwatch.elapsed.inHours.toString().padLeft(2, '0')) +
             ':' +
@@ -108,11 +120,10 @@ class RunningState extends State<Running> {
         latlnglines2.add(linehlp);
         altitude2.add(_loc);
       });
+      
     } else
       stopstopwatch();
   }
-
- 
 
   void startstopwatch() {
     setState(() {
@@ -133,63 +144,65 @@ class RunningState extends State<Running> {
     _stopwatch.stop();
   }
 
-void addPoints(){
-  int point = (time/360).round();
+  int addPoints(int distancelocal) {
+    int pointlocal = distancelocal ~/ 1000;
+    return pointlocal;
+  }
+
+void ms2kmh(double speedMeter){
   setState(() {
-    points = point;
+    maxSpeed = speedMeter * 3.6;
   });
-   
-  
 }
-
   void endrun() {
-    addPoints();
+    points = addPoints(dis);
     latlnglines = [];
-
+    ms2kmh(maxSpeed);
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SaveRun(
-             
-              dis: dis,
-              time: time,
-              kcal: kcal,
-              latlng: latlnglines2,
-              altitude: altitude,
-              sport: sport,
-              points:points,
+                dis: dis,
+                time: time,
+                kcal: kcal,
+                latlng: latlnglines2,
+                altitude: altitude,
+                sport: sport,
+                points: points,
+                tempo: tempodisplay,
+                maxspeed: maxSpeed,
               )),
     );
   }
 
+  double distanceBetween(lib2.LatLng start, lib2.LatLng end) {
+    double dis = 0;
+    dis = distance(start, end);
 
-
-
-  void distanceBetween(lib2.LatLng start, lib2.LatLng end) {
-    double hlp = 0;
-    hlp = distance(start, end);
-    distancemeter += hlp;
+    return dis;
   }
-
-
-
-
 
 
   void _onMapCreated(GoogleMapController _cntrl) {
     _controller = _cntrl;
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
+
       _loc = l.altitude;
       double hlplat = l.latitude;
       double hlplng = l.longitude;
       latlnghlp = lib2.LatLng(hlplat, hlplng);
       linehlp = LatLng(hlplat, hlplng);
-      _controller.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
+      // setState(() {
+      //   currentLocation = l;
+       
+      // });
+      // print('Speed:' + currentLocation.speed.toString());
+
+      // _controller.animateCamera(CameraUpdate.newCameraPosition(
+      //     CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
     });
   }
-  
 
   Widget _getFAB() {
     if (showRun == false) {
@@ -222,9 +235,6 @@ void addPoints(){
         ],
         mainAxisAlignment: MainAxisAlignment.center,
       );
-      
-
-
     } else {
       return RawMaterialButton(
         onPressed: (timerisrunning == true) ? stopstopwatch : startstopwatch,
@@ -258,10 +268,12 @@ void addPoints(){
         child: PopupMenuButton<int>(
           onSelected: (val) {
             setState(() {
+              _iconSport = Icon(Icons.directions_run);
               if (val == 1) {
+                print("run selectet");
                 sport = 1;
-                _iconSport = Icon(Icons.directions_run);
               } else if (val == 2) {
+                print("bike selectet");
                 sport = 2;
                 _iconSport = Icon(Icons.directions_bike);
               } else {
@@ -274,16 +286,14 @@ void addPoints(){
               value: 1,
               child: Text(
                 "Running",
-                style:
-                    Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
             PopupMenuItem(
               value: 2,
               child: Text(
                 "Cycling",
-                style:
-                     Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
           ],
@@ -292,16 +302,46 @@ void addPoints(){
         ));
   }
 
+ 
+
   Widget build(context) {
+    
+
     return new WillPopScope(
         onWillPop: () async => false,
         child: new Scaffold(
           backgroundColor: bgColor,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('Running' , style:  Theme.of(context).textTheme.headline1,),
+            title: Text('Motination ',
+                style: GoogleFonts.spartan(
+                    textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600))),
             backgroundColor: bgColor,
+            actions: <Widget>[
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.person,
+                  color: blue,
+                ),
+                label: Text(
+                  'Logout',
+                  style: GoogleFonts.spartan(
+                      textStyle: TextStyle(color: Colors.black)),
+                ),
+                onPressed: () async {
+                  await _auth.signOut();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignIn()),
+                  );
+                },
+              )
+            ],
           ),
+          
           body: Column(
             children: <Widget>[
               Expanded(
@@ -325,17 +365,16 @@ void addPoints(){
                           child: Row(
                             children: <Widget>[
                               Expanded(
-                                child: 
-                                
-                                
-                                Column(children: <Widget>[
+                                child: Column(children: <Widget>[
                                   Expanded(
                                     child: Container(
                                       color: bgColor,
                                       alignment: Alignment.center,
                                       child: Text(
                                         distancedisplay,
-                                        style: Theme.of(context).textTheme.bodyText1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
                                       ),
                                     ),
                                   ),
@@ -346,16 +385,13 @@ void addPoints(){
                                       alignment: Alignment.topCenter,
                                       child: Text(
                                         'Distanz km',
-                                        style: Theme.of(context).textTheme.bodyText2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
                                       ),
                                     ),
                                   ),
                                 ]),
-
-
-
-
-                                
                               ),
                               Expanded(
                                 child: Column(children: <Widget>[
@@ -365,7 +401,9 @@ void addPoints(){
                                       alignment: Alignment.center,
                                       child: Text(
                                         caldisplay,
-                                        style: Theme.of(context).textTheme.bodyText1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
                                       ),
                                     ),
                                   ),
@@ -376,7 +414,9 @@ void addPoints(){
                                       alignment: Alignment.topCenter,
                                       child: Text(
                                         'Kalorien kcal',
-                                        style: Theme.of(context).textTheme.bodyText2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
                                       ),
                                     ),
                                   ),
@@ -390,7 +430,9 @@ void addPoints(){
                                       alignment: Alignment.center,
                                       child: Text(
                                         tempodisplay,
-                                        style: Theme.of(context).textTheme.bodyText1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
                                       ),
                                     ),
                                   ),
@@ -400,8 +442,10 @@ void addPoints(){
                                       color: bgColor,
                                       alignment: Alignment.topCenter,
                                       child: Text(
-                                        'ø Tempo /km',
-                                        style: Theme.of(context).textTheme.bodyText2,
+                                        'ø  Min/km',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
                                       ),
                                     ),
                                   ),
@@ -415,9 +459,7 @@ void addPoints(){
               ),
               Expanded(
                 flex: 5,
-                child: 
-                
-                GoogleMap(
+                child: GoogleMap(
                   mapType: MapType.terrain,
                   initialCameraPosition: CameraPosition(
                     target: _initialPosition,
@@ -445,55 +487,7 @@ void addPoints(){
           ]),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: blue,
-            backgroundColor: bgColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                title: Text('Profile'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.timer, color: blue,),
-                title: Text('Running', style: TextStyle(color: blue),),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.fitness_center),
-                title: Text('Workout'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket),
-                title: Text('Shop'),
-              ),
-            ],
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-                if (_currentIndex == 0)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profile()),
-                  );
-                if (_currentIndex == 1)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Running()),
-                  );
-                if (_currentIndex == 3)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Shoping()),
-                  );
-                if (_currentIndex == 2)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WorkoutInfo()),
-                  );
-              });
-            },
-          ),
+          bottomNavigationBar: bottomBar(_currentIndex, context),
         ));
   }
 }

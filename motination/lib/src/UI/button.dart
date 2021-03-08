@@ -4,13 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter/material.dart';
 import 'package:motination/services/auth.dart';
-import 'package:motination/src/UI/challenge.dart';
+import 'package:motination/src/UI/OldButGold/challenge.dart';
 
-import 'workout.dart';
+import 'Workout/workout.dart';
 import 'profile.dart';
 import 'shop.dart';
-import 'running.dart';
-import 'triangle.dart';
+import 'Run/running.dart';
+import 'OldButGold/triangle.dart';
 
 class Button extends StatefulWidget {
   @override
@@ -178,25 +178,25 @@ Widget _info() {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                title: Text('Profile'),
+                label: 'Profile',
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
                   color: blue,
                 ),
-                title: Text(
+                label: 
                   'Home',
-                  style: TextStyle(color: blue),
-                ),
+                  
+                
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.chat),
-                title: Text('Challenge'),
+                label: 'Challenge',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_basket),
-                title: Text('Shop'),
+                label: 'Shop',
               ),
             ],
             onTap: (index) {

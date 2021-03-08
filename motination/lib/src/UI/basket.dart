@@ -94,19 +94,19 @@ int points = 1000;
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                title: Text('Profile'),
+                label: 'Profile',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                title: Text('Home'),
+                label: 'Home',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.chat),
-                title: Text('Challenge'),
+                label: 'Challenge',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_basket),
-                title: Text('Shop'),
+                label: 'Shop',
               ),
             ],
             onTap: (index) {

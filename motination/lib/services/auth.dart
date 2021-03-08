@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motination/models/user.dart';
-import 'package:motination/services/database.dart';
 
 class AuthService {
 
@@ -33,32 +32,65 @@ Future signInAnon() async {
   }
 }*/
 
+
+
 // sign in with email & password
 Future signInrWithEmailAndPassword(String email, String password) async {
   try{
     AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
     FirebaseUser user = result.user;
-    return _userFromFirebaseUser(user);
+    //return _userFromFirebaseUser(user);
+
+  if (user.isEmailVerified) 
+    {
+      print('Email is verified');
+      print('Logging User in...');
+      return _userFromFirebaseUser(user);
+      }
+
+    else {
+      print('Email is not verified');
+      return null;}
+      
   } catch(e){
     print(e.toString());
     return null;
   }
 }
 
+
+
+
 // register with email & password
 Future registerWithEmailAndPassword(String email, String password) async {
   try{
     AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     FirebaseUser user = result.user;
+    
+    await user.sendEmailVerification();
+   
 
 
     //create a new document (in firestore) for the user with the uid  //Wird aber nur angelegt wenn man sich neu registriert, dh. wenn ein neues Update herausgebracht wird mit neuer Collection wird es nicht hinzugefügt.
-    await DatabaseService(uid: user.uid).updateUserData( 'Vorname', 'Nachname' ,'benutzername', '-', '-','-',user.uid,'-','0','0','0',0 ,0);
+   // await DatabaseService(uid: user.uid).updateUserData( 'Vorname', 'Nachname' ,'benutzername', 180, '-', 80.0,user.uid,'-','0','0','0',0 ,0);
     //await DatabaseService(uid: user.uid).updateUserActivityData('duration', 'distance', 'calories', 'date', 'time'); //nur Test aber normalerweise bei start running implementieren
     return _userFromFirebaseUser(user);
   } catch(e){
-    print(e.toString());
-    return null;
+    print("An error occured while trying to send email verification");
+      print(e.toString());
+    switch (e.code){
+      
+      case 'ERROR_EMAIL_ALREADY_IN_USE':
+      {
+        print("Mail already in use");
+        return 'ERROR_EMAIL_ALREADY_IN_USE';
+      }
+      break;
+      default: return null;
+    }
+    
+  
+
   }
 }
 // sign out
@@ -71,5 +103,11 @@ Future signOut() async {
 
   }
 }
+
+// send new Passwort to Mail 
+Future<void> resetPassword(String email) async {
+    await _auth.sendPasswordResetEmail(email: email);
+}
+
 
 }

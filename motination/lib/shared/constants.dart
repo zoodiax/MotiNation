@@ -7,7 +7,7 @@ const textInputDecoration = InputDecoration(
       borderSide: BorderSide(color: Colors.white, width: 2.0)
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.blue, width: 2.0)
+      borderSide: BorderSide(color: blue, width: 2.0)
       ),
     );  
 
@@ -18,3 +18,4 @@ const orange = const Color(0xFFff9a00);
 const mainColor = Color(0xff191970);
 const buttonColor = Color(0xFFff9a00);
 const boxColor = Colors.white70;
+const String intKey = "status";
