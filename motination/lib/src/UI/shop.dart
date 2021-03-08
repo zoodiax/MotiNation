@@ -1,15 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:motination/models/user.dart';
+
 import 'package:motination/src/UI/basket.dart';
+import 'package:motination/src/UI/points.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/src/UI/homescreen.dart';
-import 'package:motination/models/shop.dart';
-
-
+import 'package:motination/src/UI/shopitem.dart';
+import 'package:motination/models/user.dart';
 
 
 
@@ -20,7 +21,7 @@ class Shoping extends StatefulWidget {
 
 
   @override
-
+ 
 
 
   createState() {
@@ -34,71 +35,63 @@ class Shoping extends StatefulWidget {
 
 class ShopState extends State<Shoping> {
 
+int points = 1000;
  int _currentIndex = 3;
+
+
 
  
   final wrktColor = const Color(0xFF28CCD3);
   final blackColor = const Color(0xBF000000);
 
-  final barColor = const Color(0xFF0A79DF);
+  final barColor = const Color(0xff191970); //final blue
 
   final bgColor = const Color(0xFFFEFDFD);
 
- var selectedItem = 'All products';
-
-
-
-
-
-  Widget build(context) {
-
-    //Shop shop = Provider.of<Shop>(context);
-      
-    var children2 = <Widget>[
-
-
-
-
-
-                           
-                                  
-                               
-
   
-                            
-                                    
-                            
-    
+// wichtig: beim sortieren werden Klein/buchstaben berücksichtigt. zuerst alle kleinen, dann groß
+  List<Shopitem> shopitemList = [
+  Shopitem(
+    1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info"
+  ),
+  Shopitem(
+    2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info"
+  ),
+  Shopitem(
+    3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info"
+  ),
+];
 
-  
+final laufundberg = Shopitem(1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info");
+final decathlon = Shopitem(2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info");
+final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info");
 
 
-                _buildShopItem('assets/bergundlauf.png', 'Berg und Lauf König', 'Voucher', '10.00'),
 
 
-                _buildShopItem('assets/boulderwelt.jpg', 'Boulderwelt Regensburg', 'Voucher', '10.00'),
-                _buildShopItem('assets/decathlon.jpg', 'Decathlon', 'Voucher', '20.00'),
-                _buildShopItem('assets/tarayoga.jpg', 'Tarayoga', 'Discount', '10 % auf 10er Karte') 
-                
-                ];
 
 
-   
-    return Scaffold(
+  @override
 
-      backgroundColor: bgColor,
+  Widget build(BuildContext context) {
 
-      appBar: AppBar(
+    // MediaQuery to get Device Width
 
-        title: Text('Shop'),
+    double width = MediaQuery.of(context).size.width * 0.6;
 
-        
+     return Scaffold(
 
-        backgroundColor: barColor,
+      //backgroundColor: bgColor,
 
-       
+     appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Shop' , style:  Theme.of(context).textTheme.headline1,),
+            backgroundColor: bgColor,
 
-      ),
+            
+
+            
+          ),
 
       bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
@@ -149,18 +142,24 @@ class ShopState extends State<Shoping> {
             },
           ),
 
-      body:      ListView(
-      children: <Widget>[
-      
-        Row(
+
+      // Main List View With Builder
+
+      body:    
+      Column(
+    children: <Widget>[
+     
+          Row(
+         // spacing: 8.0, // gap between adjacent chips
+         // runSpacing: 4.0,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(top: 15.0),
+              padding: EdgeInsets.only(top: 10.0),
               
             ),
             Padding(
-              padding: EdgeInsets.only(top: 15.0, right: 15.0),
+              padding: EdgeInsets.only(top: 10.0, right: 10.0),
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -170,67 +169,38 @@ class ShopState extends State<Shoping> {
                         borderRadius: BorderRadius.circular(20.0),
                         color: Colors.transparent),
                   ),
+                  
                   Container(
+                    
                     height: 40.0,
                     width: 40.0,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
-                        color: Color(0xFF0A79DF)),
-                    child: Center(
-                      child: 
+                        color: Color(0xff191970)),
+                     child:  Flexible(
+                     child: 
 
-                      FlatButton.icon(
-                icon: Icon(
-                  Icons.shopping_basket,
-                  color: Colors.white,
-                  size: 20.0,
-                ),
-                label: Text(
-                  'shopping cart',
-                  style: TextStyle(color: bgColor),
-                ),
-                onPressed: () 
-                {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Basket()),
-                        );
-                      },
-              )
+                     IconButton(
+            icon: Icon(Icons.shopping_bag),
+            color: Colors.white,
+            
+            
+            onPressed: () { Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Basket(
+        laufundberg: laufundberg,
+        )),
+     );
+},
+
+                     
+              ) , 
                         
                       ),
+                  
                     ),
-                 // ),
-                  Positioned(
-
-                    top: 25.0,
-
-                    right: 30.0,
-
-                    child: Container(
-
-                      height: 20.0,
-
-                      width: 20.0,
-
-                      decoration: BoxDecoration(
-
-                          borderRadius: BorderRadius.circular(10.0),
-
-                          color: Colors.red),
-
-                      child: Center(
-
-                          child: Text(
-
-                        '8',
-
-                        style: TextStyle(
-
-                            fontFamily: 'Raleway', color: Colors.white),
-                      )),
-                    ),
-                  )
+               
                 ],
               ),
             )
@@ -239,245 +209,852 @@ class ShopState extends State<Shoping> {
         Padding(
           padding: EdgeInsets.all(15.0),
           child: Text(
-            'Belohne dich mit tollen Preisen!',
-            style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold),
+            'Belohne dich mit tollen Preisen! ',
+          
+                style: Theme.of(context).textTheme.headline1,
           ),
+
+             
+        ),
+Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Text(
+            
+
+            'Dein Punktestand: ' + points.toString(), 
+     
+                style: Theme.of(context).textTheme.bodyText1,
+          ),
+
+          
         
         ),
-        Padding(
+  
+      Padding(
           padding: EdgeInsets.only(left: 15.0, top: 15.0, bottom: 15.0),
           child: Container(
             height: 100.0,
-            child: ListView(
+            
+            child: Align(
+
+                    alignment: Alignment.center, 
+              child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _buildItem('All products', 4),
-                _buildItem('Voucher', 3),
-                _buildItem('Gift', 0),
-                _buildItem('Discount', 1),
-                ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 15.0, top: 15.0, bottom: 10.0),
-          child: Container(
-            height: MediaQuery.of(context).size.height - 300.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              
-              children: children2,
-              
-            ),
-          ),
-        ),
-      ],
-    ));
-  }
 
-  _buildShopItem(String imgPath, String productName, String productType, String price) {
-    return Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Container(
-        width: 225.0,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 4.0,
-              blurRadius: 4.0
-            )
-          ]
-        ),
-        child: Stack(
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: 200.0,
-                  width: 225.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
-                    image: DecorationImage(
-                      image: AssetImage(imgPath),
-                      fit: BoxFit.cover
-                    )
-                  ),
-                ),
-                SizedBox(height: 25.0),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Text(productName,
-                  style: TextStyle(
-                    fontFamily: 'Raleway',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17.0
-                  ),
-                  ),
-                ),
-                SizedBox(height: 5.0),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Text(productType,
-                  style: TextStyle(
-                    fontFamily: 'Raleway',
-                    fontSize: 14.0,
-                    color: Colors.grey
-                  ),
-                  ),
-                ),
-                SizedBox(height: 15.0),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Container(
-                    height: 0.4,
-                    color: Colors.grey.withOpacity(0.4),
-                  )
-                ),
-                SizedBox(height: 15.0),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                         price + 'Punkte',
-                        style: TextStyle(
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 19.0
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          height: 40.0,
-                          width: 40.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            color: Colors.grey.withOpacity(0.2)
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.grey
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        )
-      ),
-    );
-  }
-
-  _buildItem(String productName, int count) {
-    return Padding(
+              
+             Padding(
       padding: EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10.0, left: 4.0),
+      
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
         curve: Curves.easeIn,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            color: switchHighlight(productName),
+            color: Color(0xff191970),
             boxShadow: [
               BoxShadow(
                   blurRadius: 4.0,
                   spreadRadius: 2.0,
-                  color: switchShadow(productName))
+                  color: Color(0xff191970),)
             ]),
         height: 50.0,
         width: 125.0,
         child: InkWell(
           onTap: () {
-            selectedProduct(productName);
+
+            
+            setState(() {
+            shopitemList.sort((a, b) => a.name.toString().compareTo(b.name.toString()));
+            });
+
+
+            
+           
+          
+            
+          
+            
+            
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 10.0),
-              Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.bold,
-                      color: switchHighlightColor(productName)),
-                ),
-              ),
-              SizedBox(height: 7.0),
+              
+              
+              
+              SizedBox(height: 7.0, width: 7.0 ),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  productName,
-                  style: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontSize: 15.0,
-                      color: switchHighlightColor(productName)),
+
+                
+                child: 
+                Text(
+                  "Alphabetisch",
+                  style:Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,// TextStyle(
+                      //fontFamily: 'Raleway',
+                      //fontSize: 15.0,
+                     // color: switchHighlightColor(productName)),
                 ),
-              )
+                
+
+                
+
+                
+              ),  
+
+              
+
+                            
+              
             ],
           ),
         ),
       ),
+      
+    ),
+
+Padding(
+      padding: EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10.0, left: 4.0),
+      
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Color(0xff191970),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 4.0,
+                  spreadRadius: 2.0,
+                  color: Color(0xff191970),)
+            ]),
+        height: 50.0,
+        width: 125.0,
+        child: InkWell(
+          onTap: () {
+
+            
+            setState(() {
+            shopitemList.sort((b, a) => a.points.compareTo(b.points));
+            });
+
+
+            
+           
+          
+            
+          
+            
+            
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              
+              
+              
+              SizedBox(height: 7.0, width: 7.0 ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: 
+                Text(
+                  "Punkte absteigend",
+                  style:Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,// TextStyle(
+                      //fontFamily: 'Raleway',
+                      //fontSize: 15.0,
+                     // color: switchHighlightColor(productName)),
+                ),
+
+                
+
+                
+              ),  
+
+              
+
+                            
+              
+            ],
+          ),
+        ),
+      ),
+      
+    ),
+
+    Padding(
+      padding: EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10.0, left: 4.0),
+      
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Color(0xff191970),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 4.0,
+                  spreadRadius: 2.0,
+                  color: Color(0xff191970),)
+            ]),
+        height: 50.0,
+        width: 125.0,
+        child: InkWell(
+          onTap: () {
+
+            
+            setState(() {
+            shopitemList.sort((a, b) => a.points.compareTo(b.points));
+            });
+
+
+            
+           
+          
+            
+          
+            
+            
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              
+              
+              
+              SizedBox(height: 7.0, width: 7.0 ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: 
+                Text(
+                  "Punkte aufsteigend",
+                  style:Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,// TextStyle(
+                      //fontFamily: 'Raleway',
+                      //fontSize: 15.0,
+                     // color: switchHighlightColor(productName)),
+                ),
+
+                
+
+                
+              ),  
+
+              
+
+                            
+              
+            ],
+          ),
+        ),
+      ),
+      
+    ),
+
+
+     Padding(
+      padding: EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10.0, left: 4.0),
+      
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Color(0xff191970),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 4.0,
+                  spreadRadius: 2.0,
+                  color: Color(0xff191970),)
+            ]),
+        height: 50.0,
+        width: 125.0,
+        child: InkWell(
+          onTap: () {
+
+            
+            setState(() {
+            shopitemList.sort((a, b) => a.category.compareTo(b.category));
+            });
+
+
+            
+           
+          
+            
+          
+            
+            
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              
+              
+              
+              SizedBox(height: 7.0, width: 7.0 ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: 
+                Text(
+                  "Kategorie",
+                  style:Theme.of(context).textTheme.headline6,
+                  // TextStyle(
+                      //fontFamily: 'Raleway',
+                      //fontSize: 15.0,
+                     // color: switchHighlightColor(productName)),
+                ),
+
+                
+
+                
+              ),  
+
+              
+
+                            
+              
+            ],
+          ),
+        ),
+      ),
+      
+    ),
+    
+               
+                ],
+
+                
+            ),
+            ),
+          ),
+        ),
+
+        
+          
+          
+       
+Expanded(
+        child:
+
+
+        
+         ListView.builder(
+
+  
+
+        itemCount: shopitemList.length,
+
+        itemBuilder: (context, index) {
+
+          return 
+         
+          
+          GestureDetector(
+
+            onTap: () {
+
+              // This Will Call When User Click On ListView Item
+
+              showDialogFunc(context, shopitemList[index].img, shopitemList[index].name, shopitemList[index].info);
+
+            },
+
+            
+
+            // Card Which Holds Layout Of ListView Item
+
+            child: Card(
+
+              child: Row(
+
+                children: <Widget>[
+
+                  Container(
+
+                    width: 100,
+
+                    height: 100,
+
+                    child: Image.asset(shopitemList[index].img),
+
+                  ),
+
+                  Padding(
+
+                    padding: const EdgeInsets.all(10.0),
+
+                    child: Column(
+
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                      children: <Widget>[
+
+                        Text(
+
+                          shopitemList[index].name,
+
+                          style: TextStyle(
+
+                            fontSize: 25,
+
+                            color: Colors.grey,
+
+                            fontWeight: FontWeight.bold,
+
+                          ),
+
+                        ),
+
+                        SizedBox(
+
+                          height: 10,
+
+                        ),
+
+                        Container(
+
+                          width: width,
+
+                          child: Text(
+
+                            'Punkte ' + shopitemList[index].points.toString(),
+                            
+
+                            maxLines: 3,
+
+                            style: TextStyle(
+
+                                fontSize: 15, color: Colors.grey[500]),
+
+                          ),
+
+                          
+
+                        ),
+
+                        SizedBox(
+
+                          height: 10,
+
+                        ),
+
+                        Container(
+
+                          width: width,
+
+                          child: Text(
+
+                            'Kategorie: ' + shopitemList[index].category,
+                            
+
+                            maxLines: 3,
+
+                            style: TextStyle(
+
+                                fontSize: 15, color: Colors.grey[500]),
+
+                          ),
+
+                          
+
+                        ),
+
+                        SizedBox(
+
+                          height: 10,
+
+                        ),
+
+                        Container(
+
+                          width: width,
+
+                          child: Text(
+
+                            'Wert: ' + shopitemList[index].value.toString(),
+                            
+
+                            maxLines: 3,
+
+                            style: TextStyle(
+
+                                fontSize: 15, color: Colors.grey[500]),
+
+                          ),
+
+                          
+
+                        ),
+
+                      ],
+
+                    ),
+
+                  )
+
+                ],
+
+              ),
+
+            ),
+
+          );
+
+        },
+
+      ),
+
+),  
+    ],
+    ),
+
     );
+
   }
 
-  selectedProduct(prodName) {
-    setState(() {
-      selectedItem = prodName;
-   });
-  }
-
-  switchHighlight(prodName) {
-    if (prodName == selectedItem) {
-      return Color(0xFF0A79DF);
-    } else {
-      return Colors.grey.withOpacity(0.3);
-    }
-  }
-
-  switchHighlightColor(prodName) {
-    if (prodName == selectedItem) {
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
-  }
-
-  switchShadow(prodName) {
-    if (prodName == selectedItem) {
-      return Color(0xFF0A79DF).withOpacity(0.4);
-    } else {
-      return Colors.transparent;
-    }
-  }
 }
 
 
 
-        
+// This is a block of Model Dialog 
+
+showDialogFunc(context, img, title, desc) {
+
+  final laufundberg = Shopitem(1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info");
+final decathlon = Shopitem(2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info");
+final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info");
+
+  return showDialog(
+
+    context: context,
+
+    builder: (context) {
+
+      return Center(
+
+        child: Material(
+
+          type: MaterialType.transparency,
+
+          child: Container(
+            
+                     
+
+            
+                        
+                      
+
+            decoration: BoxDecoration(
+
+              borderRadius: BorderRadius.circular(10),
+
+              color: Colors.white,
+
+            ),
+
+            padding: EdgeInsets.all(15),
+
+            height: 450,
+
+            width: MediaQuery.of(context).size.width * 0.7,
+
+            child: Column(
+
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: <Widget>[
+
+                ClipRRect(
+
+                  borderRadius: BorderRadius.circular(5),
+
+                  child: Image.asset(
+
+                    img,
+
+                    width: 200,
+
+                    height: 200,
+
+                  ),
+
+                ),
+
+                SizedBox(
+
+                  height: 10,
+
+                ),
+
+                Text(
+
+                  title,
+
+                  style: TextStyle(
+
+                    fontSize: 25,
+
+                    color: Colors.grey,
+
+                    fontWeight: FontWeight.bold,
+
+                  ),
+
+                  
+
+                ),
+
+                
+
+               
+                SizedBox(
+
+                  height: 10,
+
+                ),
+
+                Container(
+
+                  // width: 200,
+
+                  child: Align(
+
+                    alignment: Alignment.center,
+
+                    child: Text(
+
+                      desc,
+
+                      maxLines: 3,
+
+                      style: TextStyle(fontSize: 15, color: Colors.grey[500]),
+
+                      textAlign: TextAlign.center,
+
+                    ),
+
+                  ),
+
+                ),
+
+                RaisedButton(
+          onPressed: () { 
+            Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Basket(
+           laufundberg: laufundberg,
+        )),
+     );
 
 
+                          
+                        
+                          },
+          color: Color(0xff191970),
+          child: Icon((Icons.add),
+            color: Colors.white,),
+          
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
+        ),
 
+                
+
+              ],
+
+            ),
+
+          ),
+
+        ),
+
+      );
+
+    },
+
+  );
 
 
   
 
+}
 
+showBasketDialogFunc(context, img, title, desc) {
+
+  List<Shopitem> shopitemList = [
+  Shopitem(
+    1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info"
+  ),
+  Shopitem(
+    2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info"
+  ),
+  Shopitem(
+    3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info"
+  ),
+];
+
+  final laufundberg = Shopitem(1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info");
+final decathlon = Shopitem(2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info");
+final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info");
+
+  return showDialog(
+
+    context: context,
+
+    builder: (context) {
+
+      return Center(
+
+        child: Material(
+
+          type: MaterialType.transparency,
+
+          child: Container(
+            
+                     
+
+            
+                        
+                      
+
+            decoration: BoxDecoration(
+
+              borderRadius: BorderRadius.circular(10),
+
+              color: Colors.white,
+
+            ),
+
+            padding: EdgeInsets.all(15),
+
+            height: 450,
+
+            width: MediaQuery.of(context).size.width * 0.7,
+
+            child: Column(
+
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: <Widget>[
+
+                ClipRRect(
+
+                  borderRadius: BorderRadius.circular(5),
+
+                  child: Image.asset(
+
+                    img,
+
+                    width: 200,
+
+                    height: 200,
+
+                  ),
+
+                ),
+
+                SizedBox(
+
+                  height: 10,
+
+                ),
+
+                Text(
+
+                  title,
+
+                  style: TextStyle(
+
+                    fontSize: 25,
+
+                    color: Colors.grey,
+
+                    fontWeight: FontWeight.bold,
+
+                  ),
+
+                  
+
+                ),
+
+                
+
+               
+                SizedBox(
+
+                  height: 10,
+
+                ),
+
+                Container(
+
+                  // width: 200,
+
+                  child: Align(
+
+                    alignment: Alignment.center,
+
+                    child: Text(
+
+                      desc,
+
+                      maxLines: 3,
+
+                      style: TextStyle(fontSize: 15, color: Colors.grey[500]),
+
+                      textAlign: TextAlign.center,
+
+                    ),
+
+                  ),
+
+                ),
+
+                RaisedButton(
+          onPressed: () { 
+            Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Basket(
+           laufundberg: laufundberg,
+        )),
+     );
+
+
+                          
+                        
+                          },
+          color: Color(0xff191970),
+          child: Icon((Icons.remove),
+            color: Colors.white,),
+          
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
+        ),
+
+                
+
+              ],
+
+            ),
+
+          ),
+
+        ),
+
+      );
+
+    },
+
+  );
 
 
   
+
+}
+
+

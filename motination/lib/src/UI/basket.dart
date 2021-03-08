@@ -1,4 +1,5 @@
 import 'shop.dart';
+import 'package:motination/src/UI/shopitem.dart';
 import 'package:motination/src/UI/challenge.dart';
 import 'package:motination/src/UI/profile.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,23 @@ import 'package:motination/src/UI/homescreen.dart';
 
 class Basket extends StatefulWidget {
 
+
+
+final Shopitem laufundberg;
+  Basket({this.laufundberg});
+
+
+
+ 
+
+
+
+
+  //Basket({Key key, @required this.basketlist}) : super(key: key);
+
   @override
+
+
 
   createState() {
 
@@ -23,273 +40,54 @@ class Basket extends StatefulWidget {
 
 class BasketState extends State<Basket> {
 
-  int _currentIndex = 3;
+  
 
-    final barColor = const Color(0xFF0A79DF);
+int points = 1000;
+ int _currentIndex = 3;
+
+ 
+  final wrktColor = const Color(0xFF28CCD3);
+  final blackColor = const Color(0xBF000000);
+
+  final barColor = const Color(0xff191970); //final blue
 
   final bgColor = const Color(0xFFFEFDFD);
 
-  List picked = [false, false];
+  
 
+  
 
-
-  int totalAmount = 0;
-
-
-
-  pickToggle(index) {
-
-    setState(() {
-
-      picked[index] = !picked[index];
-
-      getTotalAmount();
-
-    });
-
-  }
-
-
-
-  getTotalAmount() {
-
-    var count = 0;
-
-    for (int i = 0; i < picked.length; i++) {
-
-      if (picked[i]) {
-
-        count = count + 1;
-
-      }
-
-      if (i == picked.length - 1) {
-
-        setState(() {
-
-          totalAmount = 248 * count;
-
-        });
-
-      }
-
-    }
-
-  }
 
 
 
   @override
 
+  
+
   Widget build(BuildContext context) {
 
-    var raisedButton = RaisedButton(
+    // MediaQuery to get Device Width
 
-                              onPressed: () {},
 
-                              elevation: 0.5,
+    
 
-                              color: Colors.blue,
+    double width = MediaQuery.of(context).size.width * 0.6;
 
-                              child: Center(
+     return Scaffold(
 
-                                child: Text(
+      //backgroundColor: bgColor,
 
-                                  'Jetzt Punkte einlösen',
+     appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Einkaufswagen' , style:  Theme.of(context).textTheme.headline1,),
+            backgroundColor: bgColor,
 
-                                ),
+            
 
-                              ),
+            
+          ),
 
-                              textColor: Colors.white,
-                              
-
-                            );
-    return Scaffold(
-
-      body: ListView(shrinkWrap: true, children: <Widget>[
-
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-
-          Stack(children: [
-
-            Stack(children: <Widget>[
-
-              Container(
-
-                height: MediaQuery.of(context).size.height,
-
-                width: double.infinity,
-
-              ),
-
-              Container(
-
-                height: 250.0,
-
-                width: double.infinity,
-
-                color: Color(0xFF0A79DF),
-
-              ),
-
-              Positioned(
-
-                bottom: 450.0,
-
-                right: 100.0,
-
-                child: Container(
-
-                  height: 400.0,
-
-                  width: 400.0,
-
-                  decoration: BoxDecoration(
-
-                    borderRadius: BorderRadius.circular(200.0),
-
-                    color: Color(0xFF0A79DF),
-
-                  ),
-
-                ),
-
-              ),
-
-              Positioned(
-
-                bottom: 500.0,
-
-                left: 150.0,
-
-                child: Container(
-
-                    height: 300.0,
-
-                    width: 300.0,
-
-                    decoration: BoxDecoration(
-
-                        borderRadius: BorderRadius.circular(150.0),
-
-                        color: Color(0xFF28CCD3))),
-
-                        
-
-              ),
-
-              Padding(
-
-                padding: EdgeInsets.only(top: 15.0),
-
-                
-
-              ),
-
-              Positioned(
-
-                  top: 75.0,
-
-                  right: 15.0,
-
-                  child: Text(
-
-                    'Shopping Cart',
-
-                    style: TextStyle(
-
-                        fontFamily: 'Montserrat',
-
-                        fontSize: 30.0,
-
-                        color: bgColor,
-
-                        fontWeight: FontWeight.bold),
-
-                  )),
-
-              Positioned(
-
-                top: 150.0,
-
-                child: Column(
-
-                  children: <Widget>[
-
-                    itemCard('Boulderwelt Regensburg', '10',
-
-                        'assets/boulderwelt.jpg'),
-
-                    itemCard('Boulderwelt Regensburg', '10',
-
-                        'assets/boulderwelt.jpg'),
-
-                    itemCard('Decathlon', '10',
-
-                        'assets/decathlon.jpg')
-
-                  ],
-
-                ),
-
-              ),
-
-              Padding(
-
-                  padding: EdgeInsets.only(top: 600.0, bottom: 15.0),
-
-                  child: Container(
-
-                      height: 50.0,
-
-                      width: double.infinity,
-
-                      color: Colors.white,
-
-                      
-
-                      child: Row(
-
-                        mainAxisAlignment: MainAxisAlignment.end,
-
-                        children: <Widget>[
-
-                          Text('Total: ' + totalAmount.toString() + ' Punkte',
-                          
-                          style: TextStyle(
-
-                                    fontFamily: 'Montserrat',
-
-                                    fontWeight: FontWeight.bold,
-
-                                    fontSize: 15.0),),
-
-
-
-                          SizedBox(width: 10.0),
-
-                          Padding(
-
-                            padding: const EdgeInsets.all(8.0),
-
-                            child: raisedButton,
-
-                          )
-
-                        ],
-
-                      )))
-
-            ])
-
-          ])
-
-        ])
-
-      ]),
-
-     bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             type: BottomNavigationBarType.fixed,
             backgroundColor: bgColor,
@@ -338,172 +136,205 @@ class BasketState extends State<Basket> {
             },
           ),
 
-    );
 
-  }
+      // Main List View With Builder
+  body:
 
+  
+     
+        
+          ListView.builder(
 
+  
 
-  Widget itemCard(itemName, price, imgPath) {
+        itemCount: 1,
 
-    return InkWell(
+        itemBuilder: (context, index) {
 
-      onTap: () {
+          return 
+         
+          
+          GestureDetector(
 
-       
+            onTap: () {
 
-      },
+              // This Will Call When User Click On ListView Item
 
-      child: Padding(
+              showBasketDialogFunc(context, widget.laufundberg.img, widget.laufundberg.name, widget.laufundberg.info);
 
-          padding: EdgeInsets.all(10.0),
+            },
 
-          child: Material(
+            
 
-              borderRadius: BorderRadius.circular(10.0),
+            // Card Which Holds Layout Of ListView Item
 
-              elevation: 3.0,
+            child: Card(
 
-              child: Container(
+              child: Row(
 
-                  padding: EdgeInsets.only(left: 15.0, right: 10.0),
+                children: <Widget>[
 
-                  width: MediaQuery.of(context).size.width - 20.0,
+                  Container(
 
-                  height: 150.0,
+                    width: 100,
 
-                  decoration: BoxDecoration(
+                    height: 100,
 
-                      color: Colors.white,
+                    child: Image.asset(widget.laufundberg.img),
 
-                      borderRadius: BorderRadius.circular(10.0)),
+                  ),
 
-                  child: Row(
+                  Padding(
 
-                    children: <Widget>[
+                    padding: const EdgeInsets.all(10.0),
 
-                      Column(
+                    child: Column(
 
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
-                        children: <Widget>[
+                      children: <Widget>[
 
-                          Container(
+                        Text(
 
-                              height: 25.0,
+                          widget.laufundberg.name,
 
-                              width: 25.0,
+                          style: TextStyle(
 
-                             
+                            fontSize: 25,
 
-                              child: Center(
+                            color: Colors.grey,
 
-                                  
-                                      ))
-
-                        ],
-
-                      ),
-
-                      SizedBox(width: 10.0),
-
-                      Container(
-
-                        height: 150.0,
-
-                        width: 125.0,
-
-                        decoration: BoxDecoration(
-
-                            image: DecorationImage(
-
-                                image: AssetImage(imgPath),
-
-                                fit: BoxFit.contain)),
-
-                      ),
-
-                      SizedBox(width: 4.0),
-
-                      Column(
-
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                        children: <Widget>[
-
-                          Row(
-
-                            children: <Widget>[
-
-                              Text(
-
-                                itemName,
-
-                                style: TextStyle(
-
-                                    fontFamily: 'Montserrat',
-
-                                    fontWeight: FontWeight.bold,
-
-                                    fontSize: 15.0),
-
-                              ),
-
-                              SizedBox(width: 7.0),
-
-                              
-
-                                     
-
-                                  
-
-                            ],
+                            fontWeight: FontWeight.bold,
 
                           ),
 
-                          SizedBox(height: 7.0),
+                        ),
 
-                         
+                        SizedBox(
 
-                              
+                          height: 10,
 
-                                 
+                        ),
 
-                                
+                        Container(
 
-                          SizedBox(height: 7.0),
+                          width: width,
+
+                          child: Text(
+
+                            'Punkte ' + widget.laufundberg.points.toString(),
+                            
+
+                            maxLines: 3,
+
+                            style: TextStyle(
+
+                                fontSize: 15, color: Colors.grey[500]),
+
+                          ),
 
                           
 
-                               Text(
+                        ),
 
-                                  price + ' Punkte',
+                        SizedBox(
 
-                                  style: TextStyle(
+                          height: 10,
 
-                                      fontFamily: 'Montserrat',
+                        ),
 
-                                      fontWeight: FontWeight.bold,
+                        Container(
 
-                                      fontSize: 20.0,
+                          width: width,
 
-                                      color: Color(0xFF0A79DF)),
+                          child: Text(
 
-                                )
+                            'Kategorie: ' + widget.laufundberg.category,
+                            
 
-                              
+                            maxLines: 3,
 
-                        ],
+                            style: TextStyle(
 
-                      )
+                                fontSize: 15, color: Colors.grey[500]),
 
-                    ],
+                          ),
 
-                  )))),
+                          
 
-    );
+                        ),
+
+                        SizedBox(
+
+                          height: 10,
+
+                        ),
+
+                        Container(
+
+                          width: width,
+
+                          child: Text(
+
+                            'Wert: ' + widget.laufundberg.value.toString(),
+                            
+
+                            maxLines: 3,
+
+                            style: TextStyle(
+
+                                fontSize: 15, color: Colors.grey[500]),
+
+                          ),
+
+                          
+
+                        ),
+
+                      ],
+
+                    ),
+
+                  )
+
+                ],
+
+              ),
+
+            ),
+
+          );
+
+        },
+
+      ),
+
+      
+        
+        
+     );  
+   
+      
+/*RawMaterialButton(
+        fillColor:  Color(0xff191970),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            side: BorderSide(color: Color(0xff191970))),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Shoping()),
+          );
+        },
+        child: Text("     Punkte einlösen!     ",
+            style: Theme.of(context).textTheme.headline2)),
+     
+   ); */
+
+     
+
+     
+
   }
 
 }
