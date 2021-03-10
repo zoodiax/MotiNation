@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:motination/src/UI/basket.dart';
-import 'package:motination/src/UI/points.dart';
+import 'package:motination/src/UI/OldButGold/points.dart';
 import 'package:motination/src/UI/profile.dart';
-import 'package:motination/src/UI/challenge.dart';
+import 'package:motination/src/UI/OldButGold/challenge.dart';
 import 'package:provider/provider.dart';
 import 'package:motination/src/UI/homescreen.dart';
 import 'package:motination/src/UI/shopitem.dart';
 import 'package:motination/models/user.dart';
-
+import 'package:motination/widgets/bottomBar.dart';
 
 
 
@@ -62,9 +62,10 @@ int points = 1000;
   ),
 ];
 
-final laufundberg = Shopitem(1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info");
-final decathlon = Shopitem(2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info");
-final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info");
+List<Shopitem> basketList = [];
+    
+
+      
 
 
 
@@ -74,6 +75,7 @@ final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahres
   @override
 
   Widget build(BuildContext context) {
+
 
     // MediaQuery to get Device Width
 
@@ -141,9 +143,7 @@ final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahres
             onPressed: () { Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Basket(
-        laufundberg: laufundberg,
-        )),
+        builder: (context) => Basket(basketList: basketList, )),
      );
 },
 
@@ -162,7 +162,7 @@ final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahres
         Padding(
           padding: EdgeInsets.all(15.0),
           child: Text(
-            'Belohne dich mit tollen Preisen! ',
+            'Belohne dich mit coolen Prämien!',
           
                 style: Theme.of(context).textTheme.headline1,
           ),
@@ -642,6 +642,30 @@ Expanded(
 
                         ),
 
+
+                           RaisedButton(
+          onPressed: () async { 
+
+           basketList.add( shopitemList[index]);
+            setState(() {
+             Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Basket(basketList: basketList,)),
+     );
+
+
+    });                          
+                        
+                          },
+          color: Color(0xff191970),
+          child: Icon((Icons.add),
+            color: Colors.white,),
+          
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
+        ),
+
                       ],
 
                     ),
@@ -676,169 +700,7 @@ Expanded(
 
 showDialogFunc(context, img, title, desc) {
 
-  final laufundberg = Shopitem(1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info");
-final decathlon = Shopitem(2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info");
-final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info");
-
-  return showDialog(
-
-    context: context,
-
-    builder: (context) {
-
-      return Center(
-
-        child: Material(
-
-          type: MaterialType.transparency,
-
-          child: Container(
-            
-                     
-
-            
-                        
-                      
-
-            decoration: BoxDecoration(
-
-              borderRadius: BorderRadius.circular(10),
-
-              color: Colors.white,
-
-            ),
-
-            padding: EdgeInsets.all(15),
-
-            height: 450,
-
-            width: MediaQuery.of(context).size.width * 0.7,
-
-            child: Column(
-
-              crossAxisAlignment: CrossAxisAlignment.center,
-
-              children: <Widget>[
-
-                ClipRRect(
-
-                  borderRadius: BorderRadius.circular(5),
-
-                  child: Image.asset(
-
-                    img,
-
-                    width: 200,
-
-                    height: 200,
-
-                  ),
-
-                ),
-
-                SizedBox(
-
-                  height: 10,
-
-                ),
-
-                Text(
-
-                  title,
-
-                  style: TextStyle(
-
-                    fontSize: 25,
-
-                    color: Colors.grey,
-
-                    fontWeight: FontWeight.bold,
-
-                  ),
-
-                  
-
-                ),
-
-                
-
-               
-                SizedBox(
-
-                  height: 10,
-
-                ),
-
-                Container(
-
-                  // width: 200,
-
-                  child: Align(
-
-                    alignment: Alignment.center,
-
-                    child: Text(
-
-                      desc,
-
-                      maxLines: 3,
-
-                      style: TextStyle(fontSize: 15, color: Colors.grey[500]),
-
-                      textAlign: TextAlign.center,
-
-                    ),
-
-                  ),
-
-                ),
-
-                RaisedButton(
-          onPressed: () { 
-            Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Basket(
-           laufundberg: laufundberg,
-        )),
-     );
-
-
-                          
-                        
-                          },
-          color: Color(0xff191970),
-          child: Icon((Icons.add),
-            color: Colors.white,),
-          
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(300)),
-        ),
-
-                
-
-              ],
-
-            ),
-
-          ),
-
-        ),
-
-      );
-
-    },
-
-  );
-
-
-  
-
-}
-
-showBasketDialogFunc(context, img, title, desc) {
-
-  List<Shopitem> shopitemList = [
+List<Shopitem> shopitemList = [
   Shopitem(
     1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info"
   ),
@@ -850,10 +712,6 @@ showBasketDialogFunc(context, img, title, desc) {
   ),
 ];
 
-  final laufundberg = Shopitem(1, "lauf und Berg König", "Voucher", 100, "10 €", "assets/laufundberg.jpg", "info");
-final decathlon = Shopitem(2, "decathlon", "Voucher", 200, "20 €", "assets/decathlon.jpg", "info");
-final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahreskarte", "assets/boulderwelt.jpg", "info");
-
   return showDialog(
 
     context: context,
@@ -967,27 +825,7 @@ final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahres
 
                 ),
 
-                RaisedButton(
-          onPressed: () { 
-            Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Basket(
-           laufundberg: laufundberg,
-        )),
-     );
-
-
-                          
-                        
-                          },
-          color: Color(0xff191970),
-          child: Icon((Icons.remove),
-            color: Colors.white,),
-          
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(300)),
-        ),
+             
 
                 
 
@@ -1009,5 +847,7 @@ final boulderwelt = Shopitem(3, "boulderwelt", "Discount", 500, "10 % auf Jahres
   
 
 }
+
+
 
 
