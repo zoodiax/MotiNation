@@ -27,6 +27,7 @@ class SaveRun extends StatefulWidget {
   final int points;
   final String tempo;
   final double maxspeed;
+  
 
   SaveRun(
       {Key key,
@@ -39,7 +40,8 @@ class SaveRun extends StatefulWidget {
       this.sport,
       this.points,
       this.tempo,
-      this.maxspeed})
+      this.maxspeed,
+      })
       : super(key: key);
   @override
   _SaveRunState createState() => new _SaveRunState();
@@ -156,6 +158,7 @@ class _SaveRunState extends State<SaveRun> {
 
   void sumUpdate(int dis, int time) {}
 
+
   // Höhenmeter berechen; Übergabe: List<double> list, setState double altitude
   void calcAlt(List<double> alt) {
     double altref = alt[0];
@@ -178,6 +181,7 @@ class _SaveRunState extends State<SaveRun> {
     });
   }
 
+ 
   // void getDatafromSnapshot(DocumentSnapshot snapshot) {
   //   Map<String, dynamic> data = snapshot.data;
 
@@ -263,7 +267,7 @@ class _SaveRunState extends State<SaveRun> {
   //     backgroundColor: blue,
   //   );
   // }
-Widget _saveRun(User user){
+Widget _saveRun(User user, BuildContext context){
   return RawMaterialButton(
         constraints: BoxConstraints(minHeight: 60),
         fillColor: blue,
@@ -274,6 +278,7 @@ Widget _saveRun(User user){
              // DocumentSnapshot doc =
         //     await DatabaseService(uid: user.uid).getData(user);
         // getDatafromSnapshot(doc);
+        
         await getData(user);
 
         changeSumData(widget.dis);
@@ -311,6 +316,8 @@ Widget _saveRun(User user){
     getDate();
     getSport();
     calcAlt(widget.altitude);
+    //checkLimit(context);
+   
     //calcAlt(testAlt);
 
     return new Scaffold(
@@ -392,7 +399,6 @@ Widget _saveRun(User user){
                                 widget.kcal.toString(),
                                 'Kalorien',
                                 context),
-
                             gridItem(
                                 MaterialIcons.stars,
                                 Colors.teal,
@@ -420,8 +426,11 @@ Widget _saveRun(User user){
           ),
         ),
       ),
-      floatingActionButton: _saveRun(user),//saveRun(user,
+      floatingActionButton: _saveRun(user,context),//saveRun(user,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
+
+
+

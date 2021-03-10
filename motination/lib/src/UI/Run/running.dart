@@ -14,6 +14,8 @@ import 'package:motination/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motination/src/authentication/signIn.dart';
 
+import 'saveRun.dart';
+
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
   Function: startTimer, keeprunning, startstopwatch, stopstopwatch, distanceBetween, onMapCreated
@@ -43,6 +45,7 @@ class RunningState extends State<Running> {
   int sec = 0;
   int weight = 70;
   int time = 0;
+  bool inPacelimit = true;
   final Duration dur = const Duration(seconds: 1);
   final lib2.Distance distance = new lib2.Distance();
   double distancemeter = 0;
@@ -62,6 +65,7 @@ class RunningState extends State<Running> {
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
   List<double> altitude2 = List();
+
  
   LocationData currentLocation;
   double _loc = 1;
@@ -145,7 +149,8 @@ class RunningState extends State<Running> {
   }
 
   int addPoints(int distancelocal) {
-    int pointlocal = distancelocal ~/ 1000;
+   
+    int pointlocal = distancelocal ~/ 100;
     return pointlocal;
   }
 
@@ -154,11 +159,27 @@ void ms2kmh(double speedMeter){
     maxSpeed = speedMeter * 3.6;
   });
 }
-  void endrun() {
-    points = addPoints(dis);
+
+//Algorithmus gegen Schummeln: Max. Geschwindigkeit, darf nicht größer als speed[km/h] sein (aktuell Usain Bolt max Pace))
+void checkPace(double speed){
+  print('Max. Geschwindigkeit: $maxSpeed');
+  if(speed>38){
+    setState(() {
+    inPacelimit = false;
+  });
+  }
+}
+
+  void endrun(BuildContext context, bool inPacelimit) {
+    if (inPacelimit == true) {
+      points = addPoints(dis);}
     latlnglines = [];
     ms2kmh(maxSpeed);
-    Navigator.push(
+   
+    if(dis != 0){
+      
+      
+      Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SaveRun(
@@ -171,8 +192,17 @@ void ms2kmh(double speedMeter){
                 points: points,
                 tempo: tempodisplay,
                 maxspeed: maxSpeed,
+                 
               )),
+    
     );
+    }
+    else 
+    {
+      showNoMovement(context);
+     
+    }
+    
   }
 
   double distanceBetween(lib2.LatLng start, lib2.LatLng end) {
@@ -203,8 +233,45 @@ void ms2kmh(double speedMeter){
       //     CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
     });
   }
+  Future<void> toFast() async {
+          return showDialog<void>(
+            context: context,
+            barrierDismissible: false, // user must tap button!
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Zu schnell unterwegs'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      
+                      Text('Mit deinem Tempo warst du schneller unterwegs als der Weltmeister im 100-Meter-Sprint Usain Bolt - wir gehen davon aus, dass du geschummelt hast; daher werden deine erreichten Punkte nicht gewertet.'),
 
-  Widget _getFAB() {
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('OK'),
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                      setState(() {
+                        points = 0;
+                      });
+                      endrun(context, false);
+
+
+                      
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        
+
+  Widget _getFAB(BuildContext context) {
     if (showRun == false) {
       return Row(
         children: [
@@ -221,7 +288,16 @@ void ms2kmh(double speedMeter){
             shape: CircleBorder(),
           ),
           RawMaterialButton(
-            onPressed: endrun,
+            onPressed: ()async{
+              
+              checkPace(maxSpeed*3.6);
+
+              if(inPacelimit){endrun(context, true);}
+              else{
+                await toFast();
+              }
+              
+              },
             elevation: 2.0,
             fillColor: blue,
             child: Icon(
@@ -478,7 +554,7 @@ void ms2kmh(double speedMeter){
               Stack(children: <Widget>[
             Align(
               alignment: Alignment.bottomCenter,
-              child: _getFAB(),
+              child: _getFAB(context),
             ),
             Align(
               alignment: Alignment(-0.95, 1),
@@ -491,3 +567,35 @@ void ms2kmh(double speedMeter){
         ));
   }
 }
+
+showNoMovement(BuildContext context) {
+
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+       Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Running()),
+                );
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Keine Strecke gelaufen"),
+    content: Text("Du hast keinen Meter zurückgelegt. Lege eine Strecke zurück, bevor du deinen Lauf beendest."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
