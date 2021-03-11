@@ -15,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motination/src/authentication/signIn.dart';
 
 import 'saveRun.dart';
+import 'package:background_location/background_location.dart' as lib3;
 
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
@@ -64,11 +65,10 @@ class RunningState extends State<Running> {
   List<LatLng> latlnglines = List();
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
-  List<double> altitude2 = List();
 
  
   LocationData currentLocation;
-  double _loc = 1;
+  double _loc = 0;
   int sport = 1;
 
   int points = 0;
@@ -77,12 +77,20 @@ class RunningState extends State<Running> {
     Timer(dur, keeprunning);
   }
 
+  String lib3latitude = "waiting...";
+  String lib3longitude = "waiting...";
+  String lib3altitude = "waiting...";
+  String lib3accuracy = "waiting...";
+  String lib3bearing = "waiting...";
+  String lib3speed = "waiting...";
+  String lib3time = "waiting...";
+
+
+
   void keeprunning() {
+    print('Timer time: $sec');
     if (_stopwatch.isRunning) {
       startTimer();
-      latlngstart = latlnghlp;
-      distancemeter += distanceBetween(latlngstart, latlngend);
-      latlngend = latlngstart;
       latlnglines.add(linehlp);
       altitude.add(_loc);
       _location.onLocationChanged().listen((event) {
@@ -94,6 +102,8 @@ class RunningState extends State<Running> {
       });
       
       setState(() {
+        
+      
         timerdisplay = (_stopwatch.elapsed.inHours.toString().padLeft(2, '0')) +
             ':' +
             ((_stopwatch.elapsed.inMinutes % 60).toString().padLeft(2, '0')) +
@@ -122,25 +132,77 @@ class RunningState extends State<Running> {
           width: 4,
         ));
         latlnglines2.add(linehlp);
-        altitude2.add(_loc);
+        
       });
       
     } else
       stopstopwatch();
   }
 
-  void startstopwatch() {
+// Get first locaiton for correct distance calculation
+Future <void> firstlocation() async{
+    var loc = await _location.getLocation();
+    setState(() {
+      latlngend = lib2.LatLng(loc.latitude, loc.longitude);
+    });
+
+}
+
+
+  void startstopwatch() async {
+      
+      await firstlocation();
+      
+
+      
+     
+       await lib3.BackgroundLocation.setAndroidNotification(
+            
+                        title: "Background service is running",
+                        message: "Background location in progress",
+                        icon: "@mipmap/ic_launcher",
+                    ); 
+
+   
+            
+            await lib3.BackgroundLocation.startLocationService(distanceFilter: 0);
+                    lib3.BackgroundLocation.getLocationUpdates((location) {
+
+                      
+                      setState(() {
+                        
+                        this.lib3latitude = location.latitude.toString();
+                        this.lib3longitude = location.longitude.toString();
+                        this.lib3accuracy = location.accuracy.toString();
+                        this.lib3altitude = location.altitude.toString();
+                        this.lib3bearing = location.bearing.toString();
+                        this.lib3speed = location.speed.toString();
+                        this.lib3time = DateTime.fromMillisecondsSinceEpoch(
+                                location.time.toInt())
+                            .toString();
+                     
+                      _loc = double.parse(lib3altitude);
+                      linehlp = LatLng(double.parse(lib3latitude), double.parse(lib3longitude));
+                     
+                      latlngstart = lib2.LatLng(double.parse(lib3latitude), double.parse(lib3longitude));
+                      
+                      distancemeter += distance(latlngstart, latlngend);
+                      
+                      latlngend = latlngstart;
+      
+                      });
+                     
+                    });
     setState(() {
       timerisrunning = true;
       showRun = true;
     });
-    latlngstart = latlnghlp;
-    latlngend = latlnghlp;
     _stopwatch.start();
     startTimer();
   }
 
   void stopstopwatch() {
+    lib3.BackgroundLocation.stopLocationService();
     setState(() {
       timerisrunning = false;
       showRun = false;
@@ -154,6 +216,7 @@ class RunningState extends State<Running> {
     return pointlocal;
   }
 
+// Calculator: Meter/second to km/h
 void ms2kmh(double speedMeter){
   setState(() {
     maxSpeed = speedMeter * 3.6;
@@ -171,6 +234,7 @@ void checkPace(double speed){
 }
 
   void endrun(BuildContext context, bool inPacelimit) {
+
     if (inPacelimit == true) {
       points = addPoints(dis);}
     latlnglines = [];
@@ -218,21 +282,11 @@ void checkPace(double speed){
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
 
-      _loc = l.altitude;
-      double hlplat = l.latitude;
-      double hlplng = l.longitude;
-      latlnghlp = lib2.LatLng(hlplat, hlplng);
-      linehlp = LatLng(hlplat, hlplng);
-      // setState(() {
-      //   currentLocation = l;
-       
-      // });
-      // print('Speed:' + currentLocation.speed.toString());
-
-      // _controller.animateCamera(CameraUpdate.newCameraPosition(
-      //     CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
-    });
+      
+     });
   }
+
+  //AlertDialog, if User is to Fast
   Future<void> toFast() async {
           return showDialog<void>(
             context: context,
@@ -270,13 +324,18 @@ void checkPace(double speed){
         }
 
         
-
+// Start/Stop Buttons: startsopwatch(), checkPace(), endrun(), toFast(), stopstopwatch()
   Widget _getFAB(BuildContext context) {
     if (showRun == false) {
       return Row(
         children: [
           RawMaterialButton(
-            onPressed: startstopwatch,
+            onPressed: () {
+            
+                    startstopwatch();
+              
+            },
+
             elevation: 2.0,
             fillColor: blue,
             child: Icon(
@@ -291,7 +350,7 @@ void checkPace(double speed){
             onPressed: ()async{
               
               checkPace(maxSpeed*3.6);
-
+              
               if(inPacelimit){endrun(context, true);}
               else{
                 await toFast();
@@ -593,6 +652,7 @@ showNoMovement(BuildContext context) {
   // show the dialog
   showDialog(
     context: context,
+    barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return alert;
     },

@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^1.1.1
   flutter_icons: ^1.1.0
   numberpicker: ^1.3.0
+  background_location: ^0.4.1
 
   
 
