@@ -62,6 +62,7 @@ class RunStatsDetails extends StatelessWidget {
     return km.toStringAsFixed(2);
   }
 
+
  buildPolyline(List<LatLng> list) {
    Set<Polyline> _polyline = {};
    
@@ -273,7 +274,7 @@ class RunStatsDetails extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          document['maxspeed'].toString(),
+                          document['maxspeed'].toStringAsFixed(2),
                           style: TextStyle(
                               fontSize: 20),
                         ),
