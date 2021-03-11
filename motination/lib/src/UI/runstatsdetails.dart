@@ -272,7 +272,7 @@ class RunStatsDetails extends StatelessWidget {
                           color: Colors.green[600],
                           size: 70,
                         ),
-                        Spacer(),
+                        Spacer(), 
                         Text(
                           document['maxspeed'].toStringAsFixed(2),
                           style: TextStyle(
