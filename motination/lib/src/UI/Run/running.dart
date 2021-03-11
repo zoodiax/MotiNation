@@ -14,6 +14,9 @@ import 'package:motination/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motination/src/authentication/signIn.dart';
 
+import 'saveRun.dart';
+import 'package:background_location/background_location.dart' as lib3;
+
 /* Running Class UI Design
   Content: Start/ Stop Button, Center Position Button, Bottom Navigation Bar, Stopwatch, Distance, Speed, Time, Google Maps
   Function: startTimer, keeprunning, startstopwatch, stopstopwatch, distanceBetween, onMapCreated
@@ -43,6 +46,7 @@ class RunningState extends State<Running> {
   int sec = 0;
   int weight = 70;
   int time = 0;
+  bool inPacelimit = true;
   final Duration dur = const Duration(seconds: 1);
   final lib2.Distance distance = new lib2.Distance();
   double distancemeter = 0;
@@ -61,10 +65,10 @@ class RunningState extends State<Running> {
   List<LatLng> latlnglines = List();
   List<LatLng> latlnglines2 = List();
   List<double> altitude = List();
-  List<double> altitude2 = List();
+
  
   LocationData currentLocation;
-  double _loc = 1;
+  double _loc = 0;
   int sport = 1;
 
   int points = 0;
@@ -73,12 +77,20 @@ class RunningState extends State<Running> {
     Timer(dur, keeprunning);
   }
 
+  String lib3latitude = "waiting...";
+  String lib3longitude = "waiting...";
+  String lib3altitude = "waiting...";
+  String lib3accuracy = "waiting...";
+  String lib3bearing = "waiting...";
+  String lib3speed = "waiting...";
+  String lib3time = "waiting...";
+
+
+
   void keeprunning() {
+    print('Timer time: $sec');
     if (_stopwatch.isRunning) {
       startTimer();
-      latlngstart = latlnghlp;
-      distancemeter += distanceBetween(latlngstart, latlngend);
-      latlngend = latlngstart;
       latlnglines.add(linehlp);
       altitude.add(_loc);
       _location.onLocationChanged().listen((event) {
@@ -90,6 +102,8 @@ class RunningState extends State<Running> {
       });
       
       setState(() {
+        
+      
         timerdisplay = (_stopwatch.elapsed.inHours.toString().padLeft(2, '0')) +
             ':' +
             ((_stopwatch.elapsed.inMinutes % 60).toString().padLeft(2, '0')) +
@@ -118,25 +132,77 @@ class RunningState extends State<Running> {
           width: 4,
         ));
         latlnglines2.add(linehlp);
-        altitude2.add(_loc);
+        
       });
       
     } else
       stopstopwatch();
   }
 
-  void startstopwatch() {
+// Get first locaiton for correct distance calculation
+Future <void> firstlocation() async{
+    var loc = await _location.getLocation();
+    setState(() {
+      latlngend = lib2.LatLng(loc.latitude, loc.longitude);
+    });
+
+}
+
+
+  void startstopwatch() async {
+      
+      await firstlocation();
+      
+
+      
+     
+       await lib3.BackgroundLocation.setAndroidNotification(
+            
+                        title: "Background service is running",
+                        message: "Background location in progress",
+                        icon: "@mipmap/ic_launcher",
+                    ); 
+
+   
+            
+            await lib3.BackgroundLocation.startLocationService(distanceFilter: 0);
+                    lib3.BackgroundLocation.getLocationUpdates((location) {
+
+                      
+                      setState(() {
+                        
+                        this.lib3latitude = location.latitude.toString();
+                        this.lib3longitude = location.longitude.toString();
+                        this.lib3accuracy = location.accuracy.toString();
+                        this.lib3altitude = location.altitude.toString();
+                        this.lib3bearing = location.bearing.toString();
+                        this.lib3speed = location.speed.toString();
+                        this.lib3time = DateTime.fromMillisecondsSinceEpoch(
+                                location.time.toInt())
+                            .toString();
+                     
+                      _loc = double.parse(lib3altitude);
+                      linehlp = LatLng(double.parse(lib3latitude), double.parse(lib3longitude));
+                     
+                      latlngstart = lib2.LatLng(double.parse(lib3latitude), double.parse(lib3longitude));
+                      
+                      distancemeter += distance(latlngstart, latlngend);
+                      
+                      latlngend = latlngstart;
+      
+                      });
+                     
+                    });
     setState(() {
       timerisrunning = true;
       showRun = true;
     });
-    latlngstart = latlnghlp;
-    latlngend = latlnghlp;
     _stopwatch.start();
     startTimer();
   }
 
   void stopstopwatch() {
+    lib3.BackgroundLocation.stopLocationService();
     setState(() {
       timerisrunning = false;
       showRun = false;
@@ -145,20 +211,39 @@ class RunningState extends State<Running> {
   }
 
   int addPoints(int distancelocal) {
-    int pointlocal = distancelocal ~/ 1000;
+   
+    int pointlocal = distancelocal ~/ 100;
     return pointlocal;
   }
 
+// Calculator: Meter/second to km/h
 void ms2kmh(double speedMeter){
   setState(() {
     maxSpeed = speedMeter * 3.6;
   });
 }
-  void endrun() {
-    points = addPoints(dis);
+
+//Algorithmus gegen Schummeln: Max. Geschwindigkeit, darf nicht größer als speed[km/h] sein (aktuell Usain Bolt max Pace))
+void checkPace(double speed){
+  print('Max. Geschwindigkeit: $maxSpeed');
+  if(speed>38){
+    setState(() {
+    inPacelimit = false;
+  });
+  }
+}
+
+  void endrun(BuildContext context, bool inPacelimit) {
+
+    if (inPacelimit == true) {
+      points = addPoints(dis);}
     latlnglines = [];
     ms2kmh(maxSpeed);
-    Navigator.push(
+   
+    if(dis != 0){
+      
+      
+      Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SaveRun(
@@ -171,8 +256,17 @@ void ms2kmh(double speedMeter){
                 points: points,
                 tempo: tempodisplay,
                 maxspeed: maxSpeed,
+                 
               )),
+    
     );
+    }
+    else 
+    {
+      showNoMovement(context);
+     
+    }
+    
   }
 
   double distanceBetween(lib2.LatLng start, lib2.LatLng end) {
@@ -188,28 +282,60 @@ void ms2kmh(double speedMeter){
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
 
-      _loc = l.altitude;
-      double hlplat = l.latitude;
-      double hlplng = l.longitude;
-      latlnghlp = lib2.LatLng(hlplat, hlplng);
-      linehlp = LatLng(hlplat, hlplng);
-      // setState(() {
-      //   currentLocation = l;
-       
-      // });
-      // print('Speed:' + currentLocation.speed.toString());
-
-      // _controller.animateCamera(CameraUpdate.newCameraPosition(
-      //     CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
-    });
+      
+     });
   }
 
-  Widget _getFAB() {
+  //AlertDialog, if User is to Fast
+  Future<void> toFast() async {
+          return showDialog<void>(
+            context: context,
+            barrierDismissible: false, // user must tap button!
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Zu schnell unterwegs'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      
+                      Text('Mit deinem Tempo warst du schneller unterwegs als der Weltmeister im 100-Meter-Sprint Usain Bolt - wir gehen davon aus, dass du geschummelt hast; daher werden deine erreichten Punkte nicht gewertet.'),
+
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('OK'),
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                      setState(() {
+                        points = 0;
+                      });
+                      endrun(context, false);
+
+
+                      
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        
+// Start/Stop Buttons: startsopwatch(), checkPace(), endrun(), toFast(), stopstopwatch()
+  Widget _getFAB(BuildContext context) {
     if (showRun == false) {
       return Row(
         children: [
           RawMaterialButton(
-            onPressed: startstopwatch,
+            onPressed: () {
+            
+                    startstopwatch();
+              
+            },
+
             elevation: 2.0,
             fillColor: blue,
             child: Icon(
@@ -221,7 +347,16 @@ void ms2kmh(double speedMeter){
             shape: CircleBorder(),
           ),
           RawMaterialButton(
-            onPressed: endrun,
+            onPressed: ()async{
+              
+              checkPace(maxSpeed*3.6);
+              
+              if(inPacelimit){endrun(context, true);}
+              else{
+                await toFast();
+              }
+              
+              },
             elevation: 2.0,
             fillColor: blue,
             child: Icon(
@@ -478,7 +613,7 @@ void ms2kmh(double speedMeter){
               Stack(children: <Widget>[
             Align(
               alignment: Alignment.bottomCenter,
-              child: _getFAB(),
+              child: _getFAB(context),
             ),
             Align(
               alignment: Alignment(-0.95, 1),
@@ -491,3 +626,36 @@ void ms2kmh(double speedMeter){
         ));
   }
 }
+
+showNoMovement(BuildContext context) {
+
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+       Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Running()),
+                );
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Keine Strecke gelaufen"),
+    content: Text("Du hast keinen Meter zurückgelegt. Lege eine Strecke zurück, bevor du deinen Lauf beendest."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
