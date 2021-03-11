@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'Workout/workout.dart';
 import 'shop.dart';
 import 'package:motination/src/UI/shopitem.dart';
@@ -15,9 +17,10 @@ class Basket extends StatefulWidget {
 
 
 
-final Shopitem laufundberg;
-  Basket({this.laufundberg});
+final List basketList;
+  Basket({this.basketList});
 
+  
 
 
  
@@ -40,6 +43,7 @@ final Shopitem laufundberg;
 }
 
 class BasketState extends State<Basket> {
+  
 
   
 
@@ -56,7 +60,7 @@ int points = 1000;
 
   
 
-  
+   
 
 
 
@@ -67,20 +71,23 @@ int points = 1000;
 
   Widget build(BuildContext context) {
 
-    // MediaQuery to get Device Width
 
-
-    
-
-    double width = MediaQuery.of(context).size.width * 0.6;
+       
+           
+     double width = MediaQuery.of(context).size.width * 0.6;
 
      return Scaffold(
 
       //backgroundColor: bgColor,
 
      appBar: AppBar(
+        leading: IconButton(
+    icon: Icon(Icons.arrow_back, color: Colors.black),
+    onPressed: () =>  Navigator.pop(
+                context, MaterialPageRoute(builder: (context) => Shoping())),
+  ),
             automaticallyImplyLeading: false,
-            title: Text('Einkaufswagen' , style:  Theme.of(context).textTheme.headline1,),
+            title: Text('Warenkorb' , style:  Theme.of(context).textTheme.headline1,),
             backgroundColor: bgColor,
 
             
@@ -88,67 +95,28 @@ int points = 1000;
             
           ),
 
-      bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: bgColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                label: 'Challenge',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket),
-                label: 'Shop',
-              ),
-            ],
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-                if (_currentIndex == 3)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Shoping()),
-                  );
-                if (_currentIndex == 2)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Challenge()),
-                  );
-                   if (_currentIndex == 1)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                if (_currentIndex == 0)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profile()),
-                  );
-              });
-            },
-          ),
+        
+
+      
 
 
       // Main List View With Builder
   body:
 
-  
-     
-        
-          ListView.builder(
+  new Stack(
+ 
+
+  //new Stack(
+
+    
+      children: <Widget>[ 
+
+    
+     ListView.builder(
 
   
 
-        itemCount: 1,
+        itemCount: widget.basketList.length,
 
         itemBuilder: (context, index) {
 
@@ -161,7 +129,7 @@ int points = 1000;
 
               // This Will Call When User Click On ListView Item
 
-              showBasketDialogFunc(context, widget.laufundberg.img, widget.laufundberg.name, widget.laufundberg.info);
+              showBasketDialogFunc(context, widget.basketList[index].img, widget.basketList[index].name, widget.basketList[index].info);
 
             },
 
@@ -181,7 +149,7 @@ int points = 1000;
 
                     height: 100,
 
-                    child: Image.asset(widget.laufundberg.img),
+                    child: Image.asset(widget.basketList[index].img),
 
                   ),
 
@@ -197,7 +165,7 @@ int points = 1000;
 
                         Text(
 
-                          widget.laufundberg.name,
+                          widget.basketList[index].name,
 
                           style: TextStyle(
 
@@ -223,7 +191,7 @@ int points = 1000;
 
                           child: Text(
 
-                            'Punkte ' + widget.laufundberg.points.toString(),
+                            'Punkte ' + widget.basketList[index].points.toString(),
                             
 
                             maxLines: 3,
@@ -250,7 +218,7 @@ int points = 1000;
 
                           child: Text(
 
-                            'Kategorie: ' + widget.laufundberg.category,
+                            'Kategorie: ' + widget.basketList[index].category,
                             
 
                             maxLines: 3,
@@ -277,7 +245,7 @@ int points = 1000;
 
                           child: Text(
 
-                            'Wert: ' + widget.laufundberg.value.toString(),
+                            'Wert: ' + widget.basketList[index].value.toString(),
                             
 
                             maxLines: 3,
@@ -291,6 +259,32 @@ int points = 1000;
                           
 
                         ),
+
+                        RaisedButton(
+          onPressed: ()  async { 
+
+           widget.basketList.remove( widget.basketList[index]);
+            setState(() {
+             Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Basket(basketList: widget.basketList,)),
+     );
+
+
+    });                          
+                        
+                          },
+                         
+                        
+                          
+          color: Color(0xff191970),
+          child: Icon((Icons.remove),
+            color: Colors.white,),
+          
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(300)),
+        ),
 
                       ],
 
@@ -310,32 +304,176 @@ int points = 1000;
 
       ),
 
-      
-        
-        
+
+
+Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+            width: double.infinity,
+            child: FlatButton(
+              child: Text('Jetzt Punkte einlösen', style: Theme.of(context).textTheme.bodyText2,),
+              shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            ),
+              onPressed: () => {},
+              color: Color(0xFFff9a00),
+              textColor: Colors.white,
+            ),
+          ),
+ ),
+                
+          
+
+      ],
+
+
+ ),
+  
+     
+
+     
      );  
    
-      
-/*RawMaterialButton(
-        fillColor:  Color(0xff191970),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-            side: BorderSide(color: Color(0xff191970))),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Shoping()),
-          );
-        },
-        child: Text("     Punkte einlösen!     ",
-            style: Theme.of(context).textTheme.headline2)),
-     
-   ); */
-
-     
-
-     
 
   }
 
 }
+
+showBasketDialogFunc(context, img, title, desc) {
+
+
+
+  return showDialog(
+
+    context: context,
+
+    builder: (context) {
+
+      return Center(
+
+        child: Material(
+
+          type: MaterialType.transparency,
+
+          child: Container(
+            
+                     
+
+            
+                        
+                      
+
+            decoration: BoxDecoration(
+
+              borderRadius: BorderRadius.circular(10),
+
+              color: Colors.white,
+
+            ),
+
+            padding: EdgeInsets.all(15),
+
+            height: 450,
+
+            width: MediaQuery.of(context).size.width * 0.7,
+
+            child: Column(
+
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: <Widget>[
+
+                ClipRRect(
+
+                  borderRadius: BorderRadius.circular(5),
+
+                  child: Image.asset(
+
+                    img,
+
+                    width: 200,
+
+                    height: 200,
+
+                  ),
+
+                ),
+
+                SizedBox(
+
+                  height: 10,
+
+                ),
+
+                Text(
+
+                  title,
+
+                  style: TextStyle(
+
+                    fontSize: 25,
+
+                    color: Colors.grey,
+
+                    fontWeight: FontWeight.bold,
+
+                  ),
+
+                  
+
+                ),
+
+                
+
+               
+                SizedBox(
+
+                  height: 10,
+
+                ),
+
+                Container(
+
+                  // width: 200,
+
+                  child: Align(
+
+                    alignment: Alignment.center,
+
+                    child: Text(
+
+                      desc,
+
+                      maxLines: 3,
+
+                      style: TextStyle(fontSize: 15, color: Colors.grey[500]),
+
+                      textAlign: TextAlign.center,
+
+                    ),
+
+                  ),
+
+                ),
+
+                                
+
+              ],
+
+            ),
+
+          ),
+
+        ),
+
+      );
+
+    },
+
+  );
+
+  
+
+}
+
