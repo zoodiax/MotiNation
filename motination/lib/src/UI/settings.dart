@@ -234,7 +234,8 @@ class _SettingsState extends State<Settings> {
               style: Theme.of(context).textTheme.headline1,
             ),
             backgroundColor: bgColor),
-        body: Container(
+        body: SingleChildScrollView(
+          child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -247,10 +248,11 @@ class _SettingsState extends State<Settings> {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     image: NetworkImage(
-                        'https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_200_200/0/1573047022324?e=1611792000&v=beta&t=RF6cdGacErRqLLs90TuK1KW_H9jtKYplI_Z_9KJgc88'),
+                        'https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_800_800/0/1573047022324?e=1620864000&v=beta&t=i8P6Wa3m9dkG06QzV3cDUQIXjjoe7TEs21EaHlCqmVI'),
                   ),
                 ),
               ),
+              Container(height:10.0),
               Container(
                 padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
                 alignment: Alignment.center,
@@ -296,7 +298,8 @@ class _SettingsState extends State<Settings> {
                   'Geburtstag:',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Spacer(),
+                //Spacer(),
+                Container(height:10.0),
                 FlatButton(
                     onPressed: () {
                       _showCupertinoDatePicker(context);
@@ -321,7 +324,8 @@ class _SettingsState extends State<Settings> {
                   'Geschlecht:',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Spacer(),
+                Container(height:10.0),
+                //Spacer(),
                 FlatButton(
                   color: Colors.white,
                   onPressed: () {
@@ -347,7 +351,8 @@ class _SettingsState extends State<Settings> {
                   'Größe:',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Spacer(),
+                Container(height:10.0),
+                //Spacer(),
                 FlatButton(
                   color: Colors.white,
                   onPressed: () {
@@ -373,7 +378,8 @@ class _SettingsState extends State<Settings> {
                   'Gewicht:',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Spacer(),
+                Container(height:10.0),
+                //Spacer(),
                 FlatButton(
                   color: Colors.white,
                   onPressed: () {
@@ -418,7 +424,8 @@ class _SettingsState extends State<Settings> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Profile()));
                   }),
-              Spacer(),
+             // Spacer(),
+              Container(height:10.0),
               FlatButton.icon(
                   icon: Icon(
                     Icons.person,
@@ -434,9 +441,9 @@ class _SettingsState extends State<Settings> {
                     Navigator.push(context,
                       MaterialPageRoute(builder: (context)=> SignIn()));
                   }),
-              Spacer(),
+              //Spacer(),
             ],
           ),
-        ));
+        ),),);
   }
 }

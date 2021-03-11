@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:motination/models/user.dart';
 import 'package:motination/shared/constants.dart';
 import 'package:motination/src/UI/runstatsdetails.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:intl/intl.dart';
 
 class Runstats extends StatefulWidget {
   @override
@@ -40,21 +42,41 @@ class _RunstatsState extends State<Runstats> {
         color: buttonColor,
       );
   }
+    //Datum umschreiben
+    String showDate(String date){
+      var inputFormat = DateFormat('yyyy-MM-dd');
+      var inputDate = inputFormat.parse(date); 
 
-   sectomin(String seconds){
-    
+    var outputFormat = DateFormat('dd.MM.yyyy');
+    var outputDate = outputFormat.format(inputDate);
+    return outputDate;
+    }
+
+    //Zeit in Stoppuhr Format anzeigen
+    String showTime(String second) {
+      int seconds = int.parse(second);
+      int s = seconds;
+      return (Duration(seconds: s).inHours.toString().padLeft(2, '0') +
+      ':' +
+      (Duration(seconds: s).inMinutes % 60).toString().padLeft(2, '0') +
+      ':' + 
+      (Duration(seconds: s).inSeconds % 60).toString().padLeft(2, '0'));
+    }
+
+   /*sectomin(String seconds){
     double sec = double.parse(seconds);
     assert (sec is double);
     double min = sec/60;
-    return min;
-  }
-
-  double mtokm(String meter){
+    return min.toStringAsPrecision(2);
+  }*/
+  // Funktion für Meter in Kilometer
+    mtokm(String meter){
     double m = double.parse(meter);
     assert (m is double);
     double km = m/1000;
-    return km;
+    return km.toStringAsFixed(2);
   }
+  //Rander Meter auf 2. Nachkommastellen Ziffern
 
 // makeListWidget für ListView Firestore
   List<Widget> makeListWidgetUser(AsyncSnapshot snapshot) {
@@ -64,16 +86,18 @@ class _RunstatsState extends State<Runstats> {
         
         color: boxColor,
         child: ListTile(
-          title: Text('Datum: ' +
-                  randerdatum(document['date']??'') +
+          title:
+          Text(
+            'Datum: ' +
+                  showDate(randerdatum(document['date']??'')) +
                   
-                  '  ' +
-                  'Distanz: ' + 
-                  mtokm(document['distance']).toString()  + ' km',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,)
+                  '                       ' +
+                  'Distanz: ' + mtokm(document['distance']).toString()  + ' km',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  
                   ) ,
                   
-          subtitle: Text('Dauer: ' + sectomin(document['time']).toString()  + ' Min'),
+          subtitle: Text('Dauer: ' + showTime(document['time']).toString()  + ' Min'),
           leading: sporttype(document['sportType']),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,

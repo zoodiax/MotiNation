@@ -62,6 +62,13 @@ class _ProfileState extends State<Profile> {
     bmi = currentgewicht / ((_groese / 100) * _groese / 100);
   }
 
+  String showDistance(String distance){
+    double m = double.parse(distance);
+    assert (m is double);
+    double km = m/1000;
+    return km.toStringAsFixed(2);
+  }
+
   String randerbmi(String date) {
     return date.substring(0, 2);
   }
@@ -90,7 +97,8 @@ class _ProfileState extends State<Profile> {
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
+        child: Container(
         padding: EdgeInsets.all(10),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,10 +111,11 @@ class _ProfileState extends State<Profile> {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     image: NetworkImage(
-                        'https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_200_200/0/1573047022324?e=1611792000&v=beta&t=RF6cdGacErRqLLs90TuK1KW_H9jtKYplI_Z_9KJgc88'),
+                        'https://media-exp1.licdn.com/dms/image/C4D03AQG3wibhAzXXCA/profile-displayphoto-shrink_800_800/0/1573047022324?e=1620864000&v=beta&t=i8P6Wa3m9dkG06QzV3cDUQIXjjoe7TEs21EaHlCqmVI'),
                   ),
                 ),
               ),
+              Container(height:10.0),
               Container(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Column(
@@ -204,6 +213,7 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
               ),
+              Container(height: 20.0), 
               Container(
                 alignment: Alignment.bottomLeft,
                 child: Text(
@@ -215,6 +225,8 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
+
+              
               Container(
                 padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
                 alignment: Alignment.center,
@@ -252,7 +264,7 @@ class _ProfileState extends State<Profile> {
                           Column(
                             children: <Widget>[
                               Text(
-                                sumdistanz,
+                                showDistance(sumdistanz),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 30,
@@ -309,6 +321,9 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
               ),
+
+              Container(height: 10.0),
+
               Container(
                 padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
                 alignment: Alignment.center,
@@ -383,6 +398,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
             ]),
+      ),
       ),
       
       bottomNavigationBar: bottomBar(_currentIndex, context),
