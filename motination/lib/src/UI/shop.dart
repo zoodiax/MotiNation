@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -486,11 +485,17 @@ Padding(
         ),
 
         
-          
-          
+      Padding(
+          padding: EdgeInsets.only( top: 15.0, bottom: 15.0),
+          child: Container(
+            height: 270.0,
+            
+            child: Align(
+
+                    alignment: Alignment.center, 
+              child:  
        
-Expanded(
-        child:
+
 
 
         
@@ -508,7 +513,6 @@ Expanded(
           GestureDetector(
 
             onTap: () {
-
               // This Will Call When User Click On ListView Item
 
               showDialogFunc(context, shopitemList[index].img, shopitemList[index].name, shopitemList[index].info);
@@ -527,7 +531,7 @@ Expanded(
 
                   Container(
 
-                    width: 100,
+                    width: 80,
 
                     height: 100,
 
@@ -684,11 +688,17 @@ Expanded(
 
       ),
 
-),  
-    ],
-    ),
+), 
+     
+       
+          ),
 
-    );
+      ),
+    
+    ],
+
+    ),
+     );
 
   }
 
@@ -847,7 +857,3 @@ List<Shopitem> shopitemList = [
   
 
 }
-
-
-
-
