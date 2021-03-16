@@ -65,6 +65,7 @@ class _SaveRunState extends State<SaveRun> {
 
   //List<double> testAlt = [-1, 7, 3, -1, 3];
   void buildPolyline(List<LatLng> list) {
+    print('Listenlänge aus buildPolylines: ' + list.length.toString());
     _polyline.add(Polyline(
       polylineId: PolylineId('route1'),
       visible: true,
@@ -103,19 +104,25 @@ class _SaveRunState extends State<SaveRun> {
   }
 
   void data2collection(List<LatLng> list, List<double> altitude) {
-    latmin = list[0].latitude;
+    if (lat.length < widget.latlng.length){
+      latmin = list[0].latitude;
     lngmin = list[0].longitude;
     latmax = list[0].latitude;
     lngmax = list[0].longitude;
-
+    print('Listenlänge aus data2collection : ' + list.length.toString());
     for (int i = 0; i < list.length; i++) {
       lat.add(list[i].latitude);
       lng.add(list[i].longitude);
       latlngmax(list[i].latitude, list[i].longitude);
     }
+     print('Latlänge aus data2collection : ' + lat.length.toString());
+     print('Lnglänge aus data2collection : ' + lng.length.toString());
     for (int i = 0; i < altitude.length; i++) {
       alt.add(altitude[i]);
     }
+    }
+    
+    
   }
 
   void latlngmax(double lat, double lng) {
@@ -282,9 +289,9 @@ Widget _saveRun(User user, BuildContext context){
         await getData(user);
 
         changeSumData(widget.dis);
-
+        //data2collection(widget.latlng, widget.altitude);
         await DatabaseService(uid: user.uid).updateSumDistance(_sumdis);
-
+        //data2collection(widget.latlng, widget.altitude);
         await DatabaseService(uid: user.uid).updateRunData(
             widget.dis.toString(),
             widget.kcal.toString(),

@@ -72,6 +72,7 @@ class RunStatsDetails extends StatelessWidget {
       points: list,
       color: blue,
       width: 6));
+  print(_polyline.toString());
   return _polyline;
  }
 
