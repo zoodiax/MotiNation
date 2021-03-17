@@ -168,24 +168,33 @@ class _SaveRunState extends State<SaveRun> {
 
   // Höhenmeter berechen; Übergabe: List<double> list, setState double altitude
   void calcAlt(List<double> alt) {
-    double altref = alt[0];
+    //double altref = alt[0];
     double altListUp = 0;
     double altListDown = 0;
     double altdiff = 0;
-    for (int i = 0; i < alt.length; i++) {
-      altdiff = alt[i] - altref;
-      if (altdiff >= 0) {
-        altListUp += altdiff;
-      } else {
-        altListDown += altdiff.abs();
-      }
+    for (int i = 1; i < alt.length; i++) {
 
-      altref = alt[i];
+      altdiff = alt[i-1]-alt[i];
+      if (altdiff<0){
+        altListUp += (-altdiff);
+      }
+      else {
+        altListDown += altdiff;
+      }
+      // altdiff = alt[i] - altref;
+      // if (altdiff >= 0) {
+      //   altListUp += altdiff;
+      // } else {
+      //   altListDown += altdiff.abs();
+      // }
+
+      // altref = alt[i];
     }
     setState(() {
-      altitudeUp = altListUp;
-      altitudeDown = altListDown;
+      altitudeUp = altListUp.round().toDouble();
+      altitudeDown = altListDown.round().toDouble();
     });
+    
   }
 
  
@@ -315,8 +324,15 @@ Widget _saveRun(User user, BuildContext context){
         child: Text("     Speichern     ",
             style: Theme.of(context).textTheme.headline2));}
 
+
+void checkAltitude()
+{
+  print('saveRun.dart: Altitdue Länge: ' + widget.altitude.length.toString());
+  print('saveRun.dart: List <double> altitude: '+ widget.altitude.toString());
+}
   Widget build(context) {
     User user = Provider.of<User>(context);
+    checkAltitude();
     buildPolyline(widget.latlng);
     data2collection(widget.latlng, widget.altitude);
     initposition();

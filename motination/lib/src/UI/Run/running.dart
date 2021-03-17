@@ -182,6 +182,7 @@ Future <void> firstlocation() async{
                             .toString();
                      
                       _loc = double.parse(lib3altitude);
+                      print('Location Altitude: '+ _loc.toString());
                       linehlp = LatLng(double.parse(lib3latitude), double.parse(lib3longitude));
                      
                       latlngstart = lib2.LatLng(double.parse(lib3latitude), double.parse(lib3longitude));
@@ -239,7 +240,9 @@ void checkPace(double speed){
       points = addPoints(dis);}
     latlnglines = [];
     ms2kmh(maxSpeed);
-   
+    print('Running.dart: Altitdue Länge: ' + altitude.length.toString());
+
+    print('Running.dart: List<double> altitude: ' + altitude.toString());
     if(dis != 0){
       
       
