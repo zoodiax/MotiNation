@@ -60,6 +60,7 @@ class _SaveRunState extends State<SaveRun> {
   double latmin, latmax, lngmin, lngmax, latinit, lnginit;
   double altitudeUp = 0, altitudeDown = 0;
   String _sumdis, _sumtime, _sumspeed;
+  int _points;
 
   //String _currenttime, _currentspeed, _currentdistance;
 
@@ -88,7 +89,11 @@ class _SaveRunState extends State<SaveRun> {
         print("Sumdspeed vor aktuellem Lauf: " + _sumspeed);
         print("Sumtime vor aktuellem Lauf: " + _sumtime);
         print('getdata finished');
+        _points = (data["points"] ?? 0) + widget.points;
       });
+      print('Old total points: ' + data["points"].toString());
+      print('Points per Run: ' + widget.points.toString());
+      print('New total points: $_points');
     } catch (err) {
       print(err.toString());
     }
@@ -311,7 +316,8 @@ Widget _saveRun(User user, BuildContext context){
 
         await DatabaseService(uid: user.uid).updateSumTime(_sumtime);
         await DatabaseService(uid: user.uid).updateSumSpeed(_sumspeed);
-
+        await DatabaseService(uid: user.uid).updatePoints(_points);
+       
         
 
 
