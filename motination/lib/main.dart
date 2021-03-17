@@ -4,11 +4,15 @@ import 'package:motination/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'src/wrapper.dart';
 import 'package:motination/shared/theme.dart';
+import 'package:flutter/services.dart';
 
 
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 

@@ -284,7 +284,8 @@ void checkPace(double speed){
     _controller = _cntrl;
     _location.getLocation();
     _location.onLocationChanged().listen((l) {
-
+        _controller.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: 16)));
       
      });
   }
