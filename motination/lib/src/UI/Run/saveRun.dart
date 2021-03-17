@@ -82,9 +82,11 @@ class _SaveRunState extends State<SaveRun> {
       Map<String, dynamic> data = snapshot.data;
       setState(() {
         _sumdis = data["sumdistance"] ?? "0";
-        // _sumspeed = data["sumspeed"]?? "0";
-        // _sumtime = data["sumtime"]?? "0";
-        print(_sumdis);
+        _sumspeed = data["sumspeed"] ?? "0";
+        _sumtime = data["sumtime"]?? "0";
+        print("Sumdistance: " + _sumdis);
+        print("Sumdspeed vor aktuellem Lauf: " + _sumspeed);
+        print("Sumtime vor aktuellem Lauf: " + _sumtime);
         print('getdata finished');
       });
     } catch (err) {
@@ -92,15 +94,21 @@ class _SaveRunState extends State<SaveRun> {
     }
   }
 
-  void changeSumData(int newdistance) {
+  void changeSumData(int newdistance, int newtime) {
     print('new distance $newdistance');
     print('old distance $_sumdis');
+     print('new time $newtime');
+    print('old old $_sumtime');
     int dis = int.parse(_sumdis) + newdistance;
-
+    int time = int.parse(_sumtime) + newtime;
+    double speed =  dis/time;
     setState(() {
       _sumdis = dis.toString();
+      _sumtime = time.toString();
+      _sumspeed = speed.toString();
     });
     print('total dis = $_sumdis');
+     print("Sumtime nach aktuellem Lauf: " + _sumtime);
   }
 
   void data2collection(List<LatLng> list, List<double> altitude) {
@@ -297,9 +305,17 @@ Widget _saveRun(User user, BuildContext context){
         
         await getData(user);
 
-        changeSumData(widget.dis);
+        changeSumData(widget.dis, widget.time);
         //data2collection(widget.latlng, widget.altitude);
         await DatabaseService(uid: user.uid).updateSumDistance(_sumdis);
+
+        await DatabaseService(uid: user.uid).updateSumTime(_sumtime);
+        await DatabaseService(uid: user.uid).updateSumSpeed(_sumspeed);
+
+        
+
+
+
         //data2collection(widget.latlng, widget.altitude);
         await DatabaseService(uid: user.uid).updateRunData(
             widget.dis.toString(),
